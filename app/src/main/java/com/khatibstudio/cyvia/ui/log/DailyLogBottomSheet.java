@@ -304,7 +304,15 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
 
     private void observeSymptomTags() {
         symptomRepository.getAllSymptomTags().observe(getViewLifecycleOwner(), tags -> {
-            allTagsList = tags != null ? tags : new ArrayList<>();
+            allTagsList = tags != null ? new ArrayList<>(tags) : new ArrayList<>();
+            allTagsList.sort((t1, t2) -> {
+                if (t1.category != t2.category) {
+                    return t1.category.compareTo(t2.category);
+                }
+                String l1 = t1.label != null ? t1.label : "";
+                String l2 = t2.label != null ? t2.label : "";
+                return l1.compareToIgnoreCase(l2);
+            });
             refreshAllKawaiiRows();
         });
     }
@@ -361,7 +369,7 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         }
 
         // Ensure rich Physical Condition options are present even if db wasn't re-seeded
-        String[] extraPhysical = {"Dizziness", "Chills", "Brain fog", "Joint pain", "Constipation", "Diarrhea", "Neck ache", "Ovulation pain"};
+        String[] extraPhysical = {"Dizziness", "Chills", "Brain fog", "Joint pain", "Constipation", "Diarrhea", "Neck ache", "Ovulation pain", "Lower back pain", "Tender nipples", "Sweet cravings", "Salty cravings", "Sensitive skin", "Water retention"};
         for (String extra : extraPhysical) {
             if (!seenPhysical.contains(extra.toLowerCase())) {
                 seenPhysical.add(extra.toLowerCase());

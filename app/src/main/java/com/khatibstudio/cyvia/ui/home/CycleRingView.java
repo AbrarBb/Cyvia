@@ -77,28 +77,28 @@ public class CycleRingView extends View {
         periodPaint.setStyle(Paint.Style.STROKE);
         periodPaint.setStrokeWidth(strokeWidth);
         periodPaint.setStrokeCap(Paint.Cap.ROUND);
-        periodPaint.setColor(Color.parseColor("#EF5350"));
+        periodPaint.setColor(Color.parseColor("#FFB6C1"));
 
         follicularPaint.setStyle(Paint.Style.STROKE);
         follicularPaint.setStrokeWidth(strokeWidth);
         follicularPaint.setStrokeCap(Paint.Cap.ROUND);
-        follicularPaint.setColor(Color.parseColor("#1E88E5"));
+        follicularPaint.setColor(Color.parseColor("#FF8A9D"));
 
         fertilePaint.setStyle(Paint.Style.STROKE);
         fertilePaint.setStrokeWidth(strokeWidth);
         fertilePaint.setStrokeCap(Paint.Cap.ROUND);
-        fertilePaint.setColor(Color.parseColor("#26C6DA"));
+        fertilePaint.setColor(Color.parseColor("#C0F3FF"));
 
         lutealPaint.setStyle(Paint.Style.STROKE);
         lutealPaint.setStrokeWidth(strokeWidth);
         lutealPaint.setStrokeCap(Paint.Cap.ROUND);
-        lutealPaint.setColor(Color.parseColor("#FFA726"));
+        lutealPaint.setColor(Color.parseColor("#FF5C77"));
 
         ovulationMarkerPaint.setStyle(Paint.Style.FILL);
-        ovulationMarkerPaint.setColor(Color.parseColor("#00ACC1"));
+        ovulationMarkerPaint.setColor(Color.parseColor("#8CE8FF"));
 
         ovulationGlowPaint.setStyle(Paint.Style.FILL);
-        ovulationGlowPaint.setColor(Color.parseColor("#5500ACC1"));
+        ovulationGlowPaint.setColor(Color.parseColor("#558CE8FF"));
 
         indicatorGlowPaint.setStyle(Paint.Style.FILL);
         indicatorGlowPaint.setColor(Color.parseColor("#66FFFFFF"));

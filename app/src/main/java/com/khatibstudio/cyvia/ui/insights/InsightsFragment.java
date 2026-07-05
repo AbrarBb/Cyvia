@@ -68,6 +68,7 @@ public class InsightsFragment extends Fragment {
         styleCharts();
         setupObservers();
         updateAnalyticalForecast(null, null, null);
+        updateIntimacyGuide();
 
         com.khatibstudio.cyvia.ads.AdManager adManager = new com.khatibstudio.cyvia.ads.AdManager(
                 com.khatibstudio.cyvia.CyviaApplication.from(requireContext()).getSettingsRepository());
@@ -76,25 +77,40 @@ public class InsightsFragment extends Fragment {
         binding.cardDoctorReport.setOnClickListener(v -> {
             adManager.showRewardedAd(requireActivity(), this::generateAndShareDoctorReport);
         });
+
+        binding.cardInsightsFaq.setOnClickListener(v ->
+                androidx.navigation.Navigation.findNavController(v).navigate(R.id.nav_faq));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateIntimacyGuide();
+    }
+
+    private void updateIntimacyGuide() {
+        if (binding == null) return;
+        com.khatibstudio.cyvia.data.repository.SettingsRepository settings =
+                com.khatibstudio.cyvia.CyviaApplication.from(requireContext()).getSettingsRepository();
+        if (!settings.shouldShowFertileWindow()) {
+            binding.cardIntimacyGuide.setVisibility(View.GONE);
+        } else {
+            binding.cardIntimacyGuide.setVisibility(View.VISIBLE);
+            if (settings.shouldShowReliabilityCaveat()) {
+                binding.tvIntimacyCaveat.setVisibility(View.VISIBLE);
+            } else {
+                binding.tvIntimacyCaveat.setVisibility(View.GONE);
+            }
+        }
     }
 
     // ─── Chart styling ────────────────────────────────────────────────────
 
     private void styleCharts() {
-        styleLineChart(binding.chartCycleLength);
+        styleBarChart(binding.chartCycleLength);
+        styleBarChart(binding.chartPeriodLength);
         styleBarChart(binding.chartSymptoms);
         stylePieChart(binding.chartMood);
-    }
-
-    private void styleLineChart(LineChart chart) {
-        chart.getDescription().setEnabled(false);
-        chart.getLegend().setEnabled(false);
-        chart.setTouchEnabled(true);
-        chart.setDrawGridBackground(false);
-        chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        chart.getXAxis().setDrawGridLines(false);
-        chart.getAxisRight().setEnabled(false);
-        chart.setNoDataText("Log a few cycles to see your chart");
     }
 
     private void styleBarChart(BarChart chart) {
@@ -128,6 +144,7 @@ public class InsightsFragment extends Fragment {
                 binding.tvRegularityLabel.setText("—");
                 binding.tvRegularityScore.setText("—");
                 binding.chartCycleLength.clear();
+                binding.chartPeriodLength.clear();
                 return;
             }
             binding.layoutEmptyInsights.setVisibility(View.GONE);
@@ -175,32 +192,46 @@ public class InsightsFragment extends Fragment {
 
     // ─── Cycle chart ──────────────────────────────────────────────────────
 
+    // ─── Cycle and Period BarCharts ───────────────────────────────────────
+
     private void updateCycleChart(CycleStatsCalculator.CycleStats stats) {
-        List<Entry> entries = new ArrayList<>();
-        List<Integer> lengths = stats.cycleLengths;
-        for (int i = 0; i < lengths.size(); i++) {
-            entries.add(new Entry(i, lengths.get(i)));
+        // Cycle lengths bar chart
+        List<BarEntry> cycleEntries = new ArrayList<>();
+        List<Integer> cLengths = stats.cycleLengths;
+        for (int i = 0; i < cLengths.size(); i++) {
+            cycleEntries.add(new BarEntry(i + 1, cLengths.get(i)));
         }
-        if (entries.isEmpty()) {
+        if (cycleEntries.isEmpty()) {
             binding.chartCycleLength.setNoDataText("Log a few cycles to see your chart");
             binding.chartCycleLength.clear();
-            return;
+        } else {
+            BarDataSet dataSet = new BarDataSet(cycleEntries, "Cycle length (days)");
+            dataSet.setColor(requireContext().getColor(R.color.cyvia_primary));
+            dataSet.setValueTextColor(requireContext().getColor(R.color.cyvia_on_surface_variant));
+            dataSet.setValueTextSize(10f);
+            binding.chartCycleLength.setData(new BarData(dataSet));
+            binding.chartCycleLength.animateY(500);
+            binding.chartCycleLength.invalidate();
         }
 
-        LineDataSet dataSet = new LineDataSet(entries, "Cycle length");
-        dataSet.setColor(requireContext().getColor(R.color.cyvia_primary));
-        dataSet.setCircleColor(requireContext().getColor(R.color.cyvia_primary));
-        dataSet.setLineWidth(2f);
-        dataSet.setCircleRadius(4f);
-        dataSet.setDrawFilled(true);
-        dataSet.setFillColor(requireContext().getColor(R.color.cyvia_primary_container));
-        dataSet.setValueTextColor(requireContext().getColor(R.color.cyvia_on_surface_variant));
-        dataSet.setValueTextSize(10f);
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-
-        binding.chartCycleLength.setData(new LineData(dataSet));
-        binding.chartCycleLength.animateX(500);
-        binding.chartCycleLength.invalidate();
+        // Period duration bar chart
+        List<BarEntry> periodEntries = new ArrayList<>();
+        List<Integer> pLengths = stats.periodLengths;
+        for (int i = 0; i < pLengths.size(); i++) {
+            periodEntries.add(new BarEntry(i + 1, pLengths.get(i)));
+        }
+        if (periodEntries.isEmpty()) {
+            binding.chartPeriodLength.setNoDataText("Log periods to see duration chart");
+            binding.chartPeriodLength.clear();
+        } else {
+            BarDataSet pDataSet = new BarDataSet(periodEntries, "Period duration (days)");
+            pDataSet.setColor(requireContext().getColor(R.color.cyvia_secondary));
+            pDataSet.setValueTextColor(requireContext().getColor(R.color.cyvia_on_surface_variant));
+            pDataSet.setValueTextSize(10f);
+            binding.chartPeriodLength.setData(new BarData(pDataSet));
+            binding.chartPeriodLength.animateY(500);
+            binding.chartPeriodLength.invalidate();
+        }
     }
 
     // ─── Symptom chart ────────────────────────────────────────────────────

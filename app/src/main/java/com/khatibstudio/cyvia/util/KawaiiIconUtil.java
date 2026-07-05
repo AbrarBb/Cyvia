@@ -24,6 +24,12 @@ public class KawaiiIconUtil {
     private static final String TAG = "KawaiiIconUtil";
 
     public static final String[] PRESET_KAWAII_ICONS = {
+            "ic_mochi_reading",
+            "ic_mochi_drinking_tea",
+            "ic_mochi_stretching",
+            "ic_mochi_sparkles",
+            "ic_mochi_heart_eyes",
+            "ic_mochi_cozy",
             "ic_kawaii_melody",
             "ic_kawaii_kuromi",
             "ic_kawaii_kitty",

@@ -45,14 +45,14 @@
     <color name="cyvia_cream">#2A223D</color>
 
     <!-- Calendar Day Colors (dark theme) -->
-    <color name="calendar_period">#991B1B</color>
-    <color name="calendar_period_text">#FFE4E6</color>
+    <color name="calendar_period">#831843</color>
+    <color name="calendar_period_text">#FFB6C1</color>
     <color name="calendar_predicted">#5B21B6</color>
     <color name="calendar_predicted_text">#EDE9FE</color>
-    <color name="calendar_fertile">#065F46</color>
-    <color name="calendar_fertile_text">#D1FAE5</color>
-    <color name="calendar_ovulation">#92400E</color>
-    <color name="calendar_ovulation_text">#FEF9C3</color>
+    <color name="calendar_fertile">#0369A1</color>
+    <color name="calendar_fertile_text">#C0F3FF</color>
+    <color name="calendar_ovulation">#9D174D</color>
+    <color name="calendar_ovulation_text">#FFE4E8</color>
     <color name="calendar_today_stroke">#D8B4FE</color>
     <color name="calendar_has_log_dot">#C084FC</color>
     <color name="calendar_other_month_text">#6E648B</color>

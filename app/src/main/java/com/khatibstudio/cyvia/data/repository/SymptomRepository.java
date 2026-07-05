@@ -20,6 +20,11 @@ public class SymptomRepository {
 
     public SymptomRepository(Application application) {
         dao = CyviaDatabase.getDatabase(application).symptomTagDao();
+        CyviaDatabase.databaseWriteExecutor.execute(() -> {
+            if (dao.getDefaultSymptomCount() < 30) {
+                dao.insertAllSymptomTags(CyviaDatabase.buildDefaultSymptoms());
+            }
+        });
     }
 
     public LiveData<List<SymptomTag>> getAllSymptomTags() {

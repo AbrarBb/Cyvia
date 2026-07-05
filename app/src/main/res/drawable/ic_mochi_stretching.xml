@@ -1,0 +1,65 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Shadow -->
+    <path
+        android:fillColor="#1A000000"
+        android:pathData="M25,85 C25,85 75,85 75,85 C80,85 85,88 85,91 C85,94 80,97 75,97 C75,97 25,97 25,97 C20,97 15,94 15,91 C15,88 20,85 25,85 Z" />
+    <!-- Tail raised up -->
+    <path
+        android:fillColor="#8C52FF"
+        android:pathData="M70,65 Q85,45 90,30 Q92,22 85,25 Q78,28 75,40 Q72,55 68,65 Z" />
+    <!-- Body slightly elongated -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M27,52 C27,32 73,32 73,52 C73,72 68,85 50,85 C32,85 27,72 27,52 Z" />
+    <!-- Ears -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,40 L22,18 L44,30 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M30,36 L26,24 L39,31 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M70,40 L78,18 L56,30 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M70,36 L74,24 L61,31 Z" />
+    <!-- Happy wink and smile -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M36,46 Q40,41 44,46" />
+    <path
+        android:fillColor="#2E1E40"
+        android:pathData="M60,44 A3,3 0,1,1 60,50 A3,3 0,1,1 60,44 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M61,45 A1,1 0,1,1 61,47 A1,1 0,1,1 61,45 Z" />
+    <!-- Cheeks -->
+    <path
+        android:fillColor="#FFB3DE"
+        android:pathData="M32,54 A3.5,2.5 0,1,1 32,53.9 Z" />
+    <path
+        android:fillColor="#FFB3DE"
+        android:pathData="M68,54 A3.5,2.5 0,1,1 68,53.9 Z" />
+    <!-- Joyful open mouth -->
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M45,55 Q50,62 55,55 Z" />
+    <!-- Stretching arms up high -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#E0D6FF"
+        android:strokeWidth="1.5"
+        android:pathData="M30,50 Q18,35 22,28 C26,24 33,38 35,48 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#E0D6FF"
+        android:strokeWidth="1.5"
+        android:pathData="M70,50 Q82,35 78,28 C74,24 67,38 65,48 Z" />
+</vector>

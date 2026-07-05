@@ -77,7 +77,7 @@ public class CalendarFragment extends Fragment {
             updateMonthTitle();
         });
         binding.btnNextMonth.setOnClickListener(v -> {
-            if (!viewModel.getDisplayedMonth().isBefore(YearMonth.now())) {
+            if (viewModel.getDisplayedMonth().isAfter(YearMonth.now())) {
                 adManager.showRewardedAd(requireActivity(), () -> {
                     viewModel.goToNextMonth();
                     updateMonthTitle();

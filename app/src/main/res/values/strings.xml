@@ -33,7 +33,7 @@
     <string name="onboarding_last_period_title">When did your last period start?</string>
     <string name="onboarding_last_period_subtitle">This helps Mochi predict your next one. You can always update it later.</string>
     <string name="onboarding_last_period_hint">Tap to select date</string>
-    <string name="onboarding_skip_date">Not sure, just use today</string>
+    <string name="onboarding_skip_date">Not sure, just use today </string>
 
     <string name="onboarding_prefs_title">A little about your cycle</string>
     <string name="onboarding_prefs_subtitle">Not sure? No worries, we\'ll use defaults and learn as you go.</string>

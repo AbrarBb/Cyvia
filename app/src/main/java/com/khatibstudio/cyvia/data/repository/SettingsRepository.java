@@ -178,14 +178,28 @@ public class SettingsRepository {
         prefs.edit().putLong(KEY_LAST_INTERSTITIAL_TIME, timestamp).apply();
     }
 
-    // ─── Profile ─────────────────────────────────────────────────────────
-
     public String getUserName() {
         return prefs.getString(KEY_USER_NAME, "");
     }
 
     public void setUserName(String name) {
         prefs.edit().putString(KEY_USER_NAME, name).apply();
+    }
+
+    public String getUserPfp() {
+        return prefs.getString("user_pfp", "ic_kawaii_melody");
+    }
+
+    public void setUserPfp(String pfp) {
+        prefs.edit().putString("user_pfp", pfp).apply();
+    }
+
+    public int getUserAge() {
+        return prefs.getInt("user_age", 25);
+    }
+
+    public void setUserAge(int age) {
+        prefs.edit().putInt("user_age", age).apply();
     }
 
     // ─── Utilities ───────────────────────────────────────────────────────

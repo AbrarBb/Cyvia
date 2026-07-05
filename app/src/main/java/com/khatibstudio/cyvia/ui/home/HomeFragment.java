@@ -117,15 +117,15 @@ public class HomeFragment extends Fragment {
         else if (todayLog != null && todayLog.symptomIds != null &&
                 (todayLog.symptomIds.contains("1") || todayLog.symptomIds.contains("2") ||
                  todayLog.symptomIds.contains("4") || todayLog.symptomIds.contains("7"))) {
-            targetDrawable = R.drawable.ic_mochi_sick;
+            targetDrawable = R.drawable.ic_mochi_drinking_tea;
             mochiToastMessage = "Mochi is holding warm healing tea for your cramps and aches 🍵💕";
             animType = "sway";
         }
         // Priority 3: Celebrating (30-day streak OR period finished)
         else if (streak >= 30 || (cycleDay != null && (cycleDay == periodLen || cycleDay == periodLen + 1))) {
-            targetDrawable = R.drawable.ic_mochi_celebrating;
+            targetDrawable = R.drawable.ic_mochi_sparkles;
             mochiToastMessage = streak >= 30
-                    ? "Yay! Mochi is celebrating your amazing " + streak + "-day logging streak! ✨"
+                    ? "Yay! Mochi is celebrating your amazing " + streak + "-day logging streak with sparkles! ✨"
                     : "Yay! Mochi is celebrating the finish of your period! ✨";
             animType = "bounce";
         }
@@ -137,26 +137,41 @@ public class HomeFragment extends Fragment {
         }
         // Priority 5: Happy (User logged today)
         else if (todayLog != null) {
-            targetDrawable = R.drawable.ic_mochi_smiling;
-            mochiToastMessage = "Purr... Mochi is so proud of you for logging today! 🐱♡";
+            targetDrawable = R.drawable.ic_mochi_heart_eyes;
+            mochiToastMessage = "Purr... Mochi is so proud and loves you for logging today! 🐱♡";
             animType = "bounce_gentle";
         }
-        // Priority 6: Phase Fallback
+        // Priority 6: Phase & Time Fallback
         else {
             int avgLen = CyviaApplication.from(requireContext()).getSettingsRepository().getAvgCycleLength();
             String phase = (cycleDay != null) ? viewModel.getCyclePhase(cycleDay, avgLen) : "FOLLICULAR";
-            if ("MENSTRUAL".equals(phase)) {
-                targetDrawable = R.drawable.ic_mochi_hugging;
-                mochiToastMessage = "Mochi is sending you warm period hugs ~ ♡";
+            if ("MENSTRUAL".equals(phase) || (cycleDay != null && cycleDay <= periodLen)) {
+                targetDrawable = R.drawable.ic_mochi_cozy;
+                mochiToastMessage = "Mochi is wrapped in a cozy blanket sending you warm period hugs ~ ♡";
                 animType = "sway";
             } else if ("OVULATORY".equals(phase)) {
-                targetDrawable = R.drawable.ic_mochi_waving;
-                mochiToastMessage = "Mochi is waving hi during your fertile window! ~ ♡";
+                targetDrawable = R.drawable.ic_mochi_heart_eyes;
+                mochiToastMessage = "Mochi is glowing with peak vitality during your fertile window! ~ ♡";
+                animType = "bounce_gentle";
+            } else if ("FOLLICULAR".equals(phase)) {
+                if (hour < 12) {
+                    targetDrawable = R.drawable.ic_mochi_stretching;
+                    mochiToastMessage = "Good morning! Mochi is stretching with fresh rising energy ~ ✨";
+                } else {
+                    targetDrawable = R.drawable.ic_mochi_reading;
+                    mochiToastMessage = "Mochi is reading wellness guides and checking in with you! ~ ♡";
+                }
                 animType = "bounce_gentle";
             } else {
-                targetDrawable = R.drawable.ic_mochi_smiling;
-                mochiToastMessage = "Mochi says hi! Tap Quick Log below to check in ~ ♡";
-                animType = "bounce_gentle";
+                // LUTEAL
+                if (hour >= 18) {
+                    targetDrawable = R.drawable.ic_mochi_cozy;
+                    mochiToastMessage = "Mochi is relaxing and staying cozy during your luteal evening ~ 🌸";
+                } else {
+                    targetDrawable = R.drawable.ic_mochi_drinking_tea;
+                    mochiToastMessage = "Mochi is sipping soothing herbal tea for luteal balance ~ 🍵";
+                }
+                animType = "sway";
             }
         }
 
@@ -274,16 +289,11 @@ public class HomeFragment extends Fragment {
         LocalDate nextPeriod = prediction.nextPeriodStart;
         long daysUntil = ChronoUnit.DAYS.between(today, nextPeriod);
 
-        if (daysUntil > 0) {
-            binding.tvStatusLabel.setText("Next Period");
-            binding.tvStatusMain.setText("in " + daysUntil + (daysUntil == 1 ? " day" : " days"));
-        } else if (daysUntil == 0) {
-            binding.tvStatusLabel.setText("Next Period");
-            binding.tvStatusMain.setText("Starts Today");
-        } else {
-            binding.tvStatusLabel.setText("Period");
-            binding.tvStatusMain.setText((-daysUntil) + " days late");
-        }
+        Integer cDay = viewModel.getCycleDay().getValue();
+        int cycleDay = (cDay != null && cDay > 0) ? cDay : 1;
+        int avgCycleLen = CyviaApplication.from(requireContext()).getSettingsRepository().getAvgCycleLength();
+        int avgPeriodLen = CyviaApplication.from(requireContext()).getSettingsRepository().getAvgPeriodLength();
+        String phase = viewModel.getCyclePhase(cycleDay, avgCycleLen);
 
         // Low confidence caveat
         if (prediction.isLowConfidence) {
@@ -294,22 +304,48 @@ public class HomeFragment extends Fragment {
             binding.tvLowConfidence.setVisibility(View.GONE);
         }
 
-        // Fertile window / pregnancy chance text
         boolean minimalMode = requireContext().getSharedPreferences("cyvia_settings", android.content.Context.MODE_PRIVATE).getBoolean("minimal_mode", false);
+        boolean hideFertile = minimalMode || CyviaApplication.from(requireContext()).getSettingsRepository().isMinorSafeMode() || !viewModel.shouldShowFertileWindow();
+
         if (binding.cardMochiBanner != null) {
             binding.cardMochiBanner.setVisibility(minimalMode ? View.GONE : View.VISIBLE);
         }
-        if (minimalMode || CyviaApplication.from(requireContext()).getSettingsRepository().isMinorSafeMode()) {
-            binding.tvFertileDates.setVisibility(View.GONE);
-        } else if (viewModel.shouldShowFertileWindow() && prediction.fertileWindowStart != null) {
+
+        if ("MENSTRUAL".equals(phase) || cycleDay <= avgPeriodLen) {
+            binding.tvStatusLabel.setText("Period Phase");
+            binding.tvStatusMain.setText("Day " + cycleDay + " of Flow");
             binding.tvFertileDates.setVisibility(View.VISIBLE);
-            DateTimeFormatter fmt = java.time.format.DateTimeFormatter.ofPattern("MMM d");
-            String range = "Fertile: " + prediction.fertileWindowStart.format(fmt)
-                    + " – " + prediction.fertileWindowEnd.format(fmt);
-            binding.tvFertileDates.setText(range);
+            binding.tvFertileDates.setText(hideFertile ? "Rest & self-care today" : "Low fertility · Rest & care");
+        } else if ("OVULATORY".equals(phase) || (prediction.fertileWindowStart != null && !today.isBefore(prediction.fertileWindowStart) && !today.isAfter(prediction.fertileWindowEnd))) {
+            binding.tvStatusLabel.setText("Ovulation Window");
+            binding.tvStatusMain.setText("High Fertility");
+            binding.tvFertileDates.setVisibility(View.VISIBLE);
+            if (hideFertile) {
+                binding.tvFertileDates.setVisibility(View.GONE);
+            } else {
+                binding.tvFertileDates.setText("High pregnancy chance · Use protection if avoiding");
+            }
+        } else if ("FOLLICULAR".equals(phase)) {
+            binding.tvStatusLabel.setText("Follicular Phase");
+            binding.tvStatusMain.setText("Cycle Day " + cycleDay);
+            binding.tvFertileDates.setVisibility(View.VISIBLE);
+            if (hideFertile) {
+                binding.tvFertileDates.setText("Rising energy & vitality");
+            } else {
+                binding.tvFertileDates.setText("Low pregnancy chance · Unprotected/protected intimacy");
+            }
         } else {
+            // LUTEAL Phase
+            binding.tvStatusLabel.setText("Luteal Phase");
+            if (daysUntil > 0) {
+                binding.tvStatusMain.setText("Period in " + daysUntil + (daysUntil == 1 ? " day" : " days"));
+            } else if (daysUntil == 0) {
+                binding.tvStatusMain.setText("Period Today");
+            } else {
+                binding.tvStatusMain.setText("Day " + cycleDay);
+            }
             binding.tvFertileDates.setVisibility(View.VISIBLE);
-            binding.tvFertileDates.setText("Low chance of getting pregnant 3%");
+            binding.tvFertileDates.setText(hideFertile ? "Self-care & PMS comfort" : "Low fertility · PMS comfort & care");
         }
 
         refreshCycleRing();

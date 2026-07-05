@@ -93,7 +93,7 @@ public abstract class CyviaDatabase extends RoomDatabase {
     };
 
     /** Default built-in symptom set — matches strings.xml labels. */
-    private static List<SymptomTag> buildDefaultSymptoms() {
+    public static List<SymptomTag> buildDefaultSymptoms() {
         List<SymptomTag> list = new ArrayList<>();
 
         // Physical
@@ -102,7 +102,7 @@ public abstract class CyviaDatabase extends RoomDatabase {
         list.add(SymptomTag.defaultSymptom("Bloating", SymptomCategory.PHYSICAL, "ic_kawaii_pompom"));
         list.add(SymptomTag.defaultSymptom("Backache", SymptomCategory.PHYSICAL, "ic_forecast_aches"));
         list.add(SymptomTag.defaultSymptom("Acne", SymptomCategory.PHYSICAL, "ic_forecast_acne"));
-        list.add(SymptomTag.defaultSymptom("Fatigue", SymptomCategory.PHYSICAL, "ic_forecast_tired"));
+        list.add(SymptomTag.defaultSymptom("Fatigue", SymptomCategory.PHYSICAL, "ic_mood_tired"));
         list.add(SymptomTag.defaultSymptom("Nausea", SymptomCategory.PHYSICAL, "ic_kawaii_keroppi"));
         list.add(SymptomTag.defaultSymptom("Tender breasts", SymptomCategory.PHYSICAL, "ic_kawaii_melody"));
         list.add(SymptomTag.defaultSymptom("Food cravings", SymptomCategory.PHYSICAL, "ic_kawaii_cinna"));
@@ -110,12 +110,37 @@ public abstract class CyviaDatabase extends RoomDatabase {
         list.add(SymptomTag.defaultSymptom("Hot flashes", SymptomCategory.PHYSICAL, "ic_mood_anxious"));
         list.add(SymptomTag.defaultSymptom("Discharge", SymptomCategory.PHYSICAL, "ic_kawaii_kitty"));
         list.add(SymptomTag.defaultSymptom("Spotting", SymptomCategory.PHYSICAL, "ic_kawaii_kuromi"));
+        list.add(SymptomTag.defaultSymptom("Lower back pain", SymptomCategory.PHYSICAL, "ic_forecast_aches"));
+        list.add(SymptomTag.defaultSymptom("Tender nipples", SymptomCategory.PHYSICAL, "ic_kawaii_melody"));
+        list.add(SymptomTag.defaultSymptom("Sweet cravings", SymptomCategory.PHYSICAL, "ic_kawaii_cinna"));
+        list.add(SymptomTag.defaultSymptom("Salty cravings", SymptomCategory.PHYSICAL, "ic_kawaii_cinna"));
+        list.add(SymptomTag.defaultSymptom("Dizziness", SymptomCategory.PHYSICAL, "ic_forecast_lonely"));
+        list.add(SymptomTag.defaultSymptom("Chills", SymptomCategory.PHYSICAL, "ic_forecast_aches"));
+        list.add(SymptomTag.defaultSymptom("Constipation", SymptomCategory.PHYSICAL, "ic_kawaii_pompom"));
+        list.add(SymptomTag.defaultSymptom("Diarrhea", SymptomCategory.PHYSICAL, "ic_kawaii_keroppi"));
+        list.add(SymptomTag.defaultSymptom("High energy", SymptomCategory.PHYSICAL, "ic_mood_energetic"));
+        list.add(SymptomTag.defaultSymptom("Brain fog", SymptomCategory.PHYSICAL, "ic_mood_tired"));
+        list.add(SymptomTag.defaultSymptom("Sensitive skin", SymptomCategory.PHYSICAL, "ic_forecast_acne"));
+        list.add(SymptomTag.defaultSymptom("Water retention", SymptomCategory.PHYSICAL, "ic_kawaii_pompom"));
 
-        // Emotional
+        // Emotional & Moods
         list.add(SymptomTag.defaultSymptom("Mood swings", SymptomCategory.EMOTIONAL, "ic_mood_sensitive"));
         list.add(SymptomTag.defaultSymptom("Anxiety", SymptomCategory.EMOTIONAL, "ic_mood_anxious"));
         list.add(SymptomTag.defaultSymptom("Low energy", SymptomCategory.EMOTIONAL, "ic_mood_tired"));
         list.add(SymptomTag.defaultSymptom("Irritability", SymptomCategory.EMOTIONAL, "ic_mood_irritable"));
+        list.add(SymptomTag.defaultSymptom("High libido", SymptomCategory.EMOTIONAL, "ic_mood_frisky"));
+        list.add(SymptomTag.defaultSymptom("Low libido", SymptomCategory.EMOTIONAL, "ic_mood_tired"));
+        list.add(SymptomTag.defaultSymptom("Romantic", SymptomCategory.EMOTIONAL, "ic_mochi_heart_eyes"));
+        list.add(SymptomTag.defaultSymptom("Sensitive", SymptomCategory.EMOTIONAL, "ic_mood_sensitive"));
+        list.add(SymptomTag.defaultSymptom("Focused", SymptomCategory.EMOTIONAL, "ic_mochi_reading"));
+        list.add(SymptomTag.defaultSymptom("Distracted", SymptomCategory.EMOTIONAL, "ic_mood_anxious"));
+        list.add(SymptomTag.defaultSymptom("Confident", SymptomCategory.EMOTIONAL, "ic_mochi_sparkles"));
+        list.add(SymptomTag.defaultSymptom("Insecure", SymptomCategory.EMOTIONAL, "ic_mood_sad"));
+        list.add(SymptomTag.defaultSymptom("Grateful", SymptomCategory.EMOTIONAL, "ic_mochi_cozy"));
+        list.add(SymptomTag.defaultSymptom("Bored", SymptomCategory.EMOTIONAL, "ic_mood_tired"));
+        list.add(SymptomTag.defaultSymptom("Stressed", SymptomCategory.EMOTIONAL, "ic_mood_irritable"));
+        list.add(SymptomTag.defaultSymptom("Calm", SymptomCategory.EMOTIONAL, "ic_mood_calm"));
+        list.add(SymptomTag.defaultSymptom("Frisky", SymptomCategory.EMOTIONAL, "ic_mood_frisky"));
 
         return list;
     }

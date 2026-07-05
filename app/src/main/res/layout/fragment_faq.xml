@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cyvia_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="40dp">
+
+        <!-- Top Bar -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_back"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                app:icon="@drawable/ic_chevron_left"
+                app:iconTint="@color/cyvia_on_background"
+                app:iconSize="28dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Frequently Asked Questions"
+                android:textSize="20sp"
+                android:fontFamily="@font/nunito"
+                android:textStyle="bold"
+                android:textColor="@color/cyvia_on_background" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Everything you need to know about your cycle, privacy, and tracking with Cyvia 🌸"
+            android:textSize="14sp"
+            android:fontFamily="@font/inter"
+            android:textColor="@color/cyvia_on_surface_variant"
+            android:lineSpacingMultiplier="1.3"
+            android:layout_marginBottom="24dp" />
+
+        <!-- ── Q1: Irregular cycle ────────────────────────────────────── -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_q1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:clickable="true"
+            android:focusable="true"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Why is my period or cycle irregular?"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_primary" />
+                    <ImageView
+                        android:id="@+id/iv_arrow_1"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/cyvia_primary"
+                        android:rotation="90" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_ans_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cycle variation is completely normal! Stress, sleep changes, travel, illness, hormonal fluctuations, perimenopause, or postpartum recovery can all cause your period to arrive a few days early or late. Cyvia dynamically adapts to your rhythm over time."
+                    android:textSize="13.5sp"
+                    android:fontFamily="@font/inter"
+                    android:textColor="@color/cyvia_on_surface"
+                    android:lineSpacingMultiplier="1.3"
+                    android:layout_marginTop="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── Q2: 4 Phases ───────────────────────────────────────────── -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_q2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:clickable="true"
+            android:focusable="true"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="What are the 4 phases of the menstrual cycle?"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_primary" />
+                    <ImageView
+                        android:id="@+id/iv_arrow_2"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/cyvia_primary"
+                        android:rotation="90" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_ans_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="• Menstrual Phase (Days 1–5): Shedding of the uterine lining (your period).\n• Follicular Phase (Days 6–13): Estrogen rises as ovaries prepare an egg; mood and energy often improve.\n• Ovulation (Day ~14): An egg is released! Peak fertile window.\n• Luteal Phase (Days 15–28): Progesterone rises. You may feel calmer or experience PMS symptoms before your next cycle starts."
+                    android:textSize="13.5sp"
+                    android:fontFamily="@font/inter"
+                    android:textColor="@color/cyvia_on_surface"
+                    android:lineSpacingMultiplier="1.3"
+                    android:layout_marginTop="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── Q3: Privacy ────────────────────────────────────────────── -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_q3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:clickable="true"
+            android:focusable="true"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="How does Cyvia protect my privacy?"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_primary" />
+                    <ImageView
+                        android:id="@+id/iv_arrow_3"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/cyvia_primary"
+                        android:rotation="90" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_ans_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cyvia is strictly offline-first and privacy-focused. We never require user accounts, emails, or cloud sign-ins. All your sensitive cycle, intimacy, and mood data lives encrypted locally on your personal device. Nothing is sold or uploaded to remote servers."
+                    android:textSize="13.5sp"
+                    android:fontFamily="@font/inter"
+                    android:textColor="@color/cyvia_on_surface"
+                    android:lineSpacingMultiplier="1.3"
+                    android:layout_marginTop="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── Q4: Intimacy & Pregnancy ───────────────────────────────── -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_q4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:clickable="true"
+            android:focusable="true"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="How does the Intimacy &amp; Pregnancy Guide work?"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_primary" />
+                    <ImageView
+                        android:id="@+id/iv_arrow_4"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/cyvia_primary"
+                        android:rotation="90" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_ans_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cyvia estimates your fertile window based on your average cycle length. Sperm can survive up to 5 days inside the body, so unprotected intimacy in the days leading up to and during ovulation carries the highest chance of pregnancy (~25–30%). If you select 'Not Tracking Pregnancy' or 'No Periods' in Settings, Cyvia automatically conceals fertility predictions to keep your experience stress-free."
+                    android:textSize="13.5sp"
+                    android:fontFamily="@font/inter"
+                    android:textColor="@color/cyvia_on_surface"
+                    android:lineSpacingMultiplier="1.3"
+                    android:layout_marginTop="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── Q5: Backup & Export ────────────────────────────────────── -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_q5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:clickable="true"
+            android:focusable="true"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Can I export or backup my data?"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_primary" />
+                    <ImageView
+                        android:id="@+id/iv_arrow_5"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/cyvia_primary"
+                        android:rotation="90" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_ans_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Yes! You can create an encrypted local JSON backup file or export a comprehensive PDF Medical Doctor Report right from the Insights or Settings tab to share directly with your healthcare provider."
+                    android:textSize="13.5sp"
+                    android:fontFamily="@font/inter"
+                    android:textColor="@color/cyvia_on_surface"
+                    android:lineSpacingMultiplier="1.3"
+                    android:layout_marginTop="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

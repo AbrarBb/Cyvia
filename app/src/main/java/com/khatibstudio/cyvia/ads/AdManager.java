@@ -49,6 +49,9 @@ public class AdManager {
 
     /** Minimum time between interstitial shows (8 minutes). */
     private static final long INTERSTITIAL_COOLDOWN_MS = TimeUnit.MINUTES.toMillis(8);
+    /** Minimum time between rewarded ad shows (10 minutes session cooldown). */
+    private static final long REWARDED_COOLDOWN_MS = TimeUnit.MINUTES.toMillis(10);
+    private static long lastRewardedAdShowTimeMs = 0;
 
     private final SettingsRepository settings;
     private static InterstitialAd interstitialAd;
@@ -170,6 +173,13 @@ public class AdManager {
             return;
         }
 
+        long now = System.currentTimeMillis();
+        if (now - lastRewardedAdShowTimeMs < REWARDED_COOLDOWN_MS) {
+            Log.d(TAG, "Rewarded ad skipped due to 10-minute session cooldown.");
+            if (onRewardEarned != null) onRewardEarned.run();
+            return;
+        }
+
         if (rewardedAd != null) {
             displayLoadedRewardedAd(activity, onRewardEarned);
         } else {
@@ -193,6 +203,7 @@ public class AdManager {
                             public void onAdFailedToLoad(@NonNull LoadAdError error) {
                                 if (progressDialog.isShowing()) progressDialog.dismiss();
                                 Log.d(TAG, "Rewarded ad failed to load: " + error.getMessage());
+                                lastRewardedAdShowTimeMs = System.currentTimeMillis();
                                 android.widget.Toast.makeText(activity, "Ad temporarily unavailable. Generating report...", android.widget.Toast.LENGTH_SHORT).show();
                                 if (onRewardEarned != null) onRewardEarned.run();
                             }
@@ -220,11 +231,13 @@ public class AdManager {
             public void onAdFailedToShowFullScreenContent(@NonNull com.google.android.gms.ads.AdError adError) {
                 rewardedAd = null;
                 preloadRewarded(activity);
+                lastRewardedAdShowTimeMs = System.currentTimeMillis();
                 if (onRewardEarned != null) onRewardEarned.run();
             }
         });
         rewardedAd.show(activity, rewardItem -> {
             rewardEarned[0] = true;
+            lastRewardedAdShowTimeMs = System.currentTimeMillis();
         });
     }
 }

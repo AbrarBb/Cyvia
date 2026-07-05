@@ -29,4 +29,16 @@
         android:label="@string/nav_settings"
         tools:layout="@layout/fragment_settings" />
 
+    <fragment
+        android:id="@+id/nav_profile_edit"
+        android:name="com.khatibstudio.cyvia.ui.settings.ProfileEditFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_profile_edit" />
+
+    <fragment
+        android:id="@+id/nav_faq"
+        android:name="com.khatibstudio.cyvia.ui.settings.FaqFragment"
+        android:label="FAQ"
+        tools:layout="@layout/fragment_faq" />
+
 </navigation>

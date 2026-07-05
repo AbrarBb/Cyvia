@@ -107,20 +107,22 @@ public class SettingsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateAppLockUI();
+        updateProfileSummary();
+    }
+
+    private void updateProfileSummary() {
+        if (binding == null) return;
+        String name = settings.getUserName();
+        binding.tvSummaryName.setText(name.isEmpty() ? "My Profile" : name);
+        int modeIdx = indexOfMode(settings.getTrackingMode());
+        binding.tvSummaryDetails.setText(TRACKING_MODE_LABELS[modeIdx] + " · Age " + settings.getUserAge());
+        com.khatibstudio.cyvia.util.KawaiiIconUtil.loadIcon(requireContext(), binding.ivSummaryAvatar, settings.getUserPfp(), R.drawable.ic_kawaii_melody);
     }
 
     // ─── Pre-fill saved values ────────────────────────────────────────────
 
     private void populateCurrentValues() {
-        // User name
-        binding.etUserName.setText(settings.getUserName());
-
-        // Tracking mode dropdown
-        ArrayAdapter<String> modeAdapter = new ArrayAdapter<>(
-                requireContext(), android.R.layout.simple_dropdown_item_1line, TRACKING_MODE_LABELS);
-        ((AutoCompleteTextView) binding.spinnerTrackingMode).setAdapter(modeAdapter);
-        int modeIdx = indexOfMode(settings.getTrackingMode());
-        binding.spinnerTrackingMode.setText(TRACKING_MODE_LABELS[modeIdx], false);
+        updateProfileSummary();
 
         // Notifications
         binding.switchNotifPeriod.setChecked(settings.isPeriodNotifEnabled());
@@ -161,34 +163,11 @@ public class SettingsFragment extends Fragment {
     // ─── Listeners ────────────────────────────────────────────────────────
 
     private void setupListeners() {
-        // User name — explicit save button
-        if (binding.btnSaveName != null) {
-            binding.btnSaveName.setOnClickListener(v -> {
-                String name = binding.etUserName.getText() != null ? binding.etUserName.getText().toString().trim() : "";
-                settings.setUserName(name);
-                android.widget.Toast.makeText(requireContext(), "Name updated ✨", android.widget.Toast.LENGTH_SHORT).show();
-            });
-        }
-        binding.etUserName.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus && binding.etUserName.getText() != null) {
-                settings.setUserName(binding.etUserName.getText().toString().trim());
-            }
-        });
-
-        // Tracking mode explicit dialog selector
-        binding.spinnerTrackingMode.setOnClickListener(v -> {
-            int currentIdx = indexOfMode(settings.getTrackingMode());
-            new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Select Recording Type")
-                    .setSingleChoiceItems(TRACKING_MODE_LABELS, currentIdx, (dialog, which) -> {
-                        settings.setTrackingMode(TRACKING_MODES[which]);
-                        binding.spinnerTrackingMode.setText(TRACKING_MODE_LABELS[which], false);
-                        dialog.dismiss();
-                    })
-                    .show();
-        });
-        binding.spinnerTrackingMode.setOnItemClickListener((parent, v, position, id) ->
-                settings.setTrackingMode(TRACKING_MODES[position]));
+        // Profile summary card -> navigate to ProfileEditFragment
+        View.OnClickListener openProfile = v ->
+                androidx.navigation.Navigation.findNavController(v).navigate(R.id.nav_profile_edit);
+        binding.cardProfileSummary.setOnClickListener(openProfile);
+        binding.btnEditProfile.setOnClickListener(openProfile);
 
         // Notifications
         binding.switchNotifPeriod.setOnCheckedChangeListener((v, checked) -> {
@@ -260,6 +239,10 @@ public class SettingsFragment extends Fragment {
 
         // Delete all
         binding.btnDeleteAll.setOnClickListener(v -> confirmDeleteAll());
+
+        // Help & FAQ
+        binding.cardFaq.setOnClickListener(v ->
+                androidx.navigation.Navigation.findNavController(v).navigate(R.id.nav_faq));
 
         // Remove Ads
         binding.btnRemoveAds.setOnClickListener(v -> launchRemoveAdsPurchase());

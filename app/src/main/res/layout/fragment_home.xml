@@ -108,12 +108,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-                <!-- Center Pastel Hub Card (140x140dp) -->
+                <!-- Center Pastel Hub Card -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_center_hub"
-                    android:layout_width="170dp"
-                    android:layout_height="170dp"
-                    app:cardCornerRadius="70dp"
+                    android:layout_width="176dp"
+                    android:layout_height="176dp"
+                    app:cardCornerRadius="88dp"
                     app:cardElevation="0dp"
                     app:strokeWidth="2dp"
                     app:strokeColor="@color/cyvia_peach"
@@ -128,29 +128,29 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:padding="8dp">
+                        android:padding="6dp">
 
                         <TextView
                             android:id="@+id/tv_status_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Next Period"
-                            android:textSize="12sp"
+                            android:textSize="12.5sp"
                             android:fontFamily="@font/inter"
                             android:textColor="@color/cyvia_on_primary_container"
-                            android:alpha="0.85" />
+                            android:alpha="0.85"
+                            android:maxLines="1" />
 
                         <TextView
                             android:id="@+id/tv_status_main"
-                            android:layout_width="120dp"
+                            android:layout_width="156dp"
                             android:layout_height="wrap_content"
                             android:text="—"
                             app:autoSizeTextType="uniform"
-                            app:autoSizeMinTextSize="13sp"
+                            app:autoSizeMinTextSize="11sp"
                             app:autoSizeMaxTextSize="20sp"
                             app:autoSizeStepGranularity="1sp"
-                            android:maxLines="2"
-                            android:ellipsize="end"
+                            android:maxLines="3"
                             android:fontFamily="@font/nunito"
                             android:textStyle="bold"
                             android:textColor="@color/cyvia_on_primary_container"
@@ -160,14 +160,15 @@
 
                         <TextView
                             android:id="@+id/tv_fertile_dates"
-                            android:layout_width="wrap_content"
+                            android:layout_width="154dp"
                             android:layout_height="wrap_content"
                             android:text="Low pregnancy chance"
-                            android:textSize="11sp"
+                            android:textSize="10.5sp"
                             android:fontFamily="@font/inter"
                             android:textColor="@color/cyvia_on_primary_container"
                             android:alpha="0.85"
-                            android:gravity="center" />
+                            android:gravity="center"
+                            android:maxLines="2" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>

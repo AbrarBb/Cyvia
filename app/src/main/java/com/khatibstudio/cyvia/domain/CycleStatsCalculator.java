@@ -25,6 +25,8 @@ public class CycleStatsCalculator {
         public String regularityLabel;
         /** Cycle lengths in chronological order for charting. */
         public List<Integer> cycleLengths = new ArrayList<>();
+        /** Period duration lengths in chronological order for charting. */
+        public List<Integer> periodLengths = new ArrayList<>();
 
         public boolean hasData() {
             return totalCycles > 0;
@@ -66,9 +68,13 @@ public class CycleStatsCalculator {
             if (duration > 0 && duration <= 14) {
                 totalPeriodDays += duration;
                 periodCount++;
+                stats.periodLengths.add(0, duration);
             }
         }
         stats.averagePeriodLength = periodCount > 0 ? (double) totalPeriodDays / periodCount : (defaultPeriodLen > 0 ? defaultPeriodLen : 5);
+        if (stats.periodLengths.isEmpty()) {
+            stats.periodLengths.add(defaultPeriodLen > 0 ? defaultPeriodLen : 5);
+        }
 
         // Compute inter-cycle lengths from consecutive start dates
         List<Integer> lengths = new ArrayList<>();
