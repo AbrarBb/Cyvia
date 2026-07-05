@@ -32,6 +32,12 @@ import com.khatibstudio.cyvia.data.repository.SymptomRepository;
 import com.khatibstudio.cyvia.databinding.FragmentSettingsBinding;
 import com.khatibstudio.cyvia.ui.onboarding.OnboardingActivity;
 import com.khatibstudio.cyvia.worker.BootReceiver;
+import com.khatibstudio.cyvia.worker.ReminderWorker;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import androidx.core.content.ContextCompat;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,6 +60,7 @@ public class SettingsFragment extends Fragment {
     private ActivityResultLauncher<String[]> importLauncher;
     private ActivityResultLauncher<String> exportLauncher;
     private ActivityResultLauncher<Intent> pinLockLauncher;
+    private ActivityResultLauncher<String> requestPermissionLauncher;
 
     // Tracking mode labels
     private static final String[] TRACKING_MODE_LABELS = {
@@ -80,6 +87,15 @@ public class SettingsFragment extends Fragment {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> updateAppLockUI()
         );
+
+        requestPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(), isGranted -> {
+                    if (isGranted) {
+                        Toast.makeText(requireContext(), "Notification permission granted!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), "Permission denied. Please enable notifications in system settings.", Toast.LENGTH_LONG).show();
+                    }
+                });
 
         importLauncher = registerForActivityResult(
                 new ActivityResultContracts.OpenDocument(),
@@ -172,18 +188,26 @@ public class SettingsFragment extends Fragment {
         // Notifications
         binding.switchNotifPeriod.setOnCheckedChangeListener((v, checked) -> {
             settings.setPeriodNotifEnabled(checked);
+            if (checked) checkAndRequestNotificationPermission();
             BootReceiver.scheduleReminders(requireContext());
         });
         binding.switchNotifOvulation.setOnCheckedChangeListener((v, checked) -> {
             settings.setOvulationNotifEnabled(checked);
+            if (checked) checkAndRequestNotificationPermission();
             BootReceiver.scheduleReminders(requireContext());
         });
         binding.switchNotifLog.setOnCheckedChangeListener((v, checked) -> {
             settings.setLogReminderEnabled(checked);
+            if (checked) checkAndRequestNotificationPermission();
             BootReceiver.scheduleReminders(requireContext());
         });
         binding.switchNotifDiscreet.setOnCheckedChangeListener((v, checked) ->
                 requireContext().getSharedPreferences("cyvia_settings", android.content.Context.MODE_PRIVATE).edit().putBoolean("notif_discreet", checked).apply());
+        binding.btnTestNotif.setOnClickListener(v -> {
+            checkAndRequestNotificationPermission();
+            ReminderWorker.sendImmediateTestNotification(requireContext(), ReminderWorker.TYPE_PERIOD);
+            Toast.makeText(requireContext(), "Sample notification sent! Check your notification tray.", Toast.LENGTH_SHORT).show();
+        });
 
         // Minor-safe & Minimal mode
         binding.switchMinorSafe.setOnCheckedChangeListener((v, checked) -> {
@@ -407,5 +431,14 @@ public class SettingsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         executor.shutdown();
+    }
+
+    private void checkAndRequestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
     }
 }

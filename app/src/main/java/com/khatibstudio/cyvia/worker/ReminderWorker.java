@@ -97,7 +97,7 @@ public class ReminderWorker extends Worker {
             CyclePrediction prediction = engine.predict(cycles);
             if (prediction != null && prediction.nextPeriodStart != null) {
                 long diff = ChronoUnit.DAYS.between(LocalDate.now(), prediction.nextPeriodStart);
-                return diff == targetDays;
+                return diff >= 0 && diff <= targetDays;
             }
         } catch (Exception ignored) {}
         return false;
@@ -112,7 +112,8 @@ public class ReminderWorker extends Worker {
             PredictionEngine engine = new PredictionEngine(settings);
             CyclePrediction prediction = engine.predict(cycles);
             if (prediction != null && prediction.ovulationDay != null) {
-                return prediction.ovulationDay.isEqual(LocalDate.now());
+                long diff = ChronoUnit.DAYS.between(LocalDate.now(), prediction.ovulationDay);
+                return diff >= -1 && diff <= 1;
             }
         } catch (Exception ignored) {}
         return false;

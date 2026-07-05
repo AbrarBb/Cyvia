@@ -19,6 +19,15 @@ import java.util.concurrent.TimeUnit;
  */
 public class BootReceiver {
 
+    private static long calculateInitialDelayToHour(int targetHour) {
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+        java.time.LocalDateTime target = now.withHour(targetHour).withMinute(0).withSecond(0).withNano(0);
+        if (now.compareTo(target) >= 0) {
+            target = target.plusDays(1);
+        }
+        return java.time.Duration.between(now, target).toMillis();
+    }
+
     /**
      * (Re)schedules all enabled reminders.
      * Called from SettingsFragment whenever any reminder toggle changes.
@@ -35,9 +44,10 @@ public class BootReceiver {
                     .putInt(ReminderWorker.KEY_DAYS_UNTIL, daysBefore)
                     .build();
 
-            // Run daily — the worker checks if a notification is actually appropriate today
+            // Run daily at 9:00 AM — the worker checks if a notification is actually appropriate today
             PeriodicWorkRequest periodWork = new PeriodicWorkRequest.Builder(
                     ReminderWorker.class, 1, TimeUnit.DAYS)
+                    .setInitialDelay(calculateInitialDelayToHour(9), TimeUnit.MILLISECONDS)
                     .setInputData(periodData)
                     .build();
 
@@ -58,6 +68,7 @@ public class BootReceiver {
 
             PeriodicWorkRequest ovulationWork = new PeriodicWorkRequest.Builder(
                     ReminderWorker.class, 1, TimeUnit.DAYS)
+                    .setInitialDelay(calculateInitialDelayToHour(9), TimeUnit.MILLISECONDS)
                     .setInputData(ovulationData)
                     .build();
 
@@ -78,6 +89,7 @@ public class BootReceiver {
 
             PeriodicWorkRequest logWork = new PeriodicWorkRequest.Builder(
                     ReminderWorker.class, 1, TimeUnit.DAYS)
+                    .setInitialDelay(calculateInitialDelayToHour(20), TimeUnit.MILLISECONDS)
                     .setInputData(logData)
                     .build();
 

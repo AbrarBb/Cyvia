@@ -368,6 +368,46 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider" />
+
+                <LinearLayout
+                    android:id="@+id/btn_test_notif"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_notification"
+                        app:tint="@color/cyvia_primary"
+                        android:layout_marginEnd="14dp" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Test Notifications"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_primary" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Send a sample alert to verify permissions"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_surface_variant" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -828,7 +868,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Help &amp; FAQ 🌸"
+                        android:text="Help &amp; FAQ "
                         android:textSize="16sp"
                         android:fontFamily="@font/nunito"
                         android:textStyle="bold"
@@ -896,7 +936,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Contact us or visit GitHub (@AbrarBb)"
+                        android:text="Contact us"
                         android:textSize="12.5sp"
                         android:fontFamily="@font/inter"
                         android:textColor="@color/cyvia_on_surface_variant" />
