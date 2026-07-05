@@ -109,7 +109,7 @@ public class InsightsFragment extends Fragment {
     private void styleCharts() {
         styleBarChart(binding.chartCycleLength);
         styleBarChart(binding.chartPeriodLength);
-        styleBarChart(binding.chartSymptoms);
+        styleHorizontalBarChart(binding.chartSymptoms);
         stylePieChart(binding.chartMood);
     }
 
@@ -118,9 +118,36 @@ public class InsightsFragment extends Fragment {
         chart.getLegend().setEnabled(false);
         chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         chart.getXAxis().setDrawGridLines(false);
+        chart.getXAxis().setGranularity(1f);
+        chart.getXAxis().setGranularityEnabled(true);
+        chart.getXAxis().setTextSize(11f);
+        chart.getXAxis().setTextColor(requireContext().getColor(R.color.cyvia_on_surface));
+        chart.getXAxis().setAxisMinimum(0.5f);
         chart.getAxisRight().setEnabled(false);
+        chart.getAxisLeft().setGranularity(1f);
+        chart.getAxisLeft().setAxisMinimum(0f);
+        chart.setDrawGridBackground(false);
+        chart.setExtraBottomOffset(10f);
+        chart.setNoDataText("Log some data to see your chart");
+    }
+
+    private void styleHorizontalBarChart(com.github.mikephil.charting.charts.HorizontalBarChart chart) {
+        chart.getDescription().setEnabled(false);
+        chart.getLegend().setEnabled(false);
+        chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        chart.getXAxis().setDrawGridLines(false);
+        chart.getXAxis().setGranularity(1f);
+        chart.getXAxis().setGranularityEnabled(true);
+        chart.getXAxis().setTextSize(11f);
+        chart.getXAxis().setTextColor(requireContext().getColor(R.color.cyvia_on_surface));
+        chart.getAxisRight().setEnabled(false);
+        chart.getAxisLeft().setDrawGridLines(true);
+        chart.getAxisLeft().setGranularity(1f);
+        chart.getAxisLeft().setAxisMinimum(0f);
         chart.setDrawGridBackground(false);
         chart.setNoDataText("Log some symptoms to see your chart");
+        chart.setExtraLeftOffset(8f);
+        chart.setExtraRightOffset(15f);
     }
 
     private void stylePieChart(PieChart chart) {
@@ -209,6 +236,13 @@ public class InsightsFragment extends Fragment {
             dataSet.setColor(requireContext().getColor(R.color.cyvia_primary));
             dataSet.setValueTextColor(requireContext().getColor(R.color.cyvia_on_surface_variant));
             dataSet.setValueTextSize(10f);
+            binding.chartCycleLength.getXAxis().setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return "#" + ((int) value);
+                }
+            });
+            binding.chartCycleLength.getXAxis().setLabelCount(Math.max(cLengths.size(), 2), false);
             binding.chartCycleLength.setData(new BarData(dataSet));
             binding.chartCycleLength.animateY(500);
             binding.chartCycleLength.invalidate();
@@ -228,6 +262,13 @@ public class InsightsFragment extends Fragment {
             pDataSet.setColor(requireContext().getColor(R.color.cyvia_secondary));
             pDataSet.setValueTextColor(requireContext().getColor(R.color.cyvia_on_surface_variant));
             pDataSet.setValueTextSize(10f);
+            binding.chartPeriodLength.getXAxis().setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return "#" + ((int) value);
+                }
+            });
+            binding.chartPeriodLength.getXAxis().setLabelCount(Math.max(pLengths.size(), 2), false);
             binding.chartPeriodLength.setData(new BarData(pDataSet));
             binding.chartPeriodLength.animateY(500);
             binding.chartPeriodLength.invalidate();
@@ -269,7 +310,11 @@ public class InsightsFragment extends Fragment {
         for (int i = 0; i < sortedIds.size(); i++) {
             int tagId = sortedIds.get(i);
             entries.add(new BarEntry(i, counts.get(tagId)));
-            labels.add(tagNames.getOrDefault(tagId, "Tag #" + tagId));
+            String label = tagNames.getOrDefault(tagId, "Tag #" + tagId);
+            if (label.length() > 16) {
+                label = label.substring(0, 14) + "…";
+            }
+            labels.add(label);
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "Symptoms");

@@ -862,10 +862,10 @@
                     android:textColor="@color/cyvia_on_background"
                     android:layout_marginBottom="@dimen/space_12" />
 
-                <com.github.mikephil.charting.charts.BarChart
+                <com.github.mikephil.charting.charts.HorizontalBarChart
                     android:id="@+id/chart_symptoms"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp" />
+                    android:layout_height="240dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
