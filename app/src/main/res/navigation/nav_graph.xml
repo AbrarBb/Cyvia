@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.khatibstudio.cyvia.ui.home.HomeFragment"
+        android:label="@string/nav_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_calendar"
+        android:name="com.khatibstudio.cyvia.ui.calendar.CalendarFragment"
+        android:label="@string/nav_calendar"
+        tools:layout="@layout/fragment_calendar" />
+
+    <fragment
+        android:id="@+id/nav_insights"
+        android:name="com.khatibstudio.cyvia.ui.insights.InsightsFragment"
+        android:label="@string/nav_insights"
+        tools:layout="@layout/fragment_insights" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.khatibstudio.cyvia.ui.settings.SettingsFragment"
+        android:label="@string/nav_settings"
+        tools:layout="@layout/fragment_settings" />
+
+</navigation>

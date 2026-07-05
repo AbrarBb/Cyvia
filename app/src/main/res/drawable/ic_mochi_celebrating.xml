@@ -1,0 +1,78 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Shadow -->
+    <path
+        android:fillColor="#1A000000"
+        android:pathData="M25,88 C25,88 75,88 75,88 C80,88 85,90 85,93 C85,96 80,98 75,98 C75,98 25,98 25,98 C20,98 15,96 15,93 C15,90 20,88 25,88 Z" />
+    <!-- Confetti -->
+    <path android:fillColor="#FF66C4" android:pathData="M18,22.5 A2.5,2.5 0,1,1 18,27.5 A2.5,2.5 0,1,1 18,22.5 Z" />
+    <path android:fillColor="#FFD700" android:pathData="M82,25 A3,3 0,1,1 82,31 A3,3 0,1,1 82,25 Z" />
+    <path android:fillColor="#8C52FF" android:pathData="M28,13 A2,2 0,1,1 28,17 A2,2 0,1,1 28,13 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M72,15.5 A2.5,2.5 0,1,1 72,20.5 A2.5,2.5 0,1,1 72,15.5 Z" />
+    <!-- Streamers -->
+    <path
+        android:strokeColor="#FFD700"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M12,45 Q18,38 15,32" />
+    <path
+        android:strokeColor="#8C52FF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M88,42 Q82,35 85,28" />
+    <!-- Jumping Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M25,46 C25,26 75,26 75,46 C75,66 70,80 50,80 C30,80 25,66 25,46 Z" />
+    <!-- Ears -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M28,36 L18,14 L42,26 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M28,32 L22,20 L37,27 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M72,36 L82,14 L58,26 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M72,32 L78,20 L63,27 Z" />
+    <!-- Joyful Eyes (> <) -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M33,45 L40,42 L33,39" />
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M67,45 L60,42 L67,39" />
+    <!-- Wide happy open mouth -->
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M43,48 Q50,58 57,48 Z" />
+    <!-- Cheeks -->
+    <path
+        android:fillColor="#FFB3DE"
+        android:pathData="M32,50 A4,3 0,1,1 32,49.9 Z" />
+    <path
+        android:fillColor="#FFB3DE"
+        android:pathData="M68,50 A4,3 0,1,1 68,49.9 Z" />
+    <!-- Arms raised in air celebrating -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#E0D6FF"
+        android:strokeWidth="1.5"
+        android:pathData="M26,45 C16,35 12,25 18,20 C23,16 30,30 32,42 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#E0D6FF"
+        android:strokeWidth="1.5"
+        android:pathData="M74,45 C84,35 88,25 82,20 C77,16 70,30 68,42 Z" />
+</vector>

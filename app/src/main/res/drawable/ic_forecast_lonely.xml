@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="44dp"
+    android:height="44dp"
+    android:viewportWidth="44"
+    android:viewportHeight="44">
+    <!-- Circular Background -->
+    <path
+        android:fillColor="#FF5C8A"
+        android:pathData="M22,2C10.95,2 2,10.95 2,22s8.95,20 20,20 20,-8.95 20,-20S33.05,2 22,2z"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M22,5C12.61,5 5,12.61 5,22s7.61,17 17,17 17,-7.61 17,-17S31.39,5 22,5z"
+        android:fillAlpha="0.15"/>
+    <!-- Lonely Face -->
+    <path
+        android:fillColor="#F8BBD0"
+        android:pathData="M22,12c-5.5,0 -10,4.5 -10,10c0,5.5 4.5,10 10,10c5.5,0 10,-4.5 10,-10C32,16.5 27.5,12 22,12z"/>
+    <!-- Sad round eyes -->
+    <path
+        android:fillColor="#880E4F"
+        android:pathData="M17,20a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0 M24,20a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0"/>
+    <!-- Wavy sad mouth -->
+    <path
+        android:strokeColor="#880E4F"
+        android:strokeWidth="1.5"
+        android:pathData="M19,25 Q22,23 25,25"/>
+</vector>

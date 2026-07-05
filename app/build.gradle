@@ -1,0 +1,115 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.khatibstudio.cyvia'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.khatibstudio.cyvia"
+        minSdk 24
+        targetSdk 35
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // AdMob test App ID — replace with your real ID before publishing
+        manifestPlaceholders = [
+            admobAppId: "ca-app-pub-3940256099942544~3347511713"
+        ]
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            debuggable true
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        // Enable core library desugaring so java.time works on API 24–25
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+
+    // Suppress lint errors that would block the build during development
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+dependencies {
+    // Core library desugaring (java.time on API < 26)
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+
+    // AndroidX Core & AppCompat
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.core:core:1.13.1'
+    implementation 'androidx.activity:activity:1.9.0'
+    implementation 'androidx.fragment:fragment:1.8.0'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+
+    // Material Design 3
+    implementation 'com.google.android.material:material:1.12.0'
+
+    // Layouts
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    // Navigation Component (Fragments)
+    implementation 'androidx.navigation:navigation-fragment:2.7.7'
+    implementation 'androidx.navigation:navigation-ui:2.7.7'
+
+    // Lifecycle — ViewModel + LiveData (Java-friendly)
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.8.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.8.2'
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.8.2'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.8.2'
+
+    // Room Database
+    implementation 'androidx.room:room-runtime:2.6.1'
+    annotationProcessor 'androidx.room:room-compiler:2.6.1'
+
+    // WorkManager (local notifications / reminders)
+    implementation 'androidx.work:work-runtime:2.9.0'
+    // Guava (required — play-services-ads pulls in the empty ListenableFuture stub;
+    // this provides the real com.google.common.util.concurrent.ListenableFuture)
+    implementation 'com.google.guava:guava:32.1.3-android'
+
+    // Google AdMob — test IDs used during development
+    implementation 'com.google.android.gms:play-services-ads:23.2.0'
+
+    // Google Play Billing (one-time Remove Ads IAP)
+    implementation 'com.android.billingclient:billing:6.2.1'
+
+    // MPAndroidChart (offline charting — no network required)
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // Gson (JSON serialisation for backup/restore)
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    // Testing
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    androidTestImplementation 'androidx.room:room-testing:2.6.1'
+}

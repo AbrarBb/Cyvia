@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ============================================================ -->
+    <!-- Cyvia Material 3 Theme (Light)                              -->
+    <!-- ============================================================ -->
+    <style name="Base.Theme.Cyvia" parent="Theme.Material3.Light.NoActionBar">
+
+        <!-- Brand colors -->
+        <item name="colorPrimary">@color/cyvia_primary</item>
+        <item name="colorOnPrimary">@color/cyvia_on_primary</item>
+        <item name="colorPrimaryContainer">@color/cyvia_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/cyvia_on_primary_container</item>
+        <item name="colorSecondary">@color/cyvia_secondary</item>
+        <item name="colorOnSecondary">@color/cyvia_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/cyvia_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/cyvia_on_secondary_container</item>
+        <item name="colorTertiary">@color/cyvia_tertiary</item>
+        <item name="colorOnTertiary">@color/cyvia_on_tertiary</item>
+        <item name="colorTertiaryContainer">@color/cyvia_tertiary_container</item>
+        <item name="colorOnTertiaryContainer">@color/cyvia_on_tertiary_container</item>
+        <item name="colorBackground">@color/cyvia_background</item>
+        <item name="colorOnBackground">@color/cyvia_on_background</item>
+        <item name="colorSurface">@color/cyvia_surface</item>
+        <item name="colorOnSurface">@color/cyvia_on_surface</item>
+        <item name="colorSurfaceVariant">@color/cyvia_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/cyvia_on_surface_variant</item>
+        <item name="colorError">@color/cyvia_error</item>
+        <item name="colorOnError">@color/cyvia_on_error</item>
+
+        <!-- Shape system — Material 3 rounded corners -->
+        <item name="shapeCornerSmall">@dimen/corner_small</item>
+        <item name="shapeCornerMedium">@dimen/corner_medium</item>
+        <item name="shapeCornerLarge">@dimen/corner_large</item>
+        <item name="shapeCornerExtraLarge">@dimen/corner_extra_large</item>
+
+        <!-- Status bar: transparent with light icons -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/bottom_nav_background</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+        <!-- Typography -->
+        <item name="fontFamily">@font/inter</item>
+    </style>
+
+    <style name="Theme.Cyvia" parent="Base.Theme.Cyvia" />
+
+    <!-- Splash screen theme — plain lavender background before content loads -->
+    <style name="Theme.Cyvia.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/cyvia_primary_container</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.Cyvia</item>
+    </style>
+
+    <!-- ============================================================ -->
+    <!-- Custom Widget Styles                                         -->
+    <!-- ============================================================ -->
+
+    <!-- Primary filled gradient button -->
+    <style name="Widget.Cyvia.Button.Primary" parent="Widget.Material3.Button">
+        <item name="cornerRadius">@dimen/corner_medium</item>
+        <item name="android:paddingTop">@dimen/space_12</item>
+        <item name="android:paddingBottom">@dimen/space_12</item>
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <!-- Outlined/secondary button -->
+    <style name="Widget.Cyvia.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="cornerRadius">@dimen/corner_medium</item>
+        <item name="android:paddingTop">@dimen/space_12</item>
+        <item name="android:paddingBottom">@dimen/space_12</item>
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textStyle">bold</item>
+        <item name="strokeColor">@color/cyvia_primary</item>
+        <item name="android:textColor">@color/cyvia_primary</item>
+    </style>
+
+    <!-- Text-only button -->
+    <style name="Widget.Cyvia.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:fontFamily">@font/inter</item>
+        <item name="android:textColor">@color/cyvia_primary</item>
+    </style>
+
+    <!-- Card: default surface card with large corner radius -->
+    <style name="Widget.Cyvia.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">@dimen/corner_large</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="cardBackgroundColor">@color/cyvia_surface</item>
+    </style>
+
+    <!-- Bottom navigation -->
+    <style name="Widget.Cyvia.BottomNav" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemIconTint">@color/bottom_nav_item_color</item>
+        <item name="itemTextColor">@color/bottom_nav_item_color</item>
+    </style>
+
+    <!-- Symptom chip -->
+    <style name="Widget.Cyvia.Chip.Symptom" parent="Widget.Material3.Chip.Filter">
+        <item name="android:fontFamily">@font/inter</item>
+        <item name="chipCornerRadius">@dimen/corner_small</item>
+    </style>
+
+    <!-- BottomSheet dialog -->
+    <style name="Theme.Cyvia.BottomSheetDialog" parent="Theme.Material3.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.Cyvia.BottomSheet</item>
+    </style>
+
+    <style name="Widget.Cyvia.BottomSheet" parent="Widget.Material3.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/Shape.Cyvia.BottomSheet</item>
+        <item name="android:backgroundTint">@color/cyvia_surface</item>
+    </style>
+
+    <!-- Explicitly set parent to avoid implicit inheritance issues with dots in the name -->
+    <style name="Shape.Cyvia.BottomSheet" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/corner_extra_large</item>
+        <item name="cornerSizeTopRight">@dimen/corner_extra_large</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <style name="PinNumButtonStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/cyvia_on_surface</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+</resources>

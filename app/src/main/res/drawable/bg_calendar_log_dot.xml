@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Log dot indicator: small circle for days that have a log entry -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/calendar_has_log_dot" />
+    <size
+        android:width="5dp"
+        android:height="5dp" />
+</shape>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Custom theme attributes for Cyvia -->
+    <attr name="colorBackground" format="color" />
+
+    <!-- Shape system attributes -->
+    <attr name="shapeCornerSmall" format="dimension" />
+    <attr name="shapeCornerMedium" format="dimension" />
+    <attr name="shapeCornerLarge" format="dimension" />
+    <attr name="shapeCornerExtraLarge" format="dimension" />
+
+    <!-- Splash Screen attributes (for compatibility if library attrs are not resolved) -->
+    <attr name="windowSplashScreenBackground" format="color" />
+    <attr name="windowSplashScreenAnimatedIcon" format="reference" />
+    <attr name="postSplashScreenTheme" format="reference" />
+</resources>

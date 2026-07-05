@@ -1,0 +1,889 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cyvia_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="60dp">
+
+        <!-- ── Title Header ────────────────────────────────────────────── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                android:backgroundTint="@color/cyvia_primary_container">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_settings"
+                    app:tint="@color/cyvia_primary" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:text="Settings "
+                android:textSize="26sp"
+                android:fontFamily="@font/nunito"
+                android:textStyle="bold"
+                android:textColor="@color/cyvia_on_background" />
+        </LinearLayout>
+
+        <!-- ── 1. Profile & Tracking Card ──────────────────────────────── -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile &amp; Cycle"
+            android:textSize="13.5sp"
+            android:textStyle="bold"
+            android:textColor="@color/cyvia_primary"
+            android:fontFamily="@font/nunito"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="14dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:hint="Your Name">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_user_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName|textCapWords"
+                            android:fontFamily="@font/inter"
+                            android:textSize="14.5sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_save_name"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="54dp"
+                        android:layout_marginStart="10dp"
+                        android:text="Save"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        app:cornerRadius="14dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tracking Goal"
+                    android:textSize="12.5sp"
+                    android:fontFamily="@font/inter"
+                    android:textColor="@color/cyvia_on_surface_variant"
+                    android:layout_marginBottom="4dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                    <AutoCompleteTextView
+                        android:id="@+id/spinner_tracking_mode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:fontFamily="@font/inter"
+                        android:textSize="14.5sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── 2. Appearance Card ──────────────────────────────────────── -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Appearance"
+            android:textSize="13.5sp"
+            android:textStyle="bold"
+            android:textColor="@color/cyvia_primary"
+            android:fontFamily="@font/nunito"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Theme Mode"
+                    android:textSize="13.5sp"
+                    android:fontFamily="@font/inter"
+                    android:textStyle="bold"
+                    android:textColor="@color/cyvia_on_surface"
+                    android:layout_marginBottom="8dp" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggle_theme"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="16dp"
+                    app:singleSelection="true"
+                    app:selectionRequired="true">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_theme_light"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="☀ Light"
+                        android:textSize="13sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_theme_system"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="⚙ Auto"
+                        android:textSize="13sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_theme_dark"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="☾ Dark"
+                        android:textSize="13sp" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Minimal Mode -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Minimalist Mode"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_on_surface" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Hide cutesy terms &amp; fertility framing"
+                            android:textSize="12.5sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_surface_variant" />
+                    </LinearLayout>
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switch_minimal_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── 3. Notifications & Reminders Card ───────────────────────── -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notifications"
+            android:textSize="13.5sp"
+            android:textStyle="bold"
+            android:textColor="@color/cyvia_primary"
+            android:fontFamily="@font/nunito"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Period Alerts"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_surface" />
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switch_notif_period"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Ovulation Alerts"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_surface" />
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switch_notif_ovulation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Daily Log Reminder"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_surface" />
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switch_notif_log"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Discreet Notifications"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_on_surface" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Hide personal details on lockscreen"
+                            android:textSize="12.5sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_surface_variant" />
+                    </LinearLayout>
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switch_notif_discreet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── 4. Privacy & Protection Card ────────────────────────────── -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Privacy &amp; Protection"
+            android:textSize="13.5sp"
+            android:textStyle="bold"
+            android:textColor="@color/cyvia_primary"
+            android:fontFamily="@font/nunito"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="App Lock (PIN Protection)"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_on_surface" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Require 4-digit PIN on launch"
+                            android:textSize="12.5sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_surface_variant" />
+                    </LinearLayout>
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switch_app_lock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row_change_pin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingVertical="10dp"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_lock"
+                        app:tint="@color/cyvia_primary" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:text="Change 4-Digit PIN"
+                        android:fontFamily="@font/inter"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_primary" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Minor-Safe Mode"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_on_surface" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Age-appropriate interface"
+                            android:textSize="12.5sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_surface_variant" />
+                    </LinearLayout>
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switch_minor_safe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Intimacy Logging"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_on_surface" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Opt-in to track intimate activity"
+                            android:textSize="12.5sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_surface_variant" />
+                    </LinearLayout>
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switch_track_intimacy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── 5. Backup & Data Card ───────────────────────────────────── -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Backup &amp; Data"
+            android:textSize="13.5sp"
+            android:textStyle="bold"
+            android:textColor="@color/cyvia_primary"
+            android:fontFamily="@font/nunito"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Monthly Auto Backup Switch -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        android:backgroundTint="@color/cyvia_secondary_container">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_notification"
+                            app:tint="@color/cyvia_on_secondary_container" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Monthly Auto-Backup"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_on_surface" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Automatic private app storage copy"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_surface_variant" />
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switch_auto_backup_monthly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="66dp" android:background="@color/divider" />
+
+                <!-- Export -->
+                <LinearLayout
+                    android:id="@+id/btn_export"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        android:backgroundTint="@color/cyvia_primary_container">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_export_cloud"
+                            app:tint="@color/cyvia_primary" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Export Backup"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_on_surface" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Save file locally or to cloud"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_surface_variant" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/cyvia_on_surface_variant" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="66dp" android:background="@color/divider" />
+
+                <!-- Import -->
+                <LinearLayout
+                    android:id="@+id/btn_import"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        android:backgroundTint="@color/cyvia_primary_container">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_import_cloud"
+                            app:tint="@color/cyvia_primary" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Restore Backup"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_on_surface" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Restore data from JSON file"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_surface_variant" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/cyvia_on_surface_variant" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="66dp" android:background="@color/divider" />
+
+                <!-- Delete All -->
+                <LinearLayout
+                    android:id="@+id/btn_delete_all"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        android:backgroundTint="@color/cyvia_error_container">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_trash_alert"
+                            app:tint="@color/cyvia_error" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Delete All Data"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_error" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Permanently clear logs &amp; reset"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_surface_variant" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/cyvia_error" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── 6. Premium Banner ───────────────────────────────────────── -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_remove_ads"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1.5dp"
+            app:strokeColor="@color/cyvia_outline"
+            android:backgroundTint="@color/cyvia_secondary_container">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="14dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    android:backgroundTint="@color/cyvia_primary_container">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_sparkle_crown" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginEnd="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Go Ad-Free ✨"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_secondary_container" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="One-time purchase forever"
+                        android:textSize="12.5sp"
+                        android:fontFamily="@font/inter"
+                        android:textColor="@color/cyvia_on_surface_variant" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_remove_ads"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Buy"
+                    android:textColor="@color/cyvia_on_primary"
+                    android:fontFamily="@font/nunito"
+                    android:textStyle="bold"
+                    app:cornerRadius="14dp"
+                    android:backgroundTint="@color/cyvia_primary" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Version Footer -->
+        <TextView
+            android:id="@+id/tv_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Version 1.0.0"
+            android:textSize="12.5sp"
+            android:fontFamily="@font/inter"
+            android:textColor="@color/cyvia_on_surface_variant" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

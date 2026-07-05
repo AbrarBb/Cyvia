@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cyvia_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/screen_padding_horizontal"
+        android:paddingEnd="@dimen/screen_padding_horizontal"
+        android:paddingTop="@dimen/space_16"
+        android:paddingBottom="@dimen/space_32">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/insights_title"
+            android:textSize="@dimen/text_headline_medium"
+            android:layout_gravity="center"
+            android:fontFamily="@font/nunito"
+            android:textStyle="bold"
+            android:textColor="@color/cyvia_on_background"
+            android:layout_marginBottom="@dimen/space_16" />
+
+        <!-- ── Medical Doctor Report Card ─────────────────────────────── -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_doctor_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:strokeColor="@color/cyvia_primary"
+            app:strokeWidth="1.5dp"
+            android:backgroundTint="@color/cyvia_primary_container">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@drawable/ic_insights"
+                    app:tint="@color/cyvia_primary"
+                    android:layout_marginEnd="16dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Generate Doctor Report"
+                        android:textSize="17sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_background" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Download comprehensive medical summary from beginning to end (Ad supported)"
+                        android:textSize="12.5sp"
+                        android:fontFamily="@font/inter"
+                        android:textColor="@color/cyvia_on_surface_variant"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="@color/cyvia_primary"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── Prediction Forecast Section ──────────────── -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forecast for this week"
+            android:textSize="18sp"
+            android:fontFamily="@font/nunito"
+            android:textStyle="bold"
+            android:textColor="@color/cyvia_on_background"
+            android:layout_marginBottom="12dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Table Header -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="symptom/mood"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/inter"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_surface_variant" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="Likelihood"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/inter"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_surface_variant" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#20808080"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Jul 2 Group -->
+                <TextView
+                    android:id="@+id/tv_forecast_date_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jul 2"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter"
+                    android:textColor="@color/cyvia_on_surface_variant"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Row 1 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:id="@+id/icon_forecast_1"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_forecast_acne" />
+
+                    <TextView
+                        android:id="@+id/tv_forecast_name_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/icon_forecast_1"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:text="Acne"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_surface" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tv_forecast_level_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="HIGH"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="#E53935"
+                            android:layout_marginEnd="12dp" />
+
+                        <TextView
+                            android:id="@+id/tv_forecast_pct_1"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:text="71%"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:textColor="@color/cyvia_on_surface" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!-- Row 2 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageView
+                        android:id="@+id/icon_forecast_2"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_forecast_tired" />
+
+                    <TextView
+                        android:id="@+id/tv_forecast_name_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/icon_forecast_2"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:text="Tired"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_surface" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tv_forecast_level_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="MED"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="#FB8C00"
+                            android:layout_marginEnd="12dp" />
+
+                        <TextView
+                            android:id="@+id/tv_forecast_pct_2"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:text="58%"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:textColor="@color/cyvia_on_surface" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#15808080"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Jul 3 Group -->
+                <TextView
+                    android:id="@+id/tv_forecast_date_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jul 3"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter"
+                    android:textColor="@color/cyvia_on_surface_variant"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Row 3 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:id="@+id/icon_forecast_3"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_forecast_aches" />
+
+                    <TextView
+                        android:id="@+id/tv_forecast_name_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/icon_forecast_3"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:text="Shoulder aches"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_surface" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tv_forecast_level_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="MED"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="#FB8C00"
+                            android:layout_marginEnd="12dp" />
+
+                        <TextView
+                            android:id="@+id/tv_forecast_pct_3"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:text="51%"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:textColor="@color/cyvia_on_surface" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!-- Row 4 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageView
+                        android:id="@+id/icon_forecast_4"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_forecast_lonely" />
+
+                    <TextView
+                        android:id="@+id/tv_forecast_name_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/icon_forecast_4"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:text="Lonely"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_surface" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tv_forecast_level_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="LOW"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="#43A047"
+                            android:layout_marginEnd="12dp" />
+
+                        <TextView
+                            android:id="@+id/tv_forecast_pct_4"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:text="34%"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:textColor="@color/cyvia_on_surface" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#15808080"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Jul 4 Group -->
+                <TextView
+                    android:id="@+id/tv_forecast_date_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jul 4"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter"
+                    android:textColor="@color/cyvia_on_surface_variant"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Row 5 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/icon_forecast_5"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_forecast_cramps" />
+
+                    <TextView
+                        android:id="@+id/tv_forecast_name_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/icon_forecast_5"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:text="Breast pain"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_surface" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tv_forecast_level_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="LOW"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="#43A047"
+                            android:layout_marginEnd="12dp" />
+
+                        <TextView
+                            android:id="@+id/tv_forecast_pct_5"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:text="33%"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:textColor="@color/cyvia_on_surface" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Stats row: avg, shortest, longest -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/space_16">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/space_8"
+                app:cardCornerRadius="@dimen/corner_large"
+                app:cardElevation="@dimen/card_elevation"
+                android:backgroundTint="@color/cyvia_surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="@dimen/space_16">
+
+                    <TextView
+                        android:id="@+id/tv_avg_cycle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="—"
+                        android:textSize="@dimen/text_headline_medium"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/insights_avg_cycle"
+                        android:textSize="@dimen/text_caption"
+                        android:fontFamily="@font/inter"
+                        android:textColor="@color/cyvia_on_surface_variant"
+                        android:gravity="center" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/space_8"
+                app:cardCornerRadius="@dimen/corner_large"
+                app:cardElevation="@dimen/card_elevation"
+                android:backgroundTint="@color/cyvia_surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="@dimen/space_16">
+
+                    <TextView
+                        android:id="@+id/tv_shortest_cycle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="—"
+                        android:textSize="@dimen/text_headline_medium"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_secondary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/insights_shortest"
+                        android:textSize="@dimen/text_caption"
+                        android:fontFamily="@font/inter"
+                        android:textColor="@color/cyvia_on_surface_variant"
+                        android:gravity="center" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="@dimen/corner_large"
+                app:cardElevation="@dimen/card_elevation"
+                android:backgroundTint="@color/cyvia_surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="@dimen/space_16">
+
+                    <TextView
+                        android:id="@+id/tv_longest_cycle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="—"
+                        android:textSize="@dimen/text_headline_medium"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_tertiary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/insights_longest"
+                        android:textSize="@dimen/text_caption"
+                        android:fontFamily="@font/inter"
+                        android:textColor="@color/cyvia_on_surface_variant"
+                        android:gravity="center" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- Regularity score card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_16"
+            app:cardCornerRadius="@dimen/corner_large"
+            app:cardElevation="@dimen/card_elevation"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_20">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/insights_regularity"
+                        android:textSize="@dimen/text_body_large"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_background"
+                        android:layout_marginBottom="@dimen/space_4" />
+
+                    <TextView
+                        android:id="@+id/tv_regularity_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="—"
+                        android:textSize="@dimen/text_body_medium"
+                        android:fontFamily="@font/inter"
+                        android:textColor="@color/cyvia_on_surface_variant" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_regularity_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textSize="@dimen/text_headline_large"
+                    android:fontFamily="@font/nunito"
+                    android:textStyle="bold"
+                    android:textColor="@color/cyvia_success" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Cycle length chart card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_16"
+            app:cardCornerRadius="@dimen/corner_large"
+            app:cardElevation="@dimen/card_elevation"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/space_20">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/insights_cycle_chart_title"
+                    android:textSize="@dimen/text_body_large"
+                    android:fontFamily="@font/nunito"
+                    android:textStyle="bold"
+                    android:textColor="@color/cyvia_on_background"
+                    android:layout_marginBottom="@dimen/space_12" />
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart_cycle_length"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Symptom frequency chart card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_16"
+            app:cardCornerRadius="@dimen/corner_large"
+            app:cardElevation="@dimen/card_elevation"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/space_20">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/insights_symptom_chart_title"
+                    android:textSize="@dimen/text_body_large"
+                    android:fontFamily="@font/nunito"
+                    android:textStyle="bold"
+                    android:textColor="@color/cyvia_on_background"
+                    android:layout_marginBottom="@dimen/space_12" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/chart_symptoms"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Mood frequency chart card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_16"
+            app:cardCornerRadius="@dimen/corner_large"
+            app:cardElevation="@dimen/card_elevation"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/space_20">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/insights_mood_chart_title"
+                    android:textSize="@dimen/text_body_large"
+                    android:fontFamily="@font/nunito"
+                    android:textStyle="bold"
+                    android:textColor="@color/cyvia_on_background"
+                    android:layout_marginBottom="@dimen/space_12" />
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/chart_mood"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Empty state (shown when no data) -->
+        <LinearLayout
+            android:id="@+id/layout_empty_insights"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="@dimen/space_40"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🐱"
+                android:textSize="64sp"
+                android:layout_marginBottom="@dimen/space_16" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_insights"
+                android:textSize="@dimen/text_body_large"
+                android:fontFamily="@font/inter"
+                android:textColor="@color/cyvia_on_surface_variant"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.4" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

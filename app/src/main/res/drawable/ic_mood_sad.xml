@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#FF5C8A"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <path
+        android:fillColor="#FFD1D8"
+        android:pathData="M12,18 C12,12 36,12 36,18 C38,28 35,36 24,36 C13,36 10,28 12,18 Z" />
+    <!-- Sad eyes closed downwards -->
+    <path
+        android:strokeColor="#3D2B2E"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M16,21 Q18.5,23 21,21 M27,21 Q29.5,23 32,21" />
+    <!-- Blue streaming tears -->
+    <path
+        android:fillColor="#80D8FF"
+        android:pathData="M17,23 C16,28 16,33 18,34 C20,33 19,28 19,23 Z M29,23 C28,28 28,33 30,34 C32,33 31,28 31,23 Z" />
+    <!-- Wobbly sad mouth -->
+    <path
+        android:strokeColor="#3D2B2E"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:pathData="M22,28 Q24,26 26,28" />
+</vector>

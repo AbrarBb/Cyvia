@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#FF5C8A"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <path
+        android:fillColor="#FFD1D8"
+        android:pathData="M12,18 C12,12 36,12 36,18 C38,28 35,36 24,36 C13,36 10,28 12,18 Z" />
+    <!-- Worried slant eyebrows -->
+    <path
+        android:strokeColor="#3D2B2E"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:pathData="M16,19 L20,21 M32,19 L28,21" />
+    <!-- Big round eyes -->
+    <path
+        android:fillColor="#3D2B2E"
+        android:pathData="M18,23 A2,2 0 1,1 18,27 A2,2 0 1,1 18,23 Z M30,23 A2,2 0 1,1 30,27 A2,2 0 1,1 30,23 Z" />
+    <!-- Sweat drop -->
+    <path
+        android:fillColor="#80D8FF"
+        android:pathData="M34,14 C33,17 32,20 34,21 C36,20 35,17 34,14 Z" />
+    <!-- Wobbly nervous mouth -->
+    <path
+        android:strokeColor="#3D2B2E"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M21,28 Q22.5,27 24,28 Q25.5,29 27,28" />
+</vector>

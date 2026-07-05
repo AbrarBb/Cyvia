@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#FFE8D6"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <path
+        android:fillColor="#1A1A1A"
+        android:pathData="M11,13 L15,21 C15,14 33,14 33,21 L37,13 C38,21 38,34 24,36 C10,34 10,21 11,13 Z" />
+    <!-- Yellow eyes -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M17,23 A2.5,2.5 0 1,1 17,28 A2.5,2.5 0 1,1 17,23 Z M31,23 A2.5,2.5 0 1,1 31,28 A2.5,2.5 0 1,1 31,23 Z" />
+    <path
+        android:fillColor="#1A1A1A"
+        android:pathData="M17.5,24.5 A1.2,1.2 0 1,1 17.5,26.9 A1.2,1.2 0 1,1 17.5,24.5 Z M30.5,24.5 A1.2,1.2 0 1,1 30.5,26.9 A1.2,1.2 0 1,1 30.5,24.5 Z" />
+    <path
+        android:fillColor="#FF8DA1"
+        android:pathData="M23,28.5 L25,28.5 L24,30 Z" />
+</vector>

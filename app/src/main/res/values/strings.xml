@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Cyvia</string>
+    <string name="app_slogan">Private. Beautiful. Yours.</string>
+
+    <!-- ============================================================ -->
+    <!-- Navigation                                                    -->
+    <!-- ============================================================ -->
+    <string name="nav_home">Home</string>
+    <string name="nav_calendar">Calendar</string>
+    <string name="nav_log">Log</string>
+    <string name="nav_insights">Insights</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- ============================================================ -->
+    <!-- Onboarding                                                    -->
+    <!-- ============================================================ -->
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_get_started">Get Started</string>
+    <string name="onboarding_done">Done</string>
+
+    <string name="onboarding_welcome_title">Hi there! I\'m Mochi</string>
+    <string name="onboarding_welcome_subtitle">Your private, offline period tracker.</string>
+
+    <string name="onboarding_privacy_title">Your data stays with you</string>
+    <string name="onboarding_privacy_subtitle">Everything you log is stored only on this device. We never send your data anywhere. No cloud. No servers. Just you.</string>
+    <string name="onboarding_privacy_point1">✓ No account required</string>
+    <string name="onboarding_privacy_point2">✓ No internet needed</string>
+    <string name="onboarding_privacy_point3">✓ No data ever leaves your phone</string>
+
+    <string name="onboarding_last_period_title">When did your last period start?</string>
+    <string name="onboarding_last_period_subtitle">This helps Mochi predict your next one. You can always update it later.</string>
+    <string name="onboarding_last_period_hint">Tap to select date</string>
+    <string name="onboarding_skip_date">Not sure, just use today</string>
+
+    <string name="onboarding_prefs_title">A little about your cycle</string>
+    <string name="onboarding_prefs_subtitle">Not sure? No worries, we\'ll use defaults and learn as you go.</string>
+    <string name="onboarding_cycle_length_label">Average cycle length</string>
+    <string name="onboarding_period_length_label">Average period length</string>
+    <string name="onboarding_days_suffix">days</string>
+    <string name="onboarding_tracking_mode_label">What are you tracking for?</string>
+
+    <!-- ============================================================ -->
+    <!-- Home Screen                                                   -->
+    <!-- ============================================================ -->
+    <string name="greeting_morning">Good morning</string>
+    <string name="greeting_afternoon">Good afternoon</string>
+    <string name="greeting_evening">Good evening</string>
+
+    <string name="home_period_due_in">Period due in %d days</string>
+    <string name="home_period_due_today">Your period may start today</string>
+    <string name="home_period_late">%d days late</string>
+    <string name="home_period_day">Day %d of your period</string>
+    <string name="home_period_ended">Your period ended %d days ago</string>
+    <string name="home_no_data">Log your first period to see predictions</string>
+
+    <string name="home_quick_log">Log Today</string>
+    <string name="home_cycle_day_label">Cycle day</string>
+    <string name="home_next_period_label">Next period</string>
+    <string name="home_fertile_window_label">Fertile window</string>
+    <string name="home_ovulation_label">Ovulation</string>
+    <string name="home_prediction_low_confidence">Based on %d cycle(s), accuracy will improve over time</string>
+
+    <string name="home_phase_menstrual">Menstrual Phase</string>
+    <string name="home_phase_follicular">Follicular Phase</string>
+    <string name="home_phase_ovulatory">Ovulatory Phase</string>
+    <string name="home_phase_luteal">Luteal Phase</string>
+
+    <!-- Mochi messages -->
+    <string name="mochi_greeting_period">Mochi is here with you</string>
+    <string name="mochi_greeting_normal">Mochi says hi!</string>
+    <string name="mochi_encouragement">You\'re doing great! Keep tracking</string>
+    <string name="mochi_streak_7">7 day streak! Mochi is proud of you</string>
+    <string name="mochi_streak_30">30 days! You\'re a Moon Friend</string>
+
+    <!-- ============================================================ -->
+    <!-- Calendar                                                      -->
+    <!-- ============================================================ -->
+    <string name="calendar_legend_period">Period</string>
+    <string name="calendar_legend_predicted">Predicted</string>
+    <string name="calendar_legend_fertile">Fertile</string>
+    <string name="calendar_legend_ovulation">Ovulation</string>
+    <string name="calendar_today">Today</string>
+    <string name="calendar_no_log">No log for this day</string>
+    <string name="calendar_tap_to_log">Tap to log this day</string>
+
+    <!-- ============================================================ -->
+    <!-- Daily Log                                                     -->
+    <!-- ============================================================ -->
+    <string name="log_title">Log for %s</string>
+    <string name="log_flow_label">Flow intensity</string>
+    <string name="log_mood_label">How are you feeling?</string>
+    <string name="log_symptoms_label">Symptoms</string>
+    <string name="log_notes_label">Notes</string>
+    <string name="log_notes_hint">How are you feeling? Any other notes…</string>
+    <string name="log_temperature_label">Basal body temperature (°C)</string>
+    <string name="log_weight_label">Weight (kg)</string>
+    <string name="log_intimacy_label">Intimacy</string>
+    <string name="log_save">Save</string>
+    <string name="log_delete">Delete log</string>
+    <string name="log_saved">Log saved </string>
+    <string name="log_deleted">Log deleted</string>
+    <string name="log_add_custom_symptom">+ Add custom symptom</string>
+    <string name="log_period_started">Period started</string>
+    <string name="log_period_ended">Period ended</string>
+
+    <!-- Flow intensities -->
+    <string name="flow_spotting">Spotting</string>
+    <string name="flow_light">Light</string>
+    <string name="flow_medium">Medium</string>
+    <string name="flow_heavy">Heavy</string>
+    <string name="flow_none">No flow</string>
+
+    <!-- Moods -->
+    <string name="mood_happy">Happy</string>
+    <string name="mood_calm">Calm</string>
+    <string name="mood_sad">Sad</string>
+    <string name="mood_anxious">Anxious</string>
+    <string name="mood_irritable">Irritable</string>
+    <string name="mood_energetic">Energetic</string>
+    <string name="mood_tired">Tired</string>
+
+    <!-- Default symptoms -->
+    <string name="symptom_cramps">Cramps</string>
+    <string name="symptom_headache">Headache</string>
+    <string name="symptom_bloating">Bloating</string>
+    <string name="symptom_backache">Backache</string>
+    <string name="symptom_acne">Acne</string>
+    <string name="symptom_fatigue">Fatigue</string>
+    <string name="symptom_nausea">Nausea</string>
+    <string name="symptom_tender_breasts">Tender breasts</string>
+    <string name="symptom_food_cravings">Food cravings</string>
+    <string name="symptom_insomnia">Insomnia</string>
+    <string name="symptom_mood_swings">Mood swings</string>
+    <string name="symptom_hot_flashes">Hot flashes</string>
+    <string name="symptom_discharge">Discharge</string>
+    <string name="symptom_spotting">Spotting</string>
+
+    <!-- ============================================================ -->
+    <!-- Insights                                                      -->
+    <!-- ============================================================ -->
+    <string name="insights_title">Cycle Insights</string>
+    <string name="insights_avg_cycle">Avg. length</string>
+    <string name="insights_avg_period">Avg. period length</string>
+    <string name="insights_shortest">Shortest cycle</string>
+    <string name="insights_longest">Longest cycle</string>
+    <string name="insights_regularity">Regularity score</string>
+    <string name="insights_regularity_high">Very regular</string>
+    <string name="insights_regularity_medium">Somewhat regular</string>
+    <string name="insights_regularity_low">Irregular, predictions may vary</string>
+    <string name="insights_no_data">Log a few cycles and Mochi will show you your trends</string>
+    <string name="insights_cycle_chart_title">Cycle length over time</string>
+    <string name="insights_period_chart_title">Period length over time</string>
+    <string name="insights_symptom_chart_title">Most common symptoms</string>
+    <string name="insights_mood_chart_title">Mood frequency</string>
+    <string name="insights_weight_chart_title">Weight over time</string>
+    <string name="insights_days_suffix">days</string>
+
+    <!-- ============================================================ -->
+    <!-- Settings                                                      -->
+    <!-- ============================================================ -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_profile">Profile</string>
+    <string name="settings_section_notifications">Reminders</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_section_data">Your Data</string>
+    <string name="settings_section_privacy">Privacy &amp; Safety</string>
+    <string name="settings_section_premium">Premium</string>
+    <string name="settings_section_about">About</string>
+
+    <string name="settings_name_hint">Your name (optional)</string>
+    <string name="settings_tracking_mode">Tracking goal</string>
+    <string name="settings_cycle_length">Average cycle length</string>
+    <string name="settings_period_length">Average period length</string>
+    <string name="settings_override_hint">Overrides the auto-calculated average</string>
+
+    <string name="settings_notif_period">Period reminder</string>
+    <string name="settings_notif_period_days">Days before period</string>
+    <string name="settings_notif_ovulation">Ovulation reminder</string>
+    <string name="settings_notif_log">Daily log reminder</string>
+    <string name="settings_notif_log_time">Reminder time</string>
+
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_system">Follow system</string>
+    <string name="settings_accent_color">Accent color</string>
+
+    <string name="settings_export">Export backup</string>
+    <string name="settings_export_desc">Save all your data to a JSON file</string>
+    <string name="settings_import">Restore from backup</string>
+    <string name="settings_import_desc">Restore data from a previously exported file</string>
+    <string name="settings_delete_all">Delete all data</string>
+    <string name="settings_delete_all_desc">Permanently delete all your data</string>
+
+    <string name="settings_minor_safe_mode">Minor-safe mode</string>
+    <string name="settings_minor_safe_mode_desc">Hides intimacy tracking and tones down pregnancy language</string>
+    <string name="settings_custom_symptoms">Manage custom symptoms</string>
+    <string name="settings_app_lock">App lock</string>
+
+    <string name="settings_remove_ads">Remove Ads</string>
+    <string name="settings_remove_ads_desc">One time purchase, no subscription</string>
+    <string name="settings_remove_ads_purchased">Ads removed, thank you!</string>
+    <string name="settings_restore_purchase">Restore purchase</string>
+
+    <string name="settings_version">Version %s</string>
+    <string name="settings_privacy_policy">Privacy policy</string>
+    <string name="settings_open_source">Open source licenses</string>
+
+    <!-- Tracking modes -->
+    <string name="tracking_mode_regular">Regular tracking</string>
+    <string name="tracking_mode_irregular">Irregular cycles</string>
+    <string name="tracking_mode_ttc">Trying to conceive</string>
+    <string name="tracking_mode_avoid">Avoiding pregnancy</string>
+    <string name="tracking_mode_no_periods">No periods (contraception)</string>
+    <string name="tracking_mode_postpartum">Postpartum</string>
+    <string name="tracking_mode_perimenopause">Perimenopause</string>
+
+    <!-- ============================================================ -->
+    <!-- Dialogs & Common                                              -->
+    <!-- ============================================================ -->
+    <string name="dialog_confirm">Confirm</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_delete_all_title">Delete all data?</string>
+    <string name="dialog_delete_all_message">This will delete all your data and can\'t be undone.</string>
+    <string name="dialog_delete_all_confirm">Yes, delete everything</string>
+    <string name="dialog_add_symptom_title">Add custom symptom</string>
+    <string name="dialog_add_symptom_hint">Symptom name</string>
+    <string name="dialog_add_symptom_add">Add</string>
+    <string name="dialog_import_title">Restore backup?</string>
+    <string name="dialog_import_message">Found %1$d cycles and %2$d daily logs. Existing data will be kept and new entries merged.</string>
+    <string name="dialog_import_confirm">Restore</string>
+    <string name="dialog_exclude_cycle_title">Exclude this cycle?</string>
+    <string name="dialog_exclude_cycle_message">This cycle won\'t affect your predictions. Good for gaps from pregnancy, contraception, or illness.</string>
+
+    <!-- Notifications -->
+    <string name="notif_channel_reminders">Daily Calendar &amp; Reminders</string>
+    <string name="notif_channel_reminders_desc">Calendar updates, schedule alerts, and daily check-ins.</string>
+    <string name="notif_period_title">Your period may be coming soon!</string>
+    <string name="notif_period_body">Your period may start in %d day(s). Time to get ready.</string>
+    <string name="notif_ovulation_title">Fertile window starting!</string>
+    <string name="notif_ovulation_body">Your fertile window starts today. Check Insights for more.</string>
+    <string name="notif_log_title">Don\'t forget to log today!</string>
+    <string name="notif_log_body">Mochi is waiting for your daily check-in. Tap to open Cyvia.</string>
+
+    <!-- Backup / Restore -->
+    <string name="backup_success">Backup saved successfully</string>
+    <string name="backup_failed">Backup failed, please try again</string>
+    <string name="restore_success">Data restored successfully</string>
+    <string name="restore_failed">Couldn\'t read that file. Is it a Cyvia backup?</string>
+    <string name="backup_filename">cyvia_backup_%s.json</string>
+
+    <!-- Empty states -->
+    <string name="empty_no_logs">Mochi is waiting for your first log</string>
+    <string name="empty_no_cycles">Log your first period to get started</string>
+    <string name="empty_insights">Track a few cycles and Mochi will show you your trends</string>
+
+    <!-- Accessibility -->
+    <string name="cd_mochi_cat">Mochi the cat mascot</string>
+    <string name="cd_back">Go back</string>
+    <string name="cd_close">Close</string>
+    <string name="cd_add">Add</string>
+    <string name="cd_calendar_prev">Previous month</string>
+    <string name="cd_calendar_next">Next month</string>
+    <string name="cd_delete_symptom">Remove symptom</string>
+</resources>

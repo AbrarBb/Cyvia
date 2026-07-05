@@ -1,0 +1,84 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Shadow -->
+    <path
+        android:fillColor="#1A000000"
+        android:pathData="M25,85 C25,85 75,85 75,85 C80,85 85,88 85,91 C85,94 80,97 75,97 C75,97 25,97 25,97 C20,97 15,94 15,91 C15,88 20,85 25,85 Z" />
+    <!-- Droopy Tail -->
+    <path
+        android:fillColor="#8C52FF"
+        android:pathData="M70,75 Q85,80 80,65 Q77,60 72,68 Q68,72 70,75 Z" />
+    <!-- Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M25,52 C25,32 75,32 75,52 C75,72 70,85 50,85 C30,85 25,72 25,52 Z" />
+    <!-- Droopy Ears -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M26,42 L14,32 L38,36 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M26,39 L18,33 L34,36 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M74,42 L86,32 L62,36 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M74,39 L82,33 L66,36 Z" />
+    <!-- Worried Eyebrows -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M36,44 Q40,41 44,45" />
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M64,44 Q60,41 56,45" />
+    <!-- Eyes -->
+    <path
+        android:fillColor="#2E1E40"
+        android:pathData="M40,50 A3.5,3.5 0,1,1 40,57 A3.5,3.5 0,1,1 40,50 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M41,51 A1,1 0,1,1 41,53 A1,1 0,1,1 41,51 Z" />
+    <path
+        android:fillColor="#2E1E40"
+        android:pathData="M60,50 A3.5,3.5 0,1,1 60,57 A3.5,3.5 0,1,1 60,50 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M61,51 A1,1 0,1,1 61,53 A1,1 0,1,1 61,51 Z" />
+    <!-- Cheeks -->
+    <path
+        android:fillColor="#FFB3DE"
+        android:pathData="M32,58 A4,3 0,1,1 32,57.9 Z" />
+    <path
+        android:fillColor="#FFB3DE"
+        android:pathData="M68,58 A4,3 0,1,1 68,57.9 Z" />
+    <!-- Worried Wavy Mouth -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M46,60 Q48,57 50,60 Q52,63 54,60" />
+    <!-- Blue Sweat / Teardrop -->
+    <path
+        android:fillColor="#4D96FF"
+        android:pathData="M73,48 Q76,55 71,57 Q68,55 71,48 Z" />
+    <!-- Little Paws tucked -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#E0D6FF"
+        android:strokeWidth="1.5"
+        android:pathData="M38,76 Q42,82 48,78 C48,73 42,71 38,76 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#E0D6FF"
+        android:strokeWidth="1.5"
+        android:pathData="M62,76 Q58,82 52,78 C52,73 58,71 62,76 Z" />
+</vector>

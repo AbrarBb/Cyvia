@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DailyLogBottomSheet — opened by the center FAB or tapping a calendar day -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/cyvia_surface">
+
+    <!-- Drag handle -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/space_12"
+        android:layout_marginBottom="@dimen/space_8"
+        android:background="@color/cyvia_outline"
+        android:backgroundTint="@color/cyvia_outline" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/screen_padding_horizontal"
+            android:paddingEnd="@dimen/screen_padding_horizontal"
+            android:paddingBottom="@dimen/space_32">
+
+            <!-- Date Navigation Header Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="@dimen/space_20">
+
+                <ImageButton
+                    android:id="@+id/btn_prev_date"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_chevron_left"
+                    android:contentDescription="Previous day"
+                    app:tint="@color/cyvia_on_surface" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_date_selector"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="22dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/cyvia_primary"
+                    app:strokeWidth="1.5dp"
+                    app:cardBackgroundColor="@color/cyvia_primary_container">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingVertical="10dp"
+                        android:paddingHorizontal="16dp">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_calendar"
+                            app:tint="@color/cyvia_primary"
+                            android:layout_marginEnd="8dp" />
+
+                        <TextView
+                            android:id="@+id/tv_log_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Today • Jul 2"
+                            android:textSize="@dimen/text_body_large"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_primary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <ImageButton
+                    android:id="@+id/btn_next_date"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_chevron_right"
+                    android:contentDescription="Next day"
+                    app:tint="@color/cyvia_on_surface" />
+            </LinearLayout>
+
+            <!-- ── Flow intensity ─────────────────────────────────────── -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/log_flow_label"
+                android:textSize="@dimen/text_body_large"
+                android:fontFamily="@font/nunito"
+                android:textStyle="bold"
+                android:textColor="@color/cyvia_on_background"
+                android:layout_marginBottom="@dimen/space_8" />
+
+            <!-- Flow intensity: segmented button group -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:fillViewport="true"
+                android:layout_marginBottom="@dimen/space_20">
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggle_flow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="true"
+                    app:selectionRequired="false">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_flow_spotting"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/flow_button_height"
+                        android:layout_weight="1"
+                        android:minWidth="0dp"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:paddingHorizontal="4dp"
+                        android:textSize="12sp"
+                        android:text="Spotting" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_flow_light"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/flow_button_height"
+                        android:layout_weight="1"
+                        android:minWidth="0dp"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:paddingHorizontal="4dp"
+                        android:textSize="12sp"
+                        android:text="Light" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_flow_medium"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/flow_button_height"
+                        android:layout_weight="1"
+                        android:minWidth="0dp"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:paddingHorizontal="4dp"
+                        android:textSize="12sp"
+                        android:text="Medium" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_flow_heavy"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/flow_button_height"
+                        android:layout_weight="1"
+                        android:minWidth="0dp"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:paddingHorizontal="4dp"
+                        android:textSize="12sp"
+                        android:text="Heavy" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+            </HorizontalScrollView>
+
+            <!-- ── Mood ─────────────────────────────────────────────────── -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/log_mood_label"
+                android:textSize="@dimen/text_body_large"
+                android:fontFamily="@font/nunito"
+                android:textStyle="bold"
+                android:textColor="@color/cyvia_on_background"
+                android:layout_marginBottom="@dimen/space_8" />
+
+            <!-- Mood selector: horizontal row of Kawaii circular badges -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginBottom="@dimen/space_20">
+
+                <LinearLayout
+                    android:id="@+id/layout_mood_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <!-- ── Physical Symptoms ───────────────────────────────────────── -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Physical Symptoms"
+                android:textSize="@dimen/text_body_large"
+                android:fontFamily="@font/nunito"
+                android:textStyle="bold"
+                android:textColor="@color/cyvia_on_background"
+                android:layout_marginBottom="@dimen/space_8" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginBottom="@dimen/space_16">
+
+                <LinearLayout
+                    android:id="@+id/layout_physical_symptoms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <!-- ── Emotional & Custom Symptoms ────────────────────────────── -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Emotional &amp; Custom Symptoms"
+                android:textSize="@dimen/text_body_large"
+                android:fontFamily="@font/nunito"
+                android:textStyle="bold"
+                android:textColor="@color/cyvia_on_background"
+                android:layout_marginBottom="@dimen/space_8" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginBottom="@dimen/space_16">
+
+                <LinearLayout
+                    android:id="@+id/layout_emotional_symptoms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <!-- Add custom mood/symptom with icon/photo -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_add_custom_kawaii"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_add_circle"
+                android:text="Create Mood / Symptom"
+                app:cornerRadius="16dp"
+                android:layout_marginBottom="@dimen/space_20" />
+
+            <!-- ── Notes ─────────────────────────────────────────────────── -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:hint="@string/log_notes_hint"
+                android:layout_marginBottom="@dimen/space_16">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minLines="2"
+                    android:maxLines="5"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:fontFamily="@font/inter" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- ── Temperature (optional) ─────────────────────────────────── -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_temperature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:hint="@string/log_temperature_label"
+                android:layout_marginBottom="@dimen/space_16">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_temperature"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:fontFamily="@font/inter" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- ── Intimacy toggle (hidden in minor-safe mode) ─────────────── -->
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switch_intimacy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/log_intimacy_label"
+                android:fontFamily="@font/inter"
+                android:textColor="@color/cyvia_on_background"
+                android:layout_marginBottom="@dimen/space_24"
+                android:visibility="gone" />
+
+            <!-- ── Save button ────────────────────────────────────────────── -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save_log"
+                style="@style/Widget.Cyvia.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/log_save"
+                android:backgroundTint="@color/cyvia_primary"
+                android:textColor="@color/cyvia_on_primary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_delete_log"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="🗑 Delete Log Entry"
+                android:textColor="@color/cyvia_error"
+                app:strokeColor="@color/cyvia_error"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

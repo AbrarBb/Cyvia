@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App icon background — vibrant candy pink & amethyst lavender gradient -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="135"
+        android:startColor="#FF85E5"
+        android:centerColor="#B862FF"
+        android:endColor="#7C3AED"
+        android:type="linear" />
+</shape>

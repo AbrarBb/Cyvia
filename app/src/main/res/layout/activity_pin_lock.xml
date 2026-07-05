@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
+
+    <!-- Header Section -->
+    <LinearLayout
+        android:id="@+id/layout_pin_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="60dp"
+        android:paddingHorizontal="32dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Kawaii Lock Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            android:backgroundTint="@color/cyvia_primary_container">
+            <ImageView
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_lock"
+                app:tint="@color/cyvia_primary" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tv_pin_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Cyvia App Lock"
+            android:fontFamily="@font/nunito"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/cyvia_on_surface" />
+
+        <TextView
+            android:id="@+id/tv_pin_prompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Enter your 4-digit PIN"
+            android:fontFamily="@font/inter"
+            android:textSize="14.5sp"
+            android:textColor="@color/cyvia_on_surface_variant"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <!-- PIN Dots Row -->
+    <LinearLayout
+        android:id="@+id/layout_pin_dots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/layout_pin_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <View
+            android:id="@+id/dot_view_1"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginHorizontal="12dp"
+            android:background="@drawable/bg_circle_dot"
+            android:backgroundTint="@color/cyvia_outline_variant" />
+
+        <View
+            android:id="@+id/dot_view_2"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginHorizontal="12dp"
+            android:background="@drawable/bg_circle_dot"
+            android:backgroundTint="@color/cyvia_outline_variant" />
+
+        <View
+            android:id="@+id/dot_view_3"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginHorizontal="12dp"
+            android:background="@drawable/bg_circle_dot"
+            android:backgroundTint="@color/cyvia_outline_variant" />
+
+        <View
+            android:id="@+id/dot_view_4"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginHorizontal="12dp"
+            android:background="@drawable/bg_circle_dot"
+            android:backgroundTint="@color/cyvia_outline_variant" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_pin_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text=""
+        android:fontFamily="@font/inter"
+        android:textSize="13.5sp"
+        android:textStyle="bold"
+        android:textColor="@color/cyvia_error"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/layout_pin_dots"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Number Pad Grid -->
+    <LinearLayout
+        android:id="@+id/layout_numpad"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="40dp"
+        android:paddingHorizontal="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_pin_error">
+
+        <!-- Row 1: 1, 2, 3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/btn_num_1"
+                style="@style/PinNumButtonStyle"
+                android:text="1" />
+            <TextView
+                android:id="@+id/btn_num_2"
+                style="@style/PinNumButtonStyle"
+                android:text="2" />
+            <TextView
+                android:id="@+id/btn_num_3"
+                style="@style/PinNumButtonStyle"
+                android:text="3" />
+        </LinearLayout>
+
+        <!-- Row 2: 4, 5, 6 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/btn_num_4"
+                style="@style/PinNumButtonStyle"
+                android:text="4" />
+            <TextView
+                android:id="@+id/btn_num_5"
+                style="@style/PinNumButtonStyle"
+                android:text="5" />
+            <TextView
+                android:id="@+id/btn_num_6"
+                style="@style/PinNumButtonStyle"
+                android:text="6" />
+        </LinearLayout>
+
+        <!-- Row 3: 7, 8, 9 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/btn_num_7"
+                style="@style/PinNumButtonStyle"
+                android:text="7" />
+            <TextView
+                android:id="@+id/btn_num_8"
+                style="@style/PinNumButtonStyle"
+                android:text="8" />
+            <TextView
+                android:id="@+id/btn_num_9"
+                style="@style/PinNumButtonStyle"
+                android:text="9" />
+        </LinearLayout>
+
+        <!-- Row 4: empty, 0, backspace -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/btn_num_0"
+                style="@style/PinNumButtonStyle"
+                android:text="0" />
+            <LinearLayout
+                android:id="@+id/btn_backspace"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:src="@drawable/ic_chevron_left"
+                    app:tint="@color/cyvia_on_surface" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Allow sharing files from the app's external files directory (for backup export) -->
+    <external-files-path
+        name="backup_files"
+        path="." />
+    <!-- Also allow cache directory -->
+    <cache-path
+        name="cache"
+        path="." />
+    <!-- Files directory -->
+    <files-path
+        name="app_files"
+        path="." />
+</paths>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App icon foreground: Ultra-cute Kawaii Mochi Cat centered within safe zone -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Soft glowing halo behind Mochi cat -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.18"
+        android:pathData="M54,22 A32,32 0,1,1 54,86 A32,32 0,1,1 54,22 Z" />
+
+    <!-- Cute purple wagging tail -->
+    <path
+        android:fillColor="#8C52FF"
+        android:pathData="M68,68 Q80,63 76,48 Q74,40 69,44 Q65,48 67,55 Q69,63 62,68 Z" />
+
+    <!-- Round Mochi cat head & body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,54 C32,38 76,38 76,54 C76,70 72,82 54,82 C36,82 32,70 32,54 Z" />
+
+    <!-- Left ear (outer white) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,44 L25,24 L48,35 Z" />
+    <!-- Left inner ear (pink) -->
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M34,41 L28,29 L43,36 Z" />
+
+    <!-- Right ear (outer white) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M74,44 L83,24 L60,35 Z" />
+    <!-- Right inner ear (pink) -->
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M74,41 L80,29 L65,36 Z" />
+
+    <!-- Golden kawaii sparkles around ears -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M28,22 L29.5,18 L31,22 L35,23.5 L31,25 L29.5,29 L28,25 L24,23.5 Z" />
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M78,30 L79,27 L80,30 L83,31 L80,32 L79,35 L78,32 L75,31 Z" />
+
+    <!-- Big expressive anime eyes -->
+    <path
+        android:fillColor="#2E1E40"
+        android:pathData="M44,51 A3.5,3.5 0,1,1 44,58 A3.5,3.5 0,1,1 44,51 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M45.2,52 A1.2,1.2 0,1,1 45.2,54.4 A1.2,1.2 0,1,1 45.2,52 Z" />
+
+    <path
+        android:fillColor="#2E1E40"
+        android:pathData="M64,51 A3.5,3.5 0,1,1 64,58 A3.5,3.5 0,1,1 64,51 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M65.2,52 A1.2,1.2 0,1,1 65.2,54.4 A1.2,1.2 0,1,1 65.2,52 Z" />
+
+    <!-- Rosy blush cheeks -->
+    <path
+        android:fillColor="#FFB3DE"
+        android:pathData="M37,60 A3.5,2.5 0,1,1 37,59.9 Z" />
+    <path
+        android:fillColor="#FFB3DE"
+        android:pathData="M71,60 A3.5,2.5 0,1,1 71,59.9 Z" />
+
+    <!-- Sweet little pink nose -->
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M54,56.5 A1.2,1 0,1,1 54,58.5 A1.2,1 0,1,1 54,56.5 Z" />
+
+    <!-- Adorable open happy smile -->
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M50.5,59 Q54,64 57.5,59 Q54,61 50.5,59 Z" />
+
+</vector>

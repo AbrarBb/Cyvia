@@ -1,0 +1,83 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Shadow -->
+    <path
+        android:fillColor="#1A000000"
+        android:pathData="M25,85 C25,85 75,85 75,85 C80,85 85,88 85,91 C85,94 80,97 75,97 C75,97 25,97 25,97 C20,97 15,94 15,91 C15,88 20,85 25,85 Z" />
+    <!-- Tail -->
+    <path
+        android:fillColor="#8C52FF"
+        android:pathData="M70,72 Q88,68 82,48 Q79,38 73,43 Q68,48 71,58 Q73,68 65,72 Z" />
+    <!-- Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M25,52 C25,32 75,32 75,52 C75,72 70,85 50,85 C30,85 25,72 25,52 Z" />
+    <!-- Ears -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M28,42 L20,20 L42,32 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M28,38 L24,26 L37,33 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M72,42 L80,20 L58,32 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M72,38 L76,26 L63,33 Z" />
+    <!-- Ice Pack / Cooling Bandage on head -->
+    <path
+        android:fillColor="#4D96FF"
+        android:pathData="M38,32 C38,28 62,28 62,32 C62,36 38,36 38,32 Z" />
+    <path
+        android:fillColor="#80BFFF"
+        android:pathData="M44,30 C44,28 56,28 56,30 C56,32 44,32 44,30 Z" />
+    <!-- Droopy / Tired Eyes (> < or squinted) -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M36,49 L44,53 M36,53 L44,49" />
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M56,49 L64,53 M56,53 L64,49" />
+    <!-- Pale/Pink Cheeks -->
+    <path
+        android:fillColor="#FFCCD9"
+        android:pathData="M31,56 A4,3 0,1,1 31,55.9 Z" />
+    <path
+        android:fillColor="#FFCCD9"
+        android:pathData="M69,56 A4,3 0,1,1 69,55.9 Z" />
+    <!-- Sad / Tired Mouth -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M46,61 Q50,57 54,61" />
+    <!-- Thermometer in mouth -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="1.5"
+        android:pathData="M52,59 L68,66 A3,3 0,1,1 66,70 L50,63 Z" />
+    <path
+        android:fillColor="#FF3366"
+        android:pathData="M67,67 A2,2 0,1,1 67,66.9 Z" />
+    <!-- Little Paws tucked -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#E0D6FF"
+        android:strokeWidth="1.5"
+        android:pathData="M36,75 Q40,82 46,78 C46,73 40,70 36,75 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#E0D6FF"
+        android:strokeWidth="1.5"
+        android:pathData="M64,75 Q60,82 54,78 C54,73 60,70 64,75 Z" />
+</vector>

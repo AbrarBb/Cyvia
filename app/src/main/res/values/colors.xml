@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ============================================================ -->
+    <!-- Cyvia Brand Colors (Light Theme)                             -->
+    <!-- ============================================================ -->
+
+    <!-- Primary — Lavender -->
+    <color name="cyvia_primary">#8B5CF6</color>
+    <color name="cyvia_on_primary">#FFFFFF</color>
+    <color name="cyvia_primary_container">#EDE9FE</color>
+    <color name="cyvia_on_primary_container">#4C1D95</color>
+
+    <!-- Secondary — Soft Purple -->
+    <color name="cyvia_secondary">#C084FC</color>
+    <color name="cyvia_on_secondary">#FFFFFF</color>
+    <color name="cyvia_secondary_container">#F3E8FF</color>
+    <color name="cyvia_on_secondary_container">#7C3AED</color>
+
+    <!-- Tertiary — Blush Pink -->
+    <color name="cyvia_tertiary">#F9A8D4</color>
+    <color name="cyvia_on_tertiary">#831843</color>
+    <color name="cyvia_tertiary_container">#FCE7F3</color>
+    <color name="cyvia_on_tertiary_container">#9D174D</color>
+
+    <!-- Backgrounds -->
+    <color name="cyvia_background">#FFFDFB</color>
+    <color name="cyvia_on_background">#1C1B1F</color>
+    <color name="cyvia_surface">#FFFFFF</color>
+    <color name="cyvia_on_surface">#1C1B1F</color>
+    <color name="cyvia_surface_variant">#F5F3FF</color>
+    <color name="cyvia_on_surface_variant">#49454F</color>
+
+    <!-- Outline -->
+    <color name="cyvia_outline">#DDD6FE</color>
+    <color name="cyvia_outline_variant">#EDE9FE</color>
+
+    <!-- Semantic Colors -->
+    <color name="cyvia_error">#FCA5A5</color>
+    <color name="cyvia_on_error">#7F1D1D</color>
+    <color name="cyvia_error_container">#FEE2E2</color>
+    <color name="cyvia_success">#86EFAC</color>
+    <color name="cyvia_warning">#FDE68A</color>
+    <color name="cyvia_peach">#FDBA74</color>
+    <color name="cyvia_cream">#FFF8F3</color>
+
+    <!-- Calendar Day Colors -->
+    <color name="calendar_period">#FCA5A5</color>
+    <color name="calendar_period_text">#7F1D1D</color>
+    <color name="calendar_predicted">#DDD6FE</color>
+    <color name="calendar_predicted_text">#5B21B6</color>
+    <color name="calendar_fertile">#BBF7D0</color>
+    <color name="calendar_fertile_text">#14532D</color>
+    <color name="calendar_ovulation">#FDE68A</color>
+    <color name="calendar_ovulation_text">#78350F</color>
+    <color name="calendar_today_stroke">#8B5CF6</color>
+    <color name="calendar_has_log_dot">#C084FC</color>
+    <color name="calendar_other_month_text">#C4B5FD</color>
+
+    <!-- Bottom Navigation -->
+    <color name="bottom_nav_background">#FFFFFF</color>
+    <color name="bottom_nav_selected">#8B5CF6</color>
+    <color name="bottom_nav_unselected">#A8A0B4</color>
+
+    <!-- Flow Intensity Colors -->
+    <color name="flow_spotting">#FCE7F3</color>
+    <color name="flow_light">#FBCFE8</color>
+    <color name="flow_medium">#F9A8D4</color>
+    <color name="flow_heavy">#EC4899</color>
+
+    <!-- Mood Colors -->
+    <color name="mood_happy">#FDE68A</color>
+    <color name="mood_calm">#BBF7D0</color>
+    <color name="mood_sad">#BFDBFE</color>
+    <color name="mood_anxious">#FED7AA</color>
+    <color name="mood_irritable">#FECACA</color>
+    <color name="mood_energetic">#D9F99D</color>
+    <color name="mood_tired">#E5E7EB</color>
+
+    <!-- Misc -->
+    <color name="divider">#F3F4F6</color>
+    <color name="scrim">#80000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+</resources>

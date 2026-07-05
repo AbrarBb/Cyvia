@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="44dp"
+    android:height="44dp"
+    android:viewportWidth="44"
+    android:viewportHeight="44">
+    <!-- Circular Background -->
+    <path
+        android:fillColor="#26C6DA"
+        android:pathData="M22,2C10.95,2 2,10.95 2,22s8.95,20 20,20 20,-8.95 20,-20S33.05,2 22,2z"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M22,5C12.61,5 5,12.61 5,22s7.61,17 17,17 17,-7.61 17,-17S31.39,5 22,5z"
+        android:fillAlpha="0.15"/>
+    <!-- Physical silhouette with soothing dots -->
+    <path
+        android:fillColor="#FFCDD2"
+        android:pathData="M13,24 Q22,19 31,24 C31,29 27,33 22,33 C17,33 13,29 13,24 Z"/>
+    <!-- Gentle stars/dots -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M17,25a1.2,1.2 0 1,0 2.4,0a1.2,1.2 0 1,0 -2.4,0 M25,25a1.2,1.2 0 1,0 2.4,0a1.2,1.2 0 1,0 -2.4,0"/>
+</vector>

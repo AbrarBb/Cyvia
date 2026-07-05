@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/nav_home"
+        android:contentDescription="@string/nav_home" />
+
+    <item
+        android:id="@+id/nav_calendar"
+        android:icon="@drawable/ic_calendar"
+        android:title="@string/nav_calendar"
+        android:contentDescription="@string/nav_calendar" />
+
+    <!-- Center item: opens DailyLogBottomSheet — not a real nav destination -->
+    <item
+        android:id="@+id/nav_log"
+        android:icon="@drawable/ic_add_circle"
+        android:title="@string/nav_log"
+        android:contentDescription="@string/nav_log" />
+
+    <item
+        android:id="@+id/nav_insights"
+        android:icon="@drawable/ic_insights"
+        android:title="@string/nav_insights"
+        android:contentDescription="@string/nav_insights" />
+
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/nav_settings"
+        android:contentDescription="@string/nav_settings" />
+
+</menu>

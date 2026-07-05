@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#C8E6C9"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <!-- Green frog head -->
+    <path
+        android:fillColor="#66BB6A"
+        android:pathData="M11,20 C11,14 37,14 37,20 C38,30 36,36 24,36 C12,36 10,30 11,20 Z" />
+    <!-- Big eye circles -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M16,14 A5,5 0 1,1 16,24 A5,5 0 1,1 16,14 Z M32,14 A5,5 0 1,1 32,24 A5,5 0 1,1 32,14 Z" />
+    <!-- Pupils -->
+    <path
+        android:fillColor="#1A1A1A"
+        android:pathData="M17,17 A2.2,2.2 0 1,1 17,21.4 A2.2,2.2 0 1,1 17,17 Z M31,17 A2.2,2.2 0 1,1 31,21.4 A2.2,2.2 0 1,1 31,17 Z" />
+    <!-- Rosy cheeks -->
+    <path
+        android:fillColor="#FF8A80"
+        android:pathData="M13,26 A2.5,1.5 0 1,1 13,29 A2.5,1.5 0 1,1 13,26 Z M35,26 A2.5,1.5 0 1,1 35,29 A2.5,1.5 0 1,1 35,26 Z" />
+    <!-- V smile -->
+    <path
+        android:strokeColor="#1A1A1A"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:pathData="M21,27 L24,30 L27,27" />
+</vector>

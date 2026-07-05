@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Single calendar day cell for the RecyclerView grid -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/space_2">
+
+    <!-- Circular background container for the day number -->
+    <FrameLayout
+        android:id="@+id/frame_day_circle"
+        android:layout_width="@dimen/calendar_day_size"
+        android:layout_height="@dimen/calendar_day_size">
+
+        <TextView
+            android:id="@+id/tv_day_number"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="@dimen/text_body_medium"
+            android:fontFamily="@font/inter"
+            android:textColor="@color/cyvia_on_background" />
+    </FrameLayout>
+
+    <!-- Dot indicator: shown when the day has a logged entry -->
+    <View
+        android:id="@+id/view_log_dot"
+        android:layout_width="@dimen/calendar_dot_size"
+        android:layout_height="@dimen/calendar_dot_size"
+        android:background="@drawable/bg_calendar_log_dot"
+        android:layout_marginTop="@dimen/space_2"
+        android:visibility="invisible" />
+
+</LinearLayout>

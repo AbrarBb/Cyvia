@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dark theme overrides — same structure, night-appropriate colors -->
+<resources>
+
+    <style name="Base.Theme.Cyvia" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- Dark brand colors -->
+        <item name="colorPrimary">#C084FC</item>
+        <item name="colorOnPrimary">#2D0064</item>
+        <item name="colorPrimaryContainer">#4C1D95</item>
+        <item name="colorOnPrimaryContainer">#EDE9FE</item>
+        <item name="colorSecondary">#D8B4FE</item>
+        <item name="colorOnSecondary">#3B0764</item>
+        <item name="colorSecondaryContainer">#6D28D9</item>
+        <item name="colorOnSecondaryContainer">#F3E8FF</item>
+        <item name="colorBackground">#0F0D13</item>
+        <item name="colorOnBackground">#E8E0F0</item>
+        <item name="colorSurface">#1C1B2E</item>
+        <item name="colorOnSurface">#E8E0F0</item>
+        <item name="colorSurfaceVariant">#29233A</item>
+        <item name="colorOnSurfaceVariant">#C4B5FD</item>
+        <item name="colorError">#FCA5A5</item>
+        <item name="colorOnError">#7F1D1D</item>
+
+        <item name="shapeCornerSmall">@dimen/corner_small</item>
+        <item name="shapeCornerMedium">@dimen/corner_medium</item>
+        <item name="shapeCornerLarge">@dimen/corner_large</item>
+        <item name="shapeCornerExtraLarge">@dimen/corner_extra_large</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">#1C1B2E</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="fontFamily">@font/inter</item>
+    </style>
+
+</resources>

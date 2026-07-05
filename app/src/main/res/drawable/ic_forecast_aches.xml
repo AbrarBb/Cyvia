@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="44dp"
+    android:height="44dp"
+    android:viewportWidth="44"
+    android:viewportHeight="44">
+    <!-- Circular Background -->
+    <path
+        android:fillColor="#26C6DA"
+        android:pathData="M22,2C10.95,2 2,10.95 2,22s8.95,20 20,20 20,-8.95 20,-20S33.05,2 22,2z"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M22,5C12.61,5 5,12.61 5,22s7.61,17 17,17 17,-7.61 17,-17S31.39,5 22,5z"
+        android:fillAlpha="0.15"/>
+    <!-- Shoulder ache silhouette -->
+    <path
+        android:fillColor="#FFCDD2"
+        android:pathData="M14,24 Q22,18 30,24 L32,30 H12 Z"/>
+    <!-- Ache sparkles -->
+    <path
+        android:strokeColor="#FFEB3B"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M15,17l1,-3 M13,15l3,-1 M29,17l-1,-3 M31,15l-3,-1"/>
+</vector>

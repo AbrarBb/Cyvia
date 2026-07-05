@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Full backup rules for Android 11 and below.
+    We exclude all data from auto-backup to maintain privacy.
+-->
+<full-backup-content>
+    <!-- Exclude Room database -->
+    <exclude domain="database" path="cyvia_database" />
+    <!-- Exclude shared preferences -->
+    <exclude domain="sharedpref" path="cyvia_prefs" />
+    <!-- Exclude all other files -->
+    <exclude domain="file" path="." />
+    <exclude domain="external" path="." />
+</full-backup-content>

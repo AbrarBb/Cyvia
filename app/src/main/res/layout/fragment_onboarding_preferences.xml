@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/cyvia_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/screen_padding_horizontal"
+        android:paddingEnd="@dimen/screen_padding_horizontal"
+        android:paddingTop="@dimen/space_40"
+        android:paddingBottom="@dimen/space_32">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_prefs_title"
+            android:textSize="@dimen/text_headline_medium"
+            android:fontFamily="@font/nunito"
+            android:textStyle="bold"
+            android:textColor="@color/cyvia_on_background"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/space_8" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_prefs_subtitle"
+            android:textSize="@dimen/text_body_medium"
+            android:fontFamily="@font/inter"
+            android:textColor="@color/cyvia_on_surface_variant"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/space_32" />
+
+        <!-- Cycle length slider -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/corner_large"
+            app:cardElevation="2dp"
+            android:backgroundTint="@color/cyvia_surface"
+            android:layout_marginBottom="@dimen/space_16">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/space_20">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="@dimen/space_8">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/onboarding_cycle_length_label"
+                        android:textSize="@dimen/text_body_large"
+                        android:fontFamily="@font/inter"
+                        android:textColor="@color/cyvia_on_background" />
+
+                    <TextView
+                        android:id="@+id/tv_cycle_length_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="28"
+                        android:textSize="@dimen/text_title_large"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" days"
+                        android:textSize="@dimen/text_body_medium"
+                        android:fontFamily="@font/inter"
+                        android:textColor="@color/cyvia_on_surface_variant" />
+                </LinearLayout>
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/slider_cycle_length"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:value="28"
+                    android:valueFrom="21"
+                    android:valueTo="45"
+                    android:stepSize="1"
+                    app:thumbColor="@color/cyvia_primary"
+                    app:trackColorActive="@color/cyvia_primary"
+                    app:trackColorInactive="@color/cyvia_outline_variant" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Period length slider -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/corner_large"
+            app:cardElevation="2dp"
+            android:backgroundTint="@color/cyvia_surface"
+            android:layout_marginBottom="@dimen/space_16">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/space_20">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="@dimen/space_8">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/onboarding_period_length_label"
+                        android:textSize="@dimen/text_body_large"
+                        android:fontFamily="@font/inter"
+                        android:textColor="@color/cyvia_on_background" />
+
+                    <TextView
+                        android:id="@+id/tv_period_length_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5"
+                        android:textSize="@dimen/text_title_large"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" days"
+                        android:textSize="@dimen/text_body_medium"
+                        android:fontFamily="@font/inter"
+                        android:textColor="@color/cyvia_on_surface_variant" />
+                </LinearLayout>
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/slider_period_length"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:value="5"
+                    android:valueFrom="2"
+                    android:valueTo="10"
+                    android:stepSize="1"
+                    app:thumbColor="@color/cyvia_primary"
+                    app:trackColorActive="@color/cyvia_primary"
+                    app:trackColorInactive="@color/cyvia_outline_variant" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Tracking mode selector -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/corner_large"
+            app:cardElevation="2dp"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/space_20">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/onboarding_tracking_mode_label"
+                    android:textSize="@dimen/text_body_large"
+                    android:fontFamily="@font/inter"
+                    android:textColor="@color/cyvia_on_background"
+                    android:layout_marginBottom="@dimen/space_12" />
+
+                <!-- AutoCompleteTextView wrapped in TextInputLayout for dropdown -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/spinner_tracking_mode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:text="Regular tracking" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</ScrollView>

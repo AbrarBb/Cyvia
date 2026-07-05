@@ -1,0 +1,119 @@
+package com.khatibstudio.cyvia.ui.home;
+
+import android.app.Application;
+
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Transformations;
+
+import com.khatibstudio.cyvia.CyviaApplication;
+import com.khatibstudio.cyvia.data.db.entity.CycleEntry;
+import com.khatibstudio.cyvia.data.model.CyclePrediction;
+import com.khatibstudio.cyvia.data.db.entity.DailyLog;
+import com.khatibstudio.cyvia.data.repository.CycleRepository;
+import com.khatibstudio.cyvia.data.repository.LogRepository;
+import com.khatibstudio.cyvia.data.repository.SettingsRepository;
+import com.khatibstudio.cyvia.domain.PredictionEngine;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
+/**
+ * ViewModel for the Home screen.
+ *
+ * Exposes:
+ *   - allCycles: LiveData<List<CycleEntry>> for observers
+ *   - prediction: derived from allCycles via PredictionEngine
+ *   - cycleDay: current day within the cycle
+ *   - homeStatus: the headline status string type
+ */
+public class HomeViewModel extends AndroidViewModel {
+
+    private final CycleRepository cycleRepository;
+    private final LogRepository logRepository;
+    private final SettingsRepository settings;
+    private final PredictionEngine predictionEngine;
+
+    private final LiveData<List<CycleEntry>> allCycles;
+    private final LiveData<DailyLog> todayLog;
+    private final LiveData<List<DailyLog>> allLogs;
+    private final MediatorLiveData<CyclePrediction> prediction = new MediatorLiveData<>();
+    private final MediatorLiveData<Integer> cycleDay = new MediatorLiveData<>();
+
+    public HomeViewModel(Application application) {
+        super(application);
+        CyviaApplication app = CyviaApplication.from(application);
+        cycleRepository = app.getCycleRepository();
+        logRepository = app.getLogRepository();
+        settings = app.getSettingsRepository();
+        predictionEngine = new PredictionEngine(settings);
+
+        allCycles = cycleRepository.getAllCycles();
+        todayLog = logRepository.getLogForDate(LocalDate.now());
+        allLogs = logRepository.getAllLogs();
+
+        // Compute prediction whenever cycle data changes
+        prediction.addSource(allCycles, cycles -> {
+            if (cycles != null) {
+                prediction.setValue(predictionEngine.predict(cycles));
+            }
+        });
+
+        // Compute current cycle day
+        cycleDay.addSource(allCycles, cycles -> {
+            if (cycles == null || cycles.isEmpty()) {
+                cycleDay.setValue(null);
+                return;
+            }
+            CycleEntry mostRecent = cycles.get(0);
+            LocalDate startDate = LocalDate.ofEpochDay(mostRecent.startDate);
+            int day = (int) ChronoUnit.DAYS.between(startDate, LocalDate.now()) + 1;
+            cycleDay.setValue(day);
+        });
+    }
+
+    public LiveData<List<CycleEntry>> getAllCycles() {
+        return allCycles;
+    }
+
+    public LiveData<CyclePrediction> getPrediction() {
+        return prediction;
+    }
+
+    public LiveData<Integer> getCycleDay() {
+        return cycleDay;
+    }
+
+    public LiveData<DailyLog> getTodayLog() {
+        return todayLog;
+    }
+
+    public LiveData<List<DailyLog>> getAllLogs() {
+        return allLogs;
+    }
+
+    public String getUserName() {
+        return settings.getUserName();
+    }
+
+    public boolean shouldShowFertileWindow() {
+        return settings.shouldShowFertileWindow();
+    }
+
+    /** Returns the current phase name based on cycle day and average cycle length. */
+    public String getCyclePhase(int cycleDayNum, int avgCycleLength) {
+        int periodLen = settings.getAvgPeriodLength();
+        if (periodLen <= 0 || periodLen >= avgCycleLength) periodLen = 5;
+
+        int ovDay = Math.max(periodLen + 6, avgCycleLength - 14);
+        int fertileStart = ovDay - 2;
+        int fertileEnd = ovDay + 2;
+
+        if (cycleDayNum <= periodLen) return "MENSTRUAL";
+        if (cycleDayNum < fertileStart) return "FOLLICULAR";
+        if (cycleDayNum <= fertileEnd) return "OVULATORY";
+        return "LUTEAL";
+    }
+}

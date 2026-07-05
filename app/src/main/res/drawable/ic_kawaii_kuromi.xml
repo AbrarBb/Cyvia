@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#3D2B2E"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <!-- Jester ears -->
+    <path
+        android:fillColor="#1A1A1A"
+        android:pathData="M12,8 L8,16 L16,16 Z M36,8 L32,16 L40,16 Z" />
+    <!-- White inner face -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M13,20 C13,14 35,14 35,20 C36,28 34,36 24,36 C14,36 12,28 13,20 Z" />
+    <!-- Eyes -->
+    <path
+        android:fillColor="#1A1A1A"
+        android:pathData="M18,24 A2,2 0 1,1 18,28 A2,2 0 1,1 18,24 Z M30,24 A2,2 0 1,1 30,28 A2,2 0 1,1 30,24 Z" />
+    <path
+        android:fillColor="#FF8DA1"
+        android:pathData="M17.5,24.5 A0.8,0.8 0 1,1 17.5,26.1 A0.8,0.8 0 1,1 17.5,24.5 Z M29.5,24.5 A0.8,0.8 0 1,1 29.5,26.1 A0.8,0.8 0 1,1 29.5,24.5 Z" />
+    <!-- Pink skull / bow on forehead -->
+    <path
+        android:fillColor="#FF5C8A"
+        android:pathData="M24,14 A3,2.5 0 1,1 24,19 A3,2.5 0 1,1 24,14 Z" />
+    <!-- Cheek blush -->
+    <path
+        android:fillColor="#FFB5C5"
+        android:pathData="M14.5,27 A2,1.2 0 1,1 14.5,29.4 A2,1.2 0 1,1 14.5,27 Z M33.5,27 A2,1.2 0 1,1 33.5,29.4 A2,1.2 0 1,1 33.5,27 Z" />
+    <!-- Cute mischievous smile -->
+    <path
+        android:strokeColor="#1A1A1A"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M22,30 Q24,32 26,30" />
+</vector>

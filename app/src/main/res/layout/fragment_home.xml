@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cyvia_background">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingBottom="12dp">
+
+            <!-- ── Balanced Daily Mochi Tip Banner ─────────────────────── -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_mochi_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/screen_padding_horizontal"
+                android:layout_marginEnd="@dimen/screen_padding_horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="@dimen/corner_large"
+                app:cardElevation="2dp"
+                android:backgroundTint="@color/cyvia_surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="12dp">
+
+                    <!-- Mochi cat illustration -->
+                    <ImageView
+                        android:id="@+id/img_mochi_home"
+                        android:layout_width="54dp"
+                        android:layout_height="54dp"
+                        android:src="@drawable/ic_mochi_waving"
+                        android:contentDescription="@string/cd_mochi_cat"
+                        android:scaleType="fitCenter" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="14dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_greeting"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Good morning, "
+                                android:textSize="14sp"
+                                android:fontFamily="@font/inter"
+                                android:textColor="@color/cyvia_on_surface_variant" />
+
+                            <TextView
+                                android:id="@+id/tv_user_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mochi"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/nunito"
+                                android:textStyle="bold"
+                                android:textColor="@color/cyvia_primary" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_mochi_message"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mochi_greeting_normal"
+                            android:textSize="13.5sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_surface"
+                            android:layout_marginTop="4dp"
+                            android:lineSpacingMultiplier="1.2" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ── Balanced Hero Cycle Ring Hub (270dp) ─────────────────── -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:layout_marginBottom="10dp">
+
+                <com.khatibstudio.cyvia.ui.home.CycleRingView
+                    android:id="@+id/cycle_ring_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Center Pastel Hub Card (140x140dp) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_center_hub"
+                    android:layout_width="170dp"
+                    android:layout_height="170dp"
+                    app:cardCornerRadius="70dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="2dp"
+                    app:strokeColor="@color/cyvia_peach"
+                    android:backgroundTint="@color/cyvia_primary_container"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/tv_status_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Next Period"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_primary_container"
+                            android:alpha="0.85" />
+
+                        <TextView
+                            android:id="@+id/tv_status_main"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:text="—"
+                            app:autoSizeTextType="uniform"
+                            app:autoSizeMinTextSize="13sp"
+                            app:autoSizeMaxTextSize="20sp"
+                            app:autoSizeStepGranularity="1sp"
+                            android:maxLines="2"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_on_primary_container"
+                            android:gravity="center"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="3dp" />
+
+                        <TextView
+                            android:id="@+id/tv_fertile_dates"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Low pregnancy chance"
+                            android:textSize="11sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_primary_container"
+                            android:alpha="0.85"
+                            android:gravity="center" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_low_confidence"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Log more cycles"
+                android:textSize="12sp"
+                android:fontFamily="@font/inter"
+                android:textColor="@color/cyvia_on_surface_variant"
+                android:alpha="0.85"
+                android:visibility="gone"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/screen_padding_horizontal"
+                android:layout_marginEnd="@dimen/screen_padding_horizontal"
+                android:layout_marginBottom="10dp" />
+
+            <!-- ── Comfortable Quick Log button (48dp) ────────────────── -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_quick_log"
+                style="@style/Widget.Cyvia.Button.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/screen_padding_horizontal"
+                android:layout_marginEnd="@dimen/screen_padding_horizontal"
+                android:layout_marginBottom="14dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:backgroundTint="@color/calendar_period"
+                android:fontFamily="@font/nunito"
+                android:text="@string/home_quick_log"
+                android:textColor="@color/scrim"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="24dp"
+                app:icon="@drawable/ic_add_circle"
+                app:iconGravity="textStart"
+                app:iconTint="@color/cyvia_on_primary" />
+
+            <!-- ── Status Cards Row ────────────────────────────────────── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/screen_padding_horizontal"
+                android:paddingEnd="@dimen/screen_padding_horizontal">
+
+                <!-- Cycle day -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/cyvia_outline_variant"
+                    android:backgroundTint="@color/cyvia_surface">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter"
+                            android:letterSpacing="0.06"
+                            android:text="CYCLE DAY"
+                            android:textColor="@color/cyvia_on_surface_variant"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:baselineAligned="true"
+                            android:gravity="bottom"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_cycle_day_number"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/nunito"
+                                android:text="—"
+                                android:textColor="@color/cyvia_primary"
+                                android:textSize="30sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:fontFamily="@font/inter"
+                                android:text="day"
+                                android:textColor="@color/cyvia_primary"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Cycle phase -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.3"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/cyvia_outline_variant"
+                    android:backgroundTint="@color/cyvia_surface">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter"
+                            android:letterSpacing="0.06"
+                            android:text="CURRENT PHASE"
+                            android:textColor="@color/cyvia_on_surface_variant"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="10dp"
+                                android:backgroundTint="@color/cyvia_primary_container"
+                                app:cardCornerRadius="10dp"
+                                app:cardElevation="0dp">
+
+                                <ImageView
+                                    android:id="@+id/img_phase_icon"
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp"
+                                    android:layout_gravity="center"
+                                    android:contentDescription="Cycle Phase Icon"
+                                    android:src="@drawable/ic_phase_menstrual" />
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <TextView
+                                android:id="@+id/tv_phase_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/nunito"
+                                android:text="Menstrual Phase"
+                                android:textColor="@color/cyvia_on_surface"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- ── Hidden compatibility container for cardFertileWindow ───── -->
+            <FrameLayout
+                android:id="@+id/card_fertile_window"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone" />
+
+            <!-- ── AdMob banner container (Home screen only) ─────────────── -->
+            <FrameLayout
+                android:id="@+id/ad_banner_container"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="2dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

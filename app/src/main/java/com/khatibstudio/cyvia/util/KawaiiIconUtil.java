@@ -1,0 +1,128 @@
+package com.khatibstudio.cyvia.util;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.text.TextUtils;
+import android.util.Log;
+import android.widget.ImageView;
+
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+
+import com.khatibstudio.cyvia.R;
+import com.khatibstudio.cyvia.data.model.Mood;
+
+import java.io.InputStream;
+
+/**
+ * Helper class for handling Kawaii character icons and custom uploaded images.
+ */
+public class KawaiiIconUtil {
+
+    private static final String TAG = "KawaiiIconUtil";
+
+    public static final String[] PRESET_KAWAII_ICONS = {
+            "ic_kawaii_melody",
+            "ic_kawaii_kuromi",
+            "ic_kawaii_kitty",
+            "ic_kawaii_keroppi",
+            "ic_kawaii_blackcat",
+            "ic_kawaii_cinna",
+            "ic_kawaii_pompom",
+            "ic_mood_happy",
+            "ic_mood_calm",
+            "ic_mood_sad",
+            "ic_mood_anxious",
+            "ic_mood_irritable",
+            "ic_mood_energetic",
+            "ic_mood_tired",
+            "ic_mood_sensitive",
+            "ic_mood_frisky",
+            "ic_forecast_acne",
+            "ic_forecast_cramps",
+            "ic_forecast_aches"
+    };
+
+    /**
+     * Returns the default drawable resource ID for a built-in Mood.
+     */
+    public static int getMoodIconRes(Mood mood) {
+        if (mood == null) return R.drawable.ic_mood_calm;
+        switch (mood) {
+            case HAPPY: return R.drawable.ic_mood_happy;
+            case CALM: return R.drawable.ic_mood_calm;
+            case SAD: return R.drawable.ic_mood_sad;
+            case ANXIOUS: return R.drawable.ic_mood_anxious;
+            case IRRITABLE: return R.drawable.ic_mood_irritable;
+            case ENERGETIC: return R.drawable.ic_mood_energetic;
+            case TIRED: return R.drawable.ic_mood_tired;
+            default: return R.drawable.ic_mood_calm;
+        }
+    }
+
+    /**
+     * Loads an iconKey (resource name or file/content URI) into an ImageView.
+     */
+    public static void loadIcon(Context context, ImageView iv, String iconKey, int fallbackResId) {
+        loadIcon(context, iv, iconKey, null, fallbackResId);
+    }
+
+    public static void loadIcon(Context context, ImageView iv, String iconKey, String label, int fallbackResId) {
+        if (iv == null || context == null) return;
+
+        int finalFallback = getSmartFallbackResId(label, fallbackResId);
+
+        if (TextUtils.isEmpty(iconKey)) {
+            iv.setImageResource(finalFallback);
+            return;
+        }
+
+        // Check if it is a content URI or file path from user upload
+        if (iconKey.startsWith("content://") || iconKey.startsWith("file://") || iconKey.startsWith("/")) {
+            try {
+                Uri uri = iconKey.startsWith("/") ? Uri.parse("file://" + iconKey) : Uri.parse(iconKey);
+                InputStream is = context.getContentResolver().openInputStream(uri);
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
+                if (is != null) is.close();
+
+                if (bitmap != null) {
+                    RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+                    rounded.setCircular(true);
+                    iv.setImageDrawable(rounded);
+                    return;
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Failed to load custom icon URI: " + iconKey, e);
+            }
+        }
+
+        // Try resource lookup by name
+        int resId = context.getResources().getIdentifier(iconKey, "drawable", context.getPackageName());
+        if (resId != 0) {
+            iv.setImageResource(resId);
+        } else {
+            iv.setImageResource(finalFallback);
+        }
+    }
+
+    public static int getSmartFallbackResId(String label, int defaultFallback) {
+        if (TextUtils.isEmpty(label)) return defaultFallback;
+        String lower = label.trim().toLowerCase();
+        if (lower.contains("cramp")) return R.drawable.ic_forecast_cramps;
+        if (lower.contains("headache") || lower.contains("ache") || lower.contains("pain") || lower.contains("chills")) return R.drawable.ic_forecast_aches;
+        if (lower.contains("bloat")) return R.drawable.ic_kawaii_pompom;
+        if (lower.contains("acne") || lower.contains("breakout")) return R.drawable.ic_forecast_acne;
+        if (lower.contains("fatigue") || lower.contains("tired") || lower.contains("sleep") || lower.contains("insomnia") || lower.contains("fog")) return R.drawable.ic_mood_tired;
+        if (lower.contains("nausea")) return R.drawable.ic_kawaii_keroppi;
+        if (lower.contains("tender") || lower.contains("breast")) return R.drawable.ic_kawaii_melody;
+        if (lower.contains("craving") || lower.contains("sugar")) return R.drawable.ic_kawaii_cinna;
+        if (lower.contains("anxi") || lower.contains("hot flash")) return R.drawable.ic_mood_anxious;
+        if (lower.contains("discharge")) return R.drawable.ic_kawaii_kitty;
+        if (lower.contains("spotting")) return R.drawable.ic_kawaii_kuromi;
+        if (lower.contains("mood") || lower.contains("sensitive")) return R.drawable.ic_mood_sensitive;
+        if (lower.contains("dizzy")) return R.drawable.ic_forecast_lonely;
+        return defaultFallback;
+    }
+}

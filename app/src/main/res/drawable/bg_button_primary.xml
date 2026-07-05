@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Primary gradient button background -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="18dp" />
+            <gradient
+                android:startColor="#7C3AED"
+                android:endColor="#A855F7"
+                android:angle="135"
+                android:type="linear" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="18dp" />
+            <gradient
+                android:startColor="#8B5CF6"
+                android:endColor="#C084FC"
+                android:angle="135"
+                android:type="linear" />
+        </shape>
+    </item>
+</selector>

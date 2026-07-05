@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/cyvia_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingStart="@dimen/screen_padding_horizontal"
+        android:paddingEnd="@dimen/screen_padding_horizontal"
+        android:paddingTop="@dimen/space_48"
+        android:paddingBottom="@dimen/space_32">
+
+        <!-- Mochi illustration (waving) -->
+        <ImageView
+            android:id="@+id/img_mochi_welcome"
+            android:layout_width="@dimen/onboarding_illustration_size"
+            android:layout_height="@dimen/onboarding_illustration_size"
+            android:layout_marginBottom="@dimen/space_40"
+            android:src="@drawable/ic_mochi_waving"
+            android:contentDescription="@string/cd_mochi_cat"
+            android:scaleType="fitCenter" />
+
+        <!-- App name + title -->
+        <TextView
+            android:id="@+id/tv_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cyvia"
+            android:textSize="@dimen/text_display"
+            android:fontFamily="@font/nunito"
+            android:textStyle="bold"
+            android:textColor="@color/cyvia_primary"
+            android:layout_marginBottom="@dimen/space_12" />
+
+        <TextView
+            android:id="@+id/tv_welcome_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_welcome_title"
+            android:textSize="@dimen/text_headline_medium"
+            android:fontFamily="@font/nunito"
+            android:textStyle="bold"
+            android:textColor="@color/cyvia_on_background"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/space_16" />
+
+        <TextView
+            android:id="@+id/tv_welcome_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_welcome_subtitle"
+            android:textSize="@dimen/text_body_large"
+            android:fontFamily="@font/inter"
+            android:textColor="@color/cyvia_on_surface_variant"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.4"
+            android:layout_marginBottom="@dimen/space_24" />
+
+        <!-- User Name Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:hint="Your Name or Nickname 🌸"
+            android:layout_marginBottom="@dimen/space_32">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_onboarding_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName|textCapWords"
+                android:fontFamily="@font/inter" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Privacy badge -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/corner_large"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:backgroundTint="@color/cyvia_surface">
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</ScrollView>
