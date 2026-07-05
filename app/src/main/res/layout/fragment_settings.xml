@@ -851,7 +851,66 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- ── 6. Premium Banner ───────────────────────────────────────── -->
+        <!-- ── 6. Support & Developer Card ─────────────────────────────── -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_support_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:clickable="true"
+            android:focusable="true"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_kawaii_melody" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Support &amp; Developer"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_surface" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Contact us or visit GitHub (@AbrarBb)"
+                        android:textSize="12.5sp"
+                        android:fontFamily="@font/inter"
+                        android:textColor="@color/cyvia_on_surface_variant" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="@color/cyvia_on_surface_variant" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── 7. Premium Banner ───────────────────────────────────────── -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_remove_ads"
             android:layout_width="match_parent"

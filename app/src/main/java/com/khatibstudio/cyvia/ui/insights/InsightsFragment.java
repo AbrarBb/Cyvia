@@ -92,7 +92,7 @@ public class InsightsFragment extends Fragment {
         if (binding == null) return;
         com.khatibstudio.cyvia.data.repository.SettingsRepository settings =
                 com.khatibstudio.cyvia.CyviaApplication.from(requireContext()).getSettingsRepository();
-        if (!settings.shouldShowFertileWindow()) {
+        if (!settings.shouldShowFertileWindow() || settings.isMinimalistMode() || !settings.isTrackIntimacyEnabled()) {
             binding.cardIntimacyGuide.setVisibility(View.GONE);
         } else {
             binding.cardIntimacyGuide.setVisibility(View.VISIBLE);

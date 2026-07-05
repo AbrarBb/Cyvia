@@ -36,6 +36,7 @@ public class FaqFragment extends Fragment {
         setupAccordion(binding.cardQ3, binding.tvAns3, binding.ivArrow3, false);
         setupAccordion(binding.cardQ4, binding.tvAns4, binding.ivArrow4, false);
         setupAccordion(binding.cardQ5, binding.tvAns5, binding.ivArrow5, false);
+        setupAccordion(binding.cardQ6, binding.tvAns6, binding.ivArrow6, false);
     }
 
     private void setupAccordion(View card, TextView answer, ImageView arrow, boolean openByDefault) {

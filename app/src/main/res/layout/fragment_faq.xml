@@ -333,5 +333,62 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- ── Q6: Contact Support ────────────────────────────────────── -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_q6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/cyvia_outline_variant"
+            android:clickable="true"
+            android:focusable="true"
+            android:backgroundTint="@color/cyvia_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Have further questions or need support?"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_primary" />
+                    <ImageView
+                        android:id="@+id/iv_arrow_6"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/cyvia_primary"
+                        android:rotation="90" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_ans_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="We are always here to help! For further questions, assistance, or feature suggestions, please reach out to us via email at:\n\nsupport.khatib.studio@gmail.com"
+                    android:textSize="13.5sp"
+                    android:fontFamily="@font/inter"
+                    android:textColor="@color/cyvia_on_surface"
+                    android:lineSpacingMultiplier="1.3"
+                    android:layout_marginTop="12dp"
+                    android:textIsSelectable="true" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

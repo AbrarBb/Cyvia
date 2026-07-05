@@ -244,6 +244,24 @@ public class SettingsFragment extends Fragment {
         binding.cardFaq.setOnClickListener(v ->
                 androidx.navigation.Navigation.findNavController(v).navigate(R.id.nav_faq));
 
+        // Support & Developer
+        binding.cardSupportContact.setOnClickListener(v -> {
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Support & Developer")
+                    .setMessage("Need assistance or want to check out our open-source projects?\n\n• Email Support: support.khatib.studio@gmail.com\n• GitHub: github.com/AbrarBb")
+                    .setPositiveButton("Visit GitHub", (d, w) -> {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/AbrarBb"));
+                        startActivity(intent);
+                    })
+                    .setNegativeButton("Send Email", (d, w) -> {
+                        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:support.khatib.studio@gmail.com"));
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Cyvia App Support");
+                        startActivity(Intent.createChooser(intent, "Send Email"));
+                    })
+                    .setNeutralButton("Close", null)
+                    .show();
+        });
+
         // Remove Ads
         binding.btnRemoveAds.setOnClickListener(v -> launchRemoveAdsPurchase());
     }

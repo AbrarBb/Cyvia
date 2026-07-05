@@ -39,10 +39,13 @@ public class SettingsRepository {
     public static final String THEME_SYSTEM = "SYSTEM";
 
     private final SharedPreferences prefs;
+    private final SharedPreferences extraPrefs;
 
     public SettingsRepository(Context context) {
         prefs = context.getApplicationContext()
                 .getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
+        extraPrefs = context.getApplicationContext()
+                .getSharedPreferences("cyvia_settings", Context.MODE_PRIVATE);
     }
 
     // ─── Onboarding ───────────────────────────────────────────────────────
@@ -204,11 +207,18 @@ public class SettingsRepository {
 
     // ─── Utilities ───────────────────────────────────────────────────────
 
+    public boolean isMinimalistMode() {
+        return isMinorSafeMode() || extraPrefs.getBoolean("minimal_mode", false);
+    }
+
     /**
      * Whether fertile window and ovulation data should be shown.
      * Suppressed for modes where pregnancy tracking is irrelevant or unwanted.
      */
     public boolean shouldShowFertileWindow() {
+        if (isMinimalistMode() || !isTrackIntimacyEnabled()) {
+            return false;
+        }
         TrackingMode mode = getTrackingMode();
         return mode == TrackingMode.TRYING_TO_CONCEIVE
                 || mode == TrackingMode.AVOIDING_PREGNANCY
