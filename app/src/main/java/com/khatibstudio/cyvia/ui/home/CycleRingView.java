@@ -160,7 +160,7 @@ public class CycleRingView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         float density = getResources().getDisplayMetrics().density;
-        float pad = strokeWidth / 2f + 32f * density;
+        float pad = strokeWidth / 2f + 42f * density;
         float size = Math.min(w, h);
         float left = (w - size) / 2f + pad;
         float top = (h - size) / 2f + pad;
@@ -302,20 +302,20 @@ public class CycleRingView extends View {
         String dotLabel = "Day " + currentDay;
         int dotColor = Color.parseColor("#EF5350");
         if (isCurrentInPeriod) {
-            dotLabel = "Day " + currentDay + " • Period";
+            dotLabel = "Day " + currentDay + "\nPeriod";
             dotColor = Color.parseColor("#EF5350");
         } else if (isCurrentInFollicular) {
-            dotLabel = "Day " + currentDay + " • Follicular";
+            dotLabel = "Day " + currentDay + "\nFollicular";
             dotColor = Color.parseColor("#1E88E5");
         } else if (isCurrentInFertile) {
             if (currentDay == ovulationDay) {
-                dotLabel = "Day " + currentDay + " • Ovulation";
+                dotLabel = "Day " + currentDay + "\nOvulation";
             } else {
-                dotLabel = "Day " + currentDay + " • Fertile";
+                dotLabel = "Day " + currentDay + "\nFertile";
             }
             dotColor = Color.parseColor("#0097A7");
         } else if (isCurrentInLuteal) {
-            dotLabel = "Day " + currentDay + " • Luteal";
+            dotLabel = "Day " + currentDay + "\nLuteal";
             dotColor = Color.parseColor("#FB8C00");
         }
         drawSmartLabel(canvas, dotLabel, currentAngleDeg, dotColor, 12f * density);
@@ -337,14 +337,21 @@ public class CycleRingView extends View {
 
         Paint.FontMetrics fm = labelPaint.getFontMetrics();
         float textHeight = fm.descent - fm.ascent;
+        float lineHeight = textHeight * 1.15f;
         float textOffset = (textHeight / 2f) - fm.descent;
+
+        String[] lines = text.split("\n");
+        float maxTextWidth = 0f;
+        for (String line : lines) {
+            maxTextWidth = Math.max(maxTextWidth, labelPaint.measureText(line));
+        }
 
         float lx, ly;
 
         if (angleDeg >= -135f && angleDeg <= -45f) {
             labelPaint.setTextAlign(Paint.Align.CENTER);
             lx = cx + (float) Math.cos(angleRad) * (outerRadius + 4f * density);
-            ly = cy - outerRadius - 10f * density;
+            ly = cy - outerRadius - 10f * density - ((lines.length - 1) * lineHeight);
         } else if (angleDeg >= 45f && angleDeg <= 135f) {
             labelPaint.setTextAlign(Paint.Align.CENTER);
             lx = cx + (float) Math.cos(angleRad) * (outerRadius + 4f * density);
@@ -353,32 +360,33 @@ public class CycleRingView extends View {
             labelPaint.setTextAlign(Paint.Align.LEFT);
             float cos = (float) Math.cos(angleRad);
             float sin = (float) Math.sin(angleRad);
-            lx = cx + cos * outerRadius + 8f * density;
-            ly = cy + sin * outerRadius + textOffset;
+            lx = cx + cos * outerRadius + 6f * density;
+            ly = cy + sin * outerRadius + textOffset - ((lines.length - 1) * lineHeight / 2f);
         } else {
             labelPaint.setTextAlign(Paint.Align.RIGHT);
             float cos = (float) Math.cos(angleRad);
             float sin = (float) Math.sin(angleRad);
-            lx = cx + cos * outerRadius - 8f * density;
-            ly = cy + sin * outerRadius + textOffset;
+            lx = cx + cos * outerRadius - 6f * density;
+            ly = cy + sin * outerRadius + textOffset - ((lines.length - 1) * lineHeight / 2f);
         }
 
-        float textWidth = labelPaint.measureText(text);
         if (labelPaint.getTextAlign() == Paint.Align.LEFT) {
-            if (lx + textWidth > getWidth() - 4f * density) {
-                lx = getWidth() - textWidth - 4f * density;
+            if (lx + maxTextWidth > getWidth() - 4f * density) {
+                lx = getWidth() - maxTextWidth - 4f * density;
             }
-            lx = Math.max(cx + outerRadius + 4f * density, lx);
+            lx = Math.max(cx + outerRadius + 2f * density, lx);
         } else if (labelPaint.getTextAlign() == Paint.Align.RIGHT) {
-            if (lx - textWidth < 4f * density) {
-                lx = textWidth + 4f * density;
+            if (lx - maxTextWidth < 4f * density) {
+                lx = maxTextWidth + 4f * density;
             }
-            lx = Math.min(cx - outerRadius - 4f * density, lx);
+            lx = Math.min(cx - outerRadius - 2f * density, lx);
         } else {
-            lx = Math.max(textWidth / 2f + 4f * density, Math.min(getWidth() - textWidth / 2f - 4f * density, lx));
+            lx = Math.max(maxTextWidth / 2f + 4f * density, Math.min(getWidth() - maxTextWidth / 2f - 4f * density, lx));
         }
 
-        canvas.drawText(text, lx, ly, labelPaint);
+        for (int i = 0; i < lines.length; i++) {
+            canvas.drawText(lines[i], lx, ly + (i * lineHeight), labelPaint);
+        }
     }
 
     @Override
