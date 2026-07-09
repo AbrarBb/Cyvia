@@ -1,0 +1,41 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Shadow -->
+    <path android:fillColor="#1A000000"
+        android:pathData="M25,85 C25,85 75,85 75,85 C80,85 85,88 85,91 C85,94 80,97 75,97 C75,97 25,97 25,97 C20,97 15,94 15,91 C15,88 20,85 25,85 Z" />
+    <!-- Sleeping tail curled -->
+    <path android:fillColor="#8C52FF"
+        android:pathData="M68,78 Q80,82 76,72 Q74,68 70,74 Q66,78 68,78 Z" />
+    <!-- Body (slightly slouched) -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M25,54 C25,34 75,34 75,54 C75,74 70,87 50,87 C30,87 25,74 25,54 Z" />
+    <!-- Droopy ears -->
+    <path android:fillColor="#FFFFFF" android:pathData="M26,44 L14,36 L38,38 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M26,42 L18,37 L34,39 Z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M74,44 L86,36 L62,38 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M74,42 L82,37 L66,39 Z" />
+    <!-- Sleepy closed eyes (—‿—) -->
+    <path android:strokeColor="#2E1E40" android:strokeWidth="2.5" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M36,52 L44,52" />
+    <path android:strokeColor="#2E1E40" android:strokeWidth="2.5" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M56,52 L64,52" />
+    <!-- Cheeks -->
+    <path android:fillColor="#FFB3DE" android:pathData="M32,58 A4,3 0,1,1 32,57.9 Z" />
+    <path android:fillColor="#FFB3DE" android:pathData="M68,58 A4,3 0,1,1 68,57.9 Z" />
+    <!-- Sleepy open mouth -->
+    <path android:fillColor="#FF66C4"
+        android:pathData="M47,60 A3,2.5 0,1,1 53,60 A3,2.5 0,1,1 47,60 Z" />
+    <!-- Zzz -->
+    <path android:fillColor="#88B3F8" android:pathData="M78,32 L84,32 L78,38 L84,38" />
+    <path android:fillColor="#88B3F8" android:pathData="M82,24 L86,24 L82,28 L86,28" />
+    <!-- Paws limp -->
+    <path android:fillColor="#FFFFFF" android:strokeColor="#E0D6FF" android:strokeWidth="1.5"
+        android:pathData="M38,78 Q42,84 48,80 C48,75 42,73 38,78 Z" />
+    <path android:fillColor="#FFFFFF" android:strokeColor="#E0D6FF" android:strokeWidth="1.5"
+        android:pathData="M62,78 Q58,84 52,80 C52,75 58,73 62,78 Z" />
+</vector>

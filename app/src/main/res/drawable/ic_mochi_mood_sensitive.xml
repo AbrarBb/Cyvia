@@ -1,0 +1,44 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Shadow -->
+    <path android:fillColor="#1A000000"
+        android:pathData="M25,85 C25,85 75,85 75,85 C80,85 85,88 85,91 C85,94 80,97 75,97 C75,97 25,97 25,97 C20,97 15,94 15,91 C15,88 20,85 25,85 Z" />
+    <!-- Gentle tail -->
+    <path android:fillColor="#8C52FF"
+        android:pathData="M70,72 Q86,65 80,50 Q77,42 73,48 Q70,55 73,64 Q75,70 65,72 Z" />
+    <!-- Body -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M25,52 C25,32 75,32 75,52 C75,72 70,85 50,85 C30,85 25,72 25,52 Z" />
+    <!-- Soft tilted ears -->
+    <path android:fillColor="#FFFFFF" android:pathData="M28,42 L20,20 L42,32 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M28,38 L24,25 L38,32 Z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M72,42 L80,20 L58,32 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M72,38 L76,25 L62,32 Z" />
+    <!-- Glistening sensitive eyes -->
+    <path android:fillColor="#2E1E40"
+        android:pathData="M40,47 A3.5,4.5 0,1,1 40,56 A3.5,4.5 0,1,1 40,47 Z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M41,48 A2,2.5 0,1,1 41,53 A2,2.5 0,1,1 41,48 Z" />
+    <path android:fillColor="#2E1E40"
+        android:pathData="M60,47 A3.5,4.5 0,1,1 60,56 A3.5,4.5 0,1,1 60,47 Z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M61,48 A2,2.5 0,1,1 61,53 A2,2.5 0,1,1 61,48 Z" />
+    <!-- Cheeks -->
+    <path android:fillColor="#FFB3DE" android:pathData="M32,58 A4,3 0,1,1 32,57.9 Z" />
+    <path android:fillColor="#FFB3DE" android:pathData="M68,58 A4,3 0,1,1 68,57.9 Z" />
+    <!-- Small gentle smile -->
+    <path android:strokeColor="#2E1E40" android:strokeWidth="1.8" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M46,60 Q50,63 54,60" />
+    <!-- Heart above -->
+    <path android:fillColor="#FF99CC"
+        android:pathData="M47,25 C47,22 43,20 43,24 C43,27 47,30 47,30 C47,30 51,27 51,24 C51,20 47,22 47,25 Z" />
+    <!-- Paws hugging self -->
+    <path android:fillColor="#FFFFFF" android:strokeColor="#E0D6FF" android:strokeWidth="1.5"
+        android:pathData="M36,68 Q34,62 38,58 C42,55 44,62 40,68 Z" />
+    <path android:fillColor="#FFFFFF" android:strokeColor="#E0D6FF" android:strokeWidth="1.5"
+        android:pathData="M64,68 Q66,62 62,58 C58,55 56,62 60,68 Z" />
+</vector>

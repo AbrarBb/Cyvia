@@ -65,6 +65,17 @@ public class HomeFragment extends Fragment {
         updateMochiStateAndAnimation();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (viewModel != null) {
+            viewModel.refresh();
+        }
+        setupGreeting();
+        updateMochiStateAndAnimation();
+        updateMochiCareMessage();
+    }
+
     private String mochiToastMessage = "Mochi says hi! ~ ♡";
     private android.animation.ObjectAnimator currentMochiAnimator;
 

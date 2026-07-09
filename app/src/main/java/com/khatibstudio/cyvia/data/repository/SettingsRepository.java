@@ -155,7 +155,7 @@ public class SettingsRepository {
     }
 
     public boolean isLogReminderEnabled() {
-        return prefs.getBoolean(KEY_NOTIF_LOG, false);
+        return prefs.getBoolean(KEY_NOTIF_LOG, true);
     }
 
     public void setLogReminderEnabled(boolean enabled) {

@@ -1,0 +1,12 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Single tiny drop -->
+    <path android:fillColor="#FF8A9D"
+        android:pathData="M24,14 Q28,22 28,28 A4,4 0,1,1 20,28 Q20,22 24,14 Z" />
+    <!-- Lighter center highlight -->
+    <path android:fillColor="#FFBEC9"
+        android:pathData="M23,22 Q24,19 25,22 Q25.5,24 23.5,24 Q22.5,24 23,22 Z" />
+</vector>

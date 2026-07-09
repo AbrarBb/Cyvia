@@ -927,7 +927,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Support &amp; Developer"
+                        android:text="Support"
                         android:textSize="16sp"
                         android:fontFamily="@font/nunito"
                         android:textStyle="bold"

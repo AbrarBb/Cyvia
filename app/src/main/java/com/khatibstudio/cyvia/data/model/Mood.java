@@ -10,5 +10,7 @@ public enum Mood {
     ANXIOUS,
     IRRITABLE,
     ENERGETIC,
-    TIRED
+    TIRED,
+    SENSITIVE,
+    FRISKY
 }

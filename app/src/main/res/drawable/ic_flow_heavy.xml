@@ -1,0 +1,29 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Big drop 1 -->
+    <path android:fillColor="#D42B4A"
+        android:pathData="M12,16 Q17,24 17,30 A5,5 0,1,1 7,30 Q7,24 12,16 Z" />
+    <!-- Big drop 2 -->
+    <path android:fillColor="#D42B4A"
+        android:pathData="M24,8 Q30,18 30,26 A6,6 0,1,1 18,26 Q18,18 24,8 Z" />
+    <!-- Big drop 3 -->
+    <path android:fillColor="#D42B4A"
+        android:pathData="M36,14 Q41,22 41,28 A5,5 0,1,1 31,28 Q31,22 36,14 Z" />
+    <!-- Highlights -->
+    <path android:fillColor="#FF6688"
+        android:pathData="M11,22 Q12,18 13,22 Q13.5,24 11.5,24 Z" />
+    <path android:fillColor="#FF6688"
+        android:pathData="M22.5,16 Q24,12 25.5,16 Q26,19 23,19 Z" />
+    <path android:fillColor="#FF6688"
+        android:pathData="M35,20 Q36,17 37,20 Q37.5,22 35.5,22 Z" />
+    <!-- Extra splash dots -->
+    <path android:fillColor="#D42B4A"
+        android:pathData="M5,38 A2,2 0,1,1 5,37.9 Z" />
+    <path android:fillColor="#D42B4A"
+        android:pathData="M42,36 A2,2 0,1,1 42,35.9 Z" />
+    <path android:fillColor="#D42B4A"
+        android:pathData="M22,38 A1.5,1.5 0,1,1 22,37.9 Z" />
+</vector>

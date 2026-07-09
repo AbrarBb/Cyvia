@@ -111,7 +111,7 @@
                 android:textColor="@color/cyvia_on_background"
                 android:layout_marginBottom="@dimen/space_8" />
 
-            <!-- Flow intensity: segmented button group -->
+            <!-- Flow intensity: icon card selectors -->
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -119,79 +119,25 @@
                 android:fillViewport="true"
                 android:layout_marginBottom="@dimen/space_20">
 
-                <com.google.android.material.button.MaterialButtonToggleGroup
-                    android:id="@+id/toggle_flow"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/layout_flow_selector"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:singleSelection="true"
-                    app:selectionRequired="false">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_flow_spotting"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/flow_button_height"
-                        android:layout_weight="1"
-                        android:minWidth="0dp"
-                        android:insetLeft="0dp"
-                        android:insetRight="0dp"
-                        android:paddingHorizontal="4dp"
-                        android:textSize="12sp"
-                        android:text="Spotting" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_flow_light"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/flow_button_height"
-                        android:layout_weight="1"
-                        android:minWidth="0dp"
-                        android:insetLeft="0dp"
-                        android:insetRight="0dp"
-                        android:paddingHorizontal="4dp"
-                        android:textSize="12sp"
-                        android:text="Light" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_flow_medium"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/flow_button_height"
-                        android:layout_weight="1"
-                        android:minWidth="0dp"
-                        android:insetLeft="0dp"
-                        android:insetRight="0dp"
-                        android:paddingHorizontal="4dp"
-                        android:textSize="12sp"
-                        android:text="Medium" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_flow_heavy"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/flow_button_height"
-                        android:layout_weight="1"
-                        android:minWidth="0dp"
-                        android:insetLeft="0dp"
-                        android:insetRight="0dp"
-                        android:paddingHorizontal="4dp"
-                        android:textSize="12sp"
-                        android:text="Heavy" />
-                </com.google.android.material.button.MaterialButtonToggleGroup>
+                    android:orientation="horizontal" />
             </HorizontalScrollView>
 
             <!-- ── Mood ─────────────────────────────────────────────────── -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/log_mood_label"
+                android:text="How are you feeling?"
                 android:textSize="@dimen/text_body_large"
                 android:fontFamily="@font/nunito"
                 android:textStyle="bold"
                 android:textColor="@color/cyvia_on_background"
                 android:layout_marginBottom="@dimen/space_8" />
 
-            <!-- Mood selector: horizontal row of Kawaii circular badges -->
+            <!-- Mood selector: horizontal row of Mochi pose badges -->
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -229,38 +175,14 @@
                     android:orientation="horizontal" />
             </HorizontalScrollView>
 
-            <!-- ── Emotional & Custom Symptoms ────────────────────────────── -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Emotional &amp; Custom Symptoms"
-                android:textSize="@dimen/text_body_large"
-                android:fontFamily="@font/nunito"
-                android:textStyle="bold"
-                android:textColor="@color/cyvia_on_background"
-                android:layout_marginBottom="@dimen/space_8" />
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none"
-                android:layout_marginBottom="@dimen/space_16">
-
-                <LinearLayout
-                    android:id="@+id/layout_emotional_symptoms"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" />
-            </HorizontalScrollView>
-
-            <!-- Add custom mood/symptom with icon/photo -->
+            <!-- Add custom symptom with icon/photo -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_custom_kawaii"
                 style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/ic_add_circle"
-                android:text="Create Mood / Symptom"
+                android:text="Add Custom Symptom"
                 app:cornerRadius="16dp"
                 android:layout_marginBottom="@dimen/space_20" />
 

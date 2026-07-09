@@ -1,0 +1,44 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Shadow -->
+    <path android:fillColor="#1A000000"
+        android:pathData="M25,85 C25,85 75,85 75,85 C80,85 85,88 85,91 C85,94 80,97 75,97 C75,97 25,97 25,97 C20,97 15,94 15,91 C15,88 20,85 25,85 Z" />
+    <!-- Droopy tail -->
+    <path android:fillColor="#8C52FF"
+        android:pathData="M70,78 Q82,82 78,70 Q76,65 72,72 Q68,76 70,78 Z" />
+    <!-- Body -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M25,52 C25,32 75,32 75,52 C75,72 70,85 50,85 C30,85 25,72 25,52 Z" />
+    <!-- Droopy Ears -->
+    <path android:fillColor="#FFFFFF" android:pathData="M26,42 L14,34 L38,36 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M26,40 L18,35 L34,37 Z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M74,42 L86,34 L62,36 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M74,40 L82,35 L66,37 Z" />
+    <!-- Sad eyes (teary round) -->
+    <path android:fillColor="#2E1E40"
+        android:pathData="M40,48 A3.5,4 0,1,1 40,56 A3.5,4 0,1,1 40,48 Z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M41,49 A1.5,1.5 0,1,1 41,52 A1.5,1.5 0,1,1 41,49 Z" />
+    <path android:fillColor="#2E1E40"
+        android:pathData="M60,48 A3.5,4 0,1,1 60,56 A3.5,4 0,1,1 60,48 Z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M61,49 A1.5,1.5 0,1,1 61,52 A1.5,1.5 0,1,1 61,49 Z" />
+    <!-- Tear drop -->
+    <path android:fillColor="#88C8F8"
+        android:pathData="M44,56 Q45,62 43,62 Q41,62 42,56 Z" />
+    <!-- Cheeks -->
+    <path android:fillColor="#FFB3DE" android:pathData="M32,58 A4,3 0,1,1 32,57.9 Z" />
+    <path android:fillColor="#FFB3DE" android:pathData="M68,58 A4,3 0,1,1 68,57.9 Z" />
+    <!-- Sad frown -->
+    <path android:strokeColor="#2E1E40" android:strokeWidth="2" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M45,62 Q50,58 55,62" />
+    <!-- Paws together -->
+    <path android:fillColor="#FFFFFF" android:strokeColor="#E0D6FF" android:strokeWidth="1.5"
+        android:pathData="M40,76 Q44,82 50,78 C50,73 44,71 40,76 Z" />
+    <path android:fillColor="#FFFFFF" android:strokeColor="#E0D6FF" android:strokeWidth="1.5"
+        android:pathData="M60,76 Q56,82 50,78 C50,73 56,71 60,76 Z" />
+</vector>

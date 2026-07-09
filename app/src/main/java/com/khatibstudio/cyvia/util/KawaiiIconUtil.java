@@ -30,41 +30,63 @@ public class KawaiiIconUtil {
             "ic_mochi_sparkles",
             "ic_mochi_heart_eyes",
             "ic_mochi_cozy",
-            "ic_kawaii_melody",
-            "ic_kawaii_kuromi",
-            "ic_kawaii_kitty",
-            "ic_kawaii_keroppi",
-            "ic_kawaii_blackcat",
-            "ic_kawaii_cinna",
-            "ic_kawaii_pompom",
-            "ic_mood_happy",
-            "ic_mood_calm",
-            "ic_mood_sad",
-            "ic_mood_anxious",
-            "ic_mood_irritable",
-            "ic_mood_energetic",
-            "ic_mood_tired",
-            "ic_mood_sensitive",
-            "ic_mood_frisky",
-            "ic_forecast_acne",
-            "ic_forecast_cramps",
-            "ic_forecast_aches"
+            "ic_mochi_hugging",
+            "ic_mochi_sleeping",
+            "ic_mochi_smiling",
+            "ic_mochi_waving",
+            "ic_mochi_worried",
+            "ic_mochi_sick",
+            "ic_mochi_celebrating",
+            "ic_mochi_mood_happy",
+            "ic_mochi_mood_calm",
+            "ic_mochi_mood_sad",
+            "ic_mochi_mood_anxious",
+            "ic_mochi_mood_irritable",
+            "ic_mochi_mood_energetic",
+            "ic_mochi_mood_tired",
+            "ic_mochi_mood_sensitive",
+            "ic_mochi_mood_frisky"
     };
 
+    public static String cleanIconKey(String iconKey) {
+        if (iconKey == null) return null;
+        switch (iconKey) {
+            case "ic_kawaii_pompom": return "ic_mochi_cozy";
+            case "ic_kawaii_keroppi": return "ic_mochi_sick";
+            case "ic_kawaii_melody": return "ic_mochi_cozy";
+            case "ic_kawaii_cinna": return "ic_mochi_drinking_tea";
+            case "ic_kawaii_kitty": return "ic_mochi_smiling";
+            case "ic_kawaii_kuromi": return "ic_mochi_waving";
+            case "ic_kawaii_blackcat": return "ic_mochi_stretching";
+            case "ic_mood_happy": return "ic_mochi_mood_happy";
+            case "ic_mood_calm": return "ic_mochi_mood_calm";
+            case "ic_mood_sad": return "ic_mochi_mood_sad";
+            case "ic_mood_anxious": return "ic_mochi_mood_anxious";
+            case "ic_mood_irritable": return "ic_mochi_mood_irritable";
+            case "ic_mood_energetic": return "ic_mochi_mood_energetic";
+            case "ic_mood_tired": return "ic_mochi_mood_tired";
+            case "ic_mood_sensitive": return "ic_mochi_mood_sensitive";
+            case "ic_mood_frisky": return "ic_mochi_mood_frisky";
+            default: return iconKey;
+        }
+    }
+
     /**
-     * Returns the default drawable resource ID for a built-in Mood.
+     * Returns the Mochi-pose drawable resource ID for a built-in Mood.
      */
     public static int getMoodIconRes(Mood mood) {
-        if (mood == null) return R.drawable.ic_mood_calm;
+        if (mood == null) return R.drawable.ic_mochi_mood_calm;
         switch (mood) {
-            case HAPPY: return R.drawable.ic_mood_happy;
-            case CALM: return R.drawable.ic_mood_calm;
-            case SAD: return R.drawable.ic_mood_sad;
-            case ANXIOUS: return R.drawable.ic_mood_anxious;
-            case IRRITABLE: return R.drawable.ic_mood_irritable;
-            case ENERGETIC: return R.drawable.ic_mood_energetic;
-            case TIRED: return R.drawable.ic_mood_tired;
-            default: return R.drawable.ic_mood_calm;
+            case HAPPY: return R.drawable.ic_mochi_mood_happy;
+            case CALM: return R.drawable.ic_mochi_mood_calm;
+            case SAD: return R.drawable.ic_mochi_mood_sad;
+            case ANXIOUS: return R.drawable.ic_mochi_mood_anxious;
+            case IRRITABLE: return R.drawable.ic_mochi_mood_irritable;
+            case ENERGETIC: return R.drawable.ic_mochi_mood_energetic;
+            case TIRED: return R.drawable.ic_mochi_mood_tired;
+            case SENSITIVE: return R.drawable.ic_mochi_mood_sensitive;
+            case FRISKY: return R.drawable.ic_mochi_mood_frisky;
+            default: return R.drawable.ic_mochi_mood_calm;
         }
     }
 
@@ -78,6 +100,7 @@ public class KawaiiIconUtil {
     public static void loadIcon(Context context, ImageView iv, String iconKey, String label, int fallbackResId) {
         if (iv == null || context == null) return;
 
+        iconKey = cleanIconKey(iconKey);
         int finalFallback = getSmartFallbackResId(label, fallbackResId);
 
         if (TextUtils.isEmpty(iconKey)) {

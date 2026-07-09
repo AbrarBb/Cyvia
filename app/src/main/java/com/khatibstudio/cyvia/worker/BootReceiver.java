@@ -33,8 +33,13 @@ public class BootReceiver {
      * Called from SettingsFragment whenever any reminder toggle changes.
      */
     public static void scheduleReminders(Context context) {
+        scheduleReminders(context, false);
+    }
+
+    public static void scheduleReminders(Context context, boolean forceUpdate) {
         SettingsRepository settings = new SettingsRepository(context);
         WorkManager workManager = WorkManager.getInstance(context);
+        ExistingPeriodicWorkPolicy policy = forceUpdate ? ExistingPeriodicWorkPolicy.UPDATE : ExistingPeriodicWorkPolicy.KEEP;
 
         // ─── Period reminder ──────────────────────────────────────────────
         if (settings.isPeriodNotifEnabled()) {
@@ -53,7 +58,7 @@ public class BootReceiver {
 
             workManager.enqueueUniquePeriodicWork(
                     "period_reminder",
-                    ExistingPeriodicWorkPolicy.UPDATE,
+                    policy,
                     periodWork
             );
         } else {
@@ -74,7 +79,7 @@ public class BootReceiver {
 
             workManager.enqueueUniquePeriodicWork(
                     "ovulation_reminder",
-                    ExistingPeriodicWorkPolicy.UPDATE,
+                    policy,
                     ovulationWork
             );
         } else {
@@ -95,13 +100,13 @@ public class BootReceiver {
 
             workManager.enqueueUniquePeriodicWork(
                     "log_reminder",
-                    ExistingPeriodicWorkPolicy.UPDATE,
+                    policy,
                     logWork
-            );
-        } else {
-            workManager.cancelUniqueWork("log_reminder");
+                );
+            } else {
+                workManager.cancelUniqueWork("log_reminder");
+            }
         }
-    }
 
     /**
      * Schedules auto-backup to run every 30 days if enabled by the user.

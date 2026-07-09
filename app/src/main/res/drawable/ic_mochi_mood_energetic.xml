@@ -1,0 +1,49 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Shadow (bouncy) -->
+    <path android:fillColor="#1A000000"
+        android:pathData="M28,82 C28,82 72,82 72,82 C77,82 82,85 82,88 C82,91 77,94 72,94 C72,94 28,94 28,94 C23,94 18,91 18,88 C18,85 23,82 28,82 Z" />
+    <!-- Energetic upward tail -->
+    <path android:fillColor="#8C52FF"
+        android:pathData="M68,62 Q92,48 85,30 Q82,22 76,28 Q70,36 73,48 Q75,56 65,62 Z" />
+    <!-- Body (slightly bounced up) -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M25,46 C25,26 75,26 75,46 C75,66 70,80 50,80 C30,80 25,66 25,46 Z" />
+    <!-- Perky ears -->
+    <path android:fillColor="#FFFFFF" android:pathData="M28,36 L18,12 L42,26 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M28,32 L22,17 L38,26 Z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M72,36 L82,12 L58,26 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M72,32 L78,17 L62,26 Z" />
+    <!-- Star eyes -->
+    <path android:fillColor="#FFD700"
+        android:pathData="M40,44 L41.5,39 L43,44 L48,45.5 L43,47 L41.5,52 L40,47 L35,45.5 Z" />
+    <path android:fillColor="#FFD700"
+        android:pathData="M60,44 L61.5,39 L63,44 L68,45.5 L63,47 L61.5,52 L60,47 L55,45.5 Z" />
+    <!-- Cheeks -->
+    <path android:fillColor="#FFB3DE" android:pathData="M30,52 A4,3 0,1,1 30,51.9 Z" />
+    <path android:fillColor="#FFB3DE" android:pathData="M70,52 A4,3 0,1,1 70,51.9 Z" />
+    <!-- Wide energetic grin -->
+    <path android:fillColor="#FF66C4"
+        android:pathData="M40,54 Q50,64 60,54 Z" />
+    <!-- Paws raised high -->
+    <path android:fillColor="#FFFFFF" android:strokeColor="#E0D6FF" android:strokeWidth="1.5"
+        android:pathData="M33,60 Q26,48 30,42 C34,38 38,48 36,58 Z" />
+    <path android:fillColor="#FFFFFF" android:strokeColor="#E0D6FF" android:strokeWidth="1.5"
+        android:pathData="M67,60 Q74,48 70,42 C66,38 62,48 64,58 Z" />
+    <!-- Action lines -->
+    <path android:strokeColor="#FFD700" android:strokeWidth="2" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M12,30 L8,25" />
+    <path android:strokeColor="#FFD700" android:strokeWidth="2" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M88,30 L92,25" />
+    <path android:strokeColor="#FFD700" android:strokeWidth="2" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M10,45 L5,45" />
+    <path android:strokeColor="#FFD700" android:strokeWidth="2" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M90,45 L95,45" />
+</vector>

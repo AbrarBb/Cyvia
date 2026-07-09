@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Drop 1 -->
+    <path android:fillColor="#FF5C77"
+        android:pathData="M14,18 Q18,24 18,28 A4,4 0,1,1 10,28 Q10,24 14,18 Z" />
+    <!-- Drop 2 -->
+    <path android:fillColor="#FF5C77"
+        android:pathData="M24,12 Q28,20 28,25 A4,4.5 0,1,1 20,25 Q20,20 24,12 Z" />
+    <!-- Drop 3 -->
+    <path android:fillColor="#FF5C77"
+        android:pathData="M34,16 Q38,24 38,28 A4,4 0,1,1 30,28 Q30,24 34,16 Z" />
+    <!-- Highlights -->
+    <path android:fillColor="#FF99AA"
+        android:pathData="M13,23 Q14,20 15,23 Q15.5,25 13.5,25 Z" />
+    <path android:fillColor="#FF99AA"
+        android:pathData="M23,18 Q24,15 25,18 Q25.5,20 23.5,20 Z" />
+    <path android:fillColor="#FF99AA"
+        android:pathData="M33,22 Q34,19 35,22 Q35.5,24 33.5,24 Z" />
+</vector>

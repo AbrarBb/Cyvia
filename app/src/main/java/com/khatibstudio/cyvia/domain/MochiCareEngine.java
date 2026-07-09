@@ -176,6 +176,14 @@ public class MochiCareEngine {
                 return msgs[(dayOfYear + cDay + hour) % msgs.length];
             }
         } else if ("FOLLICULAR".equals(phase)) {
+            if (cDay <= 7) {
+                String[] msgs = {
+                    "Your period has ended! Take a deep breath and feel refreshed. Wishing you a beautiful, energetic fresh start today.",
+                    "You made it through your bleeding phase! Your body did an amazing job. Savor this light, clean feeling.",
+                    "Now that your period is over, your strength is naturally returning. Treat yourself to a healthy, happy week!"
+                };
+                return msgs[(dayOfYear + cDay + hour) % msgs.length];
+            }
             if (hour < 12) {
                 String[] msgs = {
                     "Rising estrogen levels often spark fresh morning focus. Wishing you an inspired start to Day " + cDay + "!",

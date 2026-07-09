@@ -39,6 +39,7 @@ public class HomeViewModel extends AndroidViewModel {
     private final LiveData<List<CycleEntry>> allCycles;
     private final LiveData<DailyLog> todayLog;
     private final LiveData<List<DailyLog>> allLogs;
+    private final androidx.lifecycle.MutableLiveData<LocalDate> currentDate = new androidx.lifecycle.MutableLiveData<>(LocalDate.now());
     private final MediatorLiveData<CyclePrediction> prediction = new MediatorLiveData<>();
     private final MediatorLiveData<Integer> cycleDay = new MediatorLiveData<>();
 
@@ -51,7 +52,7 @@ public class HomeViewModel extends AndroidViewModel {
         predictionEngine = new PredictionEngine(settings);
 
         allCycles = cycleRepository.getAllCycles();
-        todayLog = logRepository.getLogForDate(LocalDate.now());
+        todayLog = Transformations.switchMap(currentDate, date -> logRepository.getLogForDate(date));
         allLogs = logRepository.getAllLogs();
 
         // Compute prediction whenever cycle data changes
@@ -62,16 +63,24 @@ public class HomeViewModel extends AndroidViewModel {
         });
 
         // Compute current cycle day
-        cycleDay.addSource(allCycles, cycles -> {
-            if (cycles == null || cycles.isEmpty()) {
-                cycleDay.setValue(null);
-                return;
-            }
-            CycleEntry mostRecent = cycles.get(0);
-            LocalDate startDate = LocalDate.ofEpochDay(mostRecent.startDate);
-            int day = (int) ChronoUnit.DAYS.between(startDate, LocalDate.now()) + 1;
-            cycleDay.setValue(day);
-        });
+        cycleDay.addSource(allCycles, cycles -> updateCycleDayValue());
+        cycleDay.addSource(currentDate, date -> updateCycleDayValue());
+    }
+
+    private void updateCycleDayValue() {
+        List<CycleEntry> cycles = allCycles.getValue();
+        if (cycles == null || cycles.isEmpty()) {
+            cycleDay.setValue(null);
+            return;
+        }
+        CycleEntry mostRecent = cycles.get(0);
+        LocalDate startDate = LocalDate.ofEpochDay(mostRecent.startDate);
+        int day = (int) ChronoUnit.DAYS.between(startDate, currentDate.getValue()) + 1;
+        cycleDay.setValue(day);
+    }
+
+    public void refresh() {
+        currentDate.setValue(LocalDate.now());
     }
 
     public LiveData<List<CycleEntry>> getAllCycles() {

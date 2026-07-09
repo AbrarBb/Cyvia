@@ -189,17 +189,17 @@ public class SettingsFragment extends Fragment {
         binding.switchNotifPeriod.setOnCheckedChangeListener((v, checked) -> {
             settings.setPeriodNotifEnabled(checked);
             if (checked) checkAndRequestNotificationPermission();
-            BootReceiver.scheduleReminders(requireContext());
+            BootReceiver.scheduleReminders(requireContext(), true);
         });
         binding.switchNotifOvulation.setOnCheckedChangeListener((v, checked) -> {
             settings.setOvulationNotifEnabled(checked);
             if (checked) checkAndRequestNotificationPermission();
-            BootReceiver.scheduleReminders(requireContext());
+            BootReceiver.scheduleReminders(requireContext(), true);
         });
         binding.switchNotifLog.setOnCheckedChangeListener((v, checked) -> {
             settings.setLogReminderEnabled(checked);
             if (checked) checkAndRequestNotificationPermission();
-            BootReceiver.scheduleReminders(requireContext());
+            BootReceiver.scheduleReminders(requireContext(), true);
         });
         binding.switchNotifDiscreet.setOnCheckedChangeListener((v, checked) ->
                 requireContext().getSharedPreferences("cyvia_settings", android.content.Context.MODE_PRIVATE).edit().putBoolean("notif_discreet", checked).apply());

@@ -1,0 +1,51 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Shadow -->
+    <path android:fillColor="#1A000000"
+        android:pathData="M25,85 C25,85 75,85 75,85 C80,85 85,88 85,91 C85,94 80,97 75,97 C75,97 25,97 25,97 C20,97 15,94 15,91 C15,88 20,85 25,85 Z" />
+    <!-- Annoyed swishing tail -->
+    <path android:fillColor="#8C52FF"
+        android:pathData="M70,65 Q95,50 85,38 Q80,30 75,36 Q70,42 75,52 Q78,60 65,65 Z" />
+    <!-- Body -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M25,50 C25,30 75,30 75,50 C75,70 70,85 50,85 C30,85 25,70 25,50 Z" />
+    <!-- Pointy alert ears -->
+    <path android:fillColor="#FFFFFF" android:pathData="M28,40 L18,14 L42,30 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M28,35 L22,19 L38,30 Z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M72,40 L82,14 L58,30 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M72,35 L78,19 L62,30 Z" />
+    <!-- Angry brows (V shape) -->
+    <path android:strokeColor="#2E1E40" android:strokeWidth="2.5" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M34,44 L44,40" />
+    <path android:strokeColor="#2E1E40" android:strokeWidth="2.5" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M66,44 L56,40" />
+    <!-- Sharp irritated eyes -->
+    <path android:fillColor="#2E1E40"
+        android:pathData="M38,48 A4,3.5 0,1,1 38,55 A4,3.5 0,1,1 38,48 Z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M39.5,49 A1.5,1.5 0,1,1 39.5,52 A1.5,1.5 0,1,1 39.5,49 Z" />
+    <path android:fillColor="#2E1E40"
+        android:pathData="M62,48 A4,3.5 0,1,1 62,55 A4,3.5 0,1,1 62,48 Z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M63.5,49 A1.5,1.5 0,1,1 63.5,52 A1.5,1.5 0,1,1 63.5,49 Z" />
+    <!-- Cheeks (red tinted) -->
+    <path android:fillColor="#FF9999" android:pathData="M30,56 A4,3 0,1,1 30,55.9 Z" />
+    <path android:fillColor="#FF9999" android:pathData="M70,56 A4,3 0,1,1 70,55.9 Z" />
+    <!-- Grumpy pout -->
+    <path android:strokeColor="#2E1E40" android:strokeWidth="2.5" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M44,60 Q50,56 56,60" />
+    <!-- Anger puff -->
+    <path android:fillColor="#FF8888"
+        android:pathData="M78,32 L80,28 L82,32 L86,34 L82,36 L80,40 L78,36 L74,34 Z" />
+    <!-- Paws crossed -->
+    <path android:fillColor="#FFFFFF" android:strokeColor="#E0D6FF" android:strokeWidth="1.5"
+        android:pathData="M36,72 Q40,78 46,74 C46,69 40,67 36,72 Z" />
+    <path android:fillColor="#FFFFFF" android:strokeColor="#E0D6FF" android:strokeWidth="1.5"
+        android:pathData="M64,72 Q60,78 54,74 C54,69 60,67 64,72 Z" />
+</vector>

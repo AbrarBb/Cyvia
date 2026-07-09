@@ -153,7 +153,7 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
             binding.switchIntimacy.setVisibility(View.GONE);
         }
 
-        setupFlowToggle();
+        setupFlowSelector();
         loadExistingLog();
         observeSymptomTags();
 
@@ -201,7 +201,7 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         binding.etNotes.setText("");
         binding.etTemperature.setText("");
         binding.switchIntimacy.setChecked(false);
-        binding.toggleFlow.clearChecked();
+        refreshFlowSelector();
 
         loadExistingLog();
         refreshAllKawaiiRows();
@@ -224,14 +224,31 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         dpd.show();
     }
 
-    private void setupFlowToggle() {
-        binding.toggleFlow.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (!isChecked) { selectedFlow = null; return; }
-            if (checkedId == R.id.btn_flow_spotting) selectedFlow = FlowIntensity.SPOTTING;
-            else if (checkedId == R.id.btn_flow_light) selectedFlow = FlowIntensity.LIGHT;
-            else if (checkedId == R.id.btn_flow_medium) selectedFlow = FlowIntensity.MEDIUM;
-            else if (checkedId == R.id.btn_flow_heavy) selectedFlow = FlowIntensity.HEAVY;
-        });
+    private void setupFlowSelector() {
+        refreshFlowSelector();
+    }
+
+    private void refreshFlowSelector() {
+        if (binding == null) return;
+        binding.layoutFlowSelector.removeAllViews();
+
+        FlowIntensity[] intensities = FlowIntensity.values();
+        for (FlowIntensity intensity : intensities) {
+            String label = intensity.name().substring(0, 1).toUpperCase() + intensity.name().substring(1).toLowerCase();
+            int iconRes;
+            switch (intensity) {
+                case SPOTTING: iconRes = R.drawable.ic_flow_spotting; break;
+                case LIGHT: iconRes = R.drawable.ic_flow_light; break;
+                case MEDIUM: iconRes = R.drawable.ic_flow_medium; break;
+                case HEAVY: iconRes = R.drawable.ic_flow_heavy; break;
+                default: iconRes = R.drawable.ic_flow_spotting; break;
+            }
+            boolean isSel = (selectedFlow == intensity);
+            addKawaiiBadgeView(binding.layoutFlowSelector, label, null, iconRes, isSel, v -> {
+                selectedFlow = (selectedFlow == intensity) ? null : intensity;
+                refreshFlowSelector();
+            });
+        }
     }
 
     private void loadExistingLog() {
@@ -292,11 +309,7 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                 getActivity().runOnUiThread(() -> {
                     if (binding == null) return;
                     selectedFlow = finalFlow;
-                    binding.toggleFlow.clearChecked();
-                    if (finalFlow == FlowIntensity.SPOTTING) binding.toggleFlow.check(R.id.btn_flow_spotting);
-                    else if (finalFlow == FlowIntensity.LIGHT) binding.toggleFlow.check(R.id.btn_flow_light);
-                    else if (finalFlow == FlowIntensity.MEDIUM) binding.toggleFlow.check(R.id.btn_flow_medium);
-                    else if (finalFlow == FlowIntensity.HEAVY) binding.toggleFlow.check(R.id.btn_flow_heavy);
+                    refreshFlowSelector();
                 });
             }
         });
@@ -321,11 +334,9 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         if (binding == null) return;
         binding.layoutMoodSelector.removeAllViews();
         binding.layoutPhysicalSymptoms.removeAllViews();
-        binding.layoutEmotionalSymptoms.removeAllViews();
 
         Set<String> seenMoods = new HashSet<>();
         Set<String> seenPhysical = new HashSet<>();
-        Set<String> seenEmotional = new HashSet<>();
 
         // 1. Built-in Moods
         for (Mood m : Mood.values()) {
@@ -342,26 +353,19 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         for (SymptomTag tag : allTagsList) {
             String norm = tag.label != null ? tag.label.trim().toLowerCase() : "";
             boolean isSel = selectedSymptomIds.contains(tag.id);
-            int fallback = tag.category == SymptomCategory.EMOTIONAL ? R.drawable.ic_mood_sensitive : R.drawable.ic_forecast_cramps;
+            int fallback = tag.category == SymptomCategory.EMOTIONAL ? R.drawable.ic_mochi_mood_sensitive : R.drawable.ic_mochi_smiling;
 
             if (tag.category == SymptomCategory.MOOD) {
                 if (!seenMoods.contains(norm)) {
                     seenMoods.add(norm);
-                    addKawaiiBadgeView(binding.layoutMoodSelector, tag.label, tag.iconKey, R.drawable.ic_mood_happy, isSel, v -> {
-                        toggleSymptomSelection(tag.id);
-                    });
-                }
-            } else if (tag.category == SymptomCategory.PHYSICAL) {
-                if (!seenPhysical.contains(norm)) {
-                    seenPhysical.add(norm);
-                    addKawaiiBadgeView(binding.layoutPhysicalSymptoms, tag.label, tag.iconKey, fallback, isSel, v -> {
+                    addKawaiiBadgeView(binding.layoutMoodSelector, tag.label, tag.iconKey, R.drawable.ic_mochi_mood_happy, isSel, v -> {
                         toggleSymptomSelection(tag.id);
                     });
                 }
             } else {
-                if (!seenEmotional.contains(norm) && !seenMoods.contains(norm)) {
-                    seenEmotional.add(norm);
-                    addKawaiiBadgeView(binding.layoutEmotionalSymptoms, tag.label, tag.iconKey, fallback, isSel, v -> {
+                if (!seenPhysical.contains(norm)) {
+                    seenPhysical.add(norm);
+                    addKawaiiBadgeView(binding.layoutPhysicalSymptoms, tag.label, tag.iconKey, fallback, isSel, v -> {
                         toggleSymptomSelection(tag.id);
                     });
                 }
@@ -373,7 +377,7 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         for (String extra : extraPhysical) {
             if (!seenPhysical.contains(extra.toLowerCase())) {
                 seenPhysical.add(extra.toLowerCase());
-                addKawaiiBadgeView(binding.layoutPhysicalSymptoms, extra, null, R.drawable.ic_forecast_aches, false, v -> {
+                addKawaiiBadgeView(binding.layoutPhysicalSymptoms, extra, null, R.drawable.ic_mochi_smiling, false, v -> {
                     symptomRepository.addCustomSymptom(extra, com.khatibstudio.cyvia.data.model.SymptomCategory.PHYSICAL);
                     android.widget.Toast.makeText(requireContext(), "Added " + extra + "! Tap again to select.", android.widget.Toast.LENGTH_SHORT).show();
                 });
