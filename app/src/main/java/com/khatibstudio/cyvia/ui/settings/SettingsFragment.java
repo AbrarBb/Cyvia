@@ -41,6 +41,7 @@ import androidx.core.content.ContextCompat;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import androidx.documentfile.provider.DocumentFile;
 
 /**
  * Settings screen fragment.
@@ -61,6 +62,7 @@ public class SettingsFragment extends Fragment {
     private ActivityResultLauncher<String> exportLauncher;
     private ActivityResultLauncher<Intent> pinLockLauncher;
     private ActivityResultLauncher<String> requestPermissionLauncher;
+    private ActivityResultLauncher<Uri> folderPickerLauncher;
 
     // Tracking mode labels
     private static final String[] TRACKING_MODE_LABELS = {
@@ -100,6 +102,17 @@ public class SettingsFragment extends Fragment {
         importLauncher = registerForActivityResult(
                 new ActivityResultContracts.OpenDocument(),
                 uri -> { if (uri != null) performImport(uri); }
+        );
+
+        folderPickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.OpenDocumentTree(),
+                uri -> {
+                    if (uri != null) {
+                        handleFolderSelection(uri);
+                    } else {
+                        updateAutoBackupStatus();
+                    }
+                }
         );
     }
 
@@ -160,7 +173,7 @@ public class SettingsFragment extends Fragment {
         else binding.btnThemeSystem.setChecked(true);
 
         // Auto Backup
-        binding.switchAutoBackupMonthly.setChecked(requireContext().getSharedPreferences("cyvia_settings", android.content.Context.MODE_PRIVATE).getBoolean("auto_backup_enabled", false));
+        updateAutoBackupStatus();
 
         // Ads removed
         if (settings.isAdsRemoved()) {
@@ -247,19 +260,7 @@ public class SettingsFragment extends Fragment {
         });
 
         // Local Auto-Backup control
-        binding.switchAutoBackupMonthly.setOnCheckedChangeListener((v, checked) -> {
-            requireContext().getSharedPreferences("cyvia_settings", android.content.Context.MODE_PRIVATE)
-                    .edit().putBoolean("auto_backup_enabled", checked).apply();
-            BootReceiver.scheduleAutoBackup(requireContext());
-            if (checked) {
-                executor.execute(() -> {
-                    BackupManager.BackupResult res = backupManager.backupToLocalAuto();
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "Auto-backup enabled & saved locally!", Toast.LENGTH_SHORT).show());
-                    }
-                });
-            }
-        });
+        setupAutoBackupListener();
 
         // Delete all
         binding.btnDeleteAll.setOnClickListener(v -> confirmDeleteAll());
@@ -431,6 +432,149 @@ public class SettingsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         executor.shutdown();
+    }
+
+    private void handleFolderSelection(Uri treeUri) {
+        requireContext().getContentResolver().takePersistableUriPermission(
+                treeUri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        );
+        requireContext().getSharedPreferences("cyvia_settings", android.content.Context.MODE_PRIVATE)
+                .edit()
+                .putString("auto_backup_uri", treeUri.toString())
+                .putBoolean("auto_backup_enabled", true)
+                .apply();
+        BootReceiver.scheduleAutoBackup(requireContext());
+        executor.execute(() -> {
+            BackupManager.BackupResult result = backupManager.backupToDriveFolder(treeUri);
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show();
+                    updateAutoBackupStatus();
+                });
+            }
+        });
+    }
+
+    private void updateAutoBackupStatus() {
+        if (binding == null) return;
+        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("cyvia_settings", android.content.Context.MODE_PRIVATE);
+        boolean enabled = prefs.getBoolean("auto_backup_enabled", false);
+        String uriStr = prefs.getString("auto_backup_uri", null);
+        String lastDate = prefs.getString("last_auto_backup_date", null);
+
+        binding.switchAutoBackupMonthly.setOnCheckedChangeListener(null);
+        binding.switchAutoBackupMonthly.setChecked(enabled);
+        setupAutoBackupListener();
+
+        if (enabled) {
+            binding.dividerRestoreAutoBackup.setVisibility(View.VISIBLE);
+            binding.btnRestoreAutoBackup.setVisibility(View.VISIBLE);
+            String dest = "Local private storage";
+            if (uriStr != null) {
+                try {
+                    DocumentFile root = DocumentFile.fromTreeUri(requireContext(), Uri.parse(uriStr));
+                    if (root != null && root.getName() != null) {
+                        dest = root.getName();
+                    }
+                } catch (Exception e) {
+                    dest = "Selected Folder";
+                }
+            }
+            String desc = "Folder: " + dest;
+            if (lastDate != null) {
+                desc += " · Last saved: " + lastDate;
+            }
+            binding.tvAutoBackupDesc.setText(desc);
+            binding.tvRestoreAutoBackupDesc.setText("Restore settings and logs from backup in '" + dest + "'");
+        } else {
+            binding.dividerRestoreAutoBackup.setVisibility(View.GONE);
+            binding.btnRestoreAutoBackup.setVisibility(View.GONE);
+            binding.tvAutoBackupDesc.setText("Automatic private app storage copy");
+        }
+    }
+
+    private void setupAutoBackupListener() {
+        binding.switchAutoBackupMonthly.setOnCheckedChangeListener((v, checked) -> {
+            if (checked) {
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Select Backup Location")
+                        .setMessage("Please select a folder (like Google Drive or Documents) where Cyvia can save your monthly backups. This ensures they are not lost if you reinstall the app or change phones.")
+                        .setPositiveButton("Choose Folder", (dialog, which) -> {
+                            CyviaApplication.suppressLockOnce();
+                            folderPickerLauncher.launch(null);
+                        })
+                        .setNegativeButton("Use Local Storage", (dialog, which) -> {
+                            requireContext().getSharedPreferences("cyvia_settings", android.content.Context.MODE_PRIVATE)
+                                    .edit().putBoolean("auto_backup_enabled", true).apply();
+                            BootReceiver.scheduleAutoBackup(requireContext());
+                            executor.execute(() -> {
+                                backupManager.backupToLocalAuto();
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(() -> {
+                                        Toast.makeText(requireContext(), "Auto-backup enabled (local private storage only)!", Toast.LENGTH_SHORT).show();
+                                        updateAutoBackupStatus();
+                                    });
+                                }
+                            });
+                        })
+                        .setCancelable(true)
+                        .show();
+            } else {
+                requireContext().getSharedPreferences("cyvia_settings", android.content.Context.MODE_PRIVATE)
+                        .edit().putBoolean("auto_backup_enabled", false).apply();
+                BootReceiver.scheduleAutoBackup(requireContext());
+                updateAutoBackupStatus();
+            }
+        });
+
+        binding.btnRestoreAutoBackup.setOnClickListener(v -> {
+            android.content.SharedPreferences prefs = requireContext().getSharedPreferences("cyvia_settings", android.content.Context.MODE_PRIVATE);
+            String uriStr = prefs.getString("auto_backup_uri", null);
+            if (uriStr != null) {
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Restore data?")
+                        .setMessage("Are you sure you want to restore from the auto-backup file? This will merge auto-backup entries with your current data.")
+                        .setPositiveButton("Restore", (dialog, which) -> {
+                            executor.execute(() -> {
+                                BackupManager.BackupResult result = backupManager.restoreFromDriveFolder(Uri.parse(uriStr));
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(() -> {
+                                        Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show();
+                                    });
+                                }
+                            });
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            } else {
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Restore data?")
+                        .setMessage("Are you sure you want to restore from the local private auto-backup file? This will merge auto-backup entries with your current data.")
+                        .setPositiveButton("Restore", (dialog, which) -> {
+                            executor.execute(() -> {
+                                java.io.File backupDir = new java.io.File(requireContext().getFilesDir(), "CyviaBackups");
+                                java.io.File backupFile = new java.io.File(backupDir, "cyvia_autobackup.json");
+                                if (backupFile.exists()) {
+                                    BackupManager.BackupResult result = backupManager.importFromUri(Uri.fromFile(backupFile));
+                                    if (getActivity() != null) {
+                                        getActivity().runOnUiThread(() -> {
+                                            Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show();
+                                        });
+                                    }
+                                } else {
+                                    if (getActivity() != null) {
+                                        getActivity().runOnUiThread(() -> {
+                                            Toast.makeText(requireContext(), "No local auto-backup file found.", Toast.LENGTH_SHORT).show();
+                                        });
+                                    }
+                                }
+                            });
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            }
+        });
     }
 
     private void checkAndRequestNotificationPermission() {

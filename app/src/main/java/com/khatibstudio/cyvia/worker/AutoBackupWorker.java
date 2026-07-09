@@ -37,7 +37,13 @@ public class AutoBackupWorker extends Worker {
 
         try {
             BackupManager backupManager = new BackupManager(context);
-            BackupManager.BackupResult result = backupManager.backupToLocalAuto();
+            String uriStr = prefs.getString("auto_backup_uri", null);
+            BackupManager.BackupResult result;
+            if (uriStr != null) {
+                result = backupManager.backupToDriveFolder(Uri.parse(uriStr));
+            } else {
+                result = backupManager.backupToLocalAuto();
+            }
             if (result.success) {
                 Log.d(TAG, "Auto-backup succeeded: " + result.message);
                 return Result.success();

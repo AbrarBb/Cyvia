@@ -638,6 +638,7 @@
                             android:textStyle="bold"
                             android:textColor="@color/cyvia_on_surface" />
                         <TextView
+                            android:id="@+id/tv_auto_backup_desc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Automatic private app storage copy"
@@ -650,6 +651,73 @@
                         android:id="@+id/switch_auto_backup_monthly"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider_restore_auto_backup"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="66dp"
+                    android:background="@color/divider"
+                    android:visibility="gone" />
+
+                <!-- Restore from Auto-Backup -->
+                <LinearLayout
+                    android:id="@+id/btn_restore_auto_backup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:visibility="gone">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        android:backgroundTint="@color/cyvia_secondary_container">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_import_cloud"
+                            app:tint="@color/cyvia_on_secondary_container" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Restore from Auto-Backup"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/nunito"
+                            android:textStyle="bold"
+                            android:textColor="@color/cyvia_on_surface" />
+                        <TextView
+                            android:id="@+id/tv_restore_auto_backup_desc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Restore settings and logs from auto-backup file"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="@color/cyvia_on_surface_variant" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/cyvia_on_surface_variant" />
                 </LinearLayout>
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="66dp" android:background="@color/divider" />
