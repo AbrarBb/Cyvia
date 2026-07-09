@@ -25,13 +25,15 @@ Beyond tracking, Cyvia introduces the **Mochi Care Engine**—an intelligent, dy
 
 ###  No Vendor Lock-In (SAF Backup & Restore)
 * **Storage Access Framework (SAF)**: Export your entire health history to a clean, schema-validated JSON file and save it anywhere you choose—Google Drive, local storage, SD card, or email (`BackupManager`).
-* **Seamless Restoration**: Import your backup file on any device without fear of data loss or duplicates.
+* **Automated SAF Folder Backup**: Configure a persistent public folder or Google Drive location to automatically save and overwrite your monthly auto-backups without losing them on app uninstall.
+* **Seamless Restoration**: Import your backup files or restore directly from your configured auto-backup folder with a single click.
 
 ###  Mochi Care Engine (Dynamic Well-Being Companion)
 * **Context-Aware Advice**: Generates personalized care messages tailored to:
   * **Time of Day**: Morning motivation, afternoon check-ins, and evening wind-down routines.
   * **Biological Phase**: Customized guidance for Menstrual, Follicular, Ovulatory, and Luteal phases.
   * **Physical Symptoms & Mood**: Responsive comfort for cramps, headaches, bloating, fatigue, anxiety, and more.
+* **Refreshed Post-Bleed Empathy**: Delivers warm, encouraging care advice right after your period ends to ease you into the follicular phase.
 * **Empathetic Brand Voice**: Supportive, guilt-free tone delivered in concise 2-line messages without emoji clutter (`MochiCareEngine`).
 
 ###  Transparent & Smart Prediction Engine
@@ -44,9 +46,10 @@ Beyond tracking, Cyvia introduces the **Mochi Care Engine**—an intelligent, dy
   * `No Periods (Contraception)`: Intelligently suppresses fertile window and pregnancy messaging.
   * `Postpartum` & `Perimenopause`: Shows predictions with realistic reliability caveats rather than false precision.
 
-###  Comprehensive Logging & Kawaii Custom Icons
-* **Multi-Dimensional Logging**: Track flow intensity, moods, symptoms (cramps, aches, acne, bloating, fatigue, tender breasts, cravings, hot flashes), and custom user tags (`DailyLogBottomSheet`).
-* **Kawaii Character Support**: Choose from 19+ built-in kawaii-style character icons (Melody, Kuromi, Cinnamoroll, Pompom, Keroppi, Kitty, etc.) (`KawaiiIconUtil`).
+###  Comprehensive Logging & Mochi Character Poses
+* **Consolidated Two-Section Logs**: Easily track moods and symptoms across just two unified sections: "How are you feeling?" (Moods) and "Physical Symptoms".
+* **Flow Intensity Cards**: Select your cycle flow level (Spotting, Light, Medium, Heavy) using intuitive, custom card selectors instead of plain text toggles.
+* **Mochi Poses Only**: Choose from 13+ expressive kawaii-style Mochi cat poses (reading, drinking tea, stretching, sparkles, heart eyes, cozy, hugging, waving, sleeping, smiling, sick, celebrating, etc.) matching your logged feelings. Sanrio or other external character icons are sanitized out.
 * **Custom Image Uploads**: Upload your own photos or custom icons from your device gallery to personalize symptom tracking!
 
 ###  Rich Visualizations & Offline Analytics
