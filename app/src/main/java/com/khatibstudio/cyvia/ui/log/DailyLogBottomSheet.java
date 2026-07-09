@@ -508,7 +508,8 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                     for (CycleEntry cycle : cycles) {
                         long start = cycle.startDate;
                         long end = cycle.isOngoing() ? LocalDate.now().toEpochDay() : cycle.endDate;
-                        if (targetDay >= start - 2 && targetDay <= end + 2) {
+                        boolean isSamePeriod = (targetDay - start <= 10 && targetDay - start >= -2);
+                        if (isSamePeriod && targetDay >= start - 2 && targetDay <= end + 2) {
                             if (targetDay < start) {
                                 cycle.startDate = targetDay;
                             }
@@ -525,6 +526,19 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                     }
                 }
                 if (!handled) {
+                    // End any previous ongoing cycles first
+                    if (cycles != null) {
+                        for (CycleEntry oldCycle : cycles) {
+                            if (oldCycle.isOngoing()) {
+                                int avgPeriodLen = 5;
+                                if (getContext() != null) {
+                                    avgPeriodLen = CyviaApplication.from(requireContext()).getSettingsRepository().getAvgPeriodLength();
+                                }
+                                oldCycle.endDate = oldCycle.startDate + (avgPeriodLen - 1);
+                                cycleRepository.updateCycle(oldCycle);
+                            }
+                        }
+                    }
                     CycleEntry newCycle = new CycleEntry(targetDay, flowToSave);
                     if (logDate.isBefore(LocalDate.now().minusDays(5))) {
                         newCycle.endDate = targetDay + 4;

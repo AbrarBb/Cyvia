@@ -766,7 +766,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Save file locally or to cloud"
+                            android:text="Save file locally or anywhere"
                             android:textSize="12sp"
                             android:fontFamily="@font/inter"
                             android:textColor="@color/cyvia_on_surface_variant" />
@@ -825,7 +825,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Restore data from JSON file"
+                            android:text="Restore data from file"
                             android:textSize="12sp"
                             android:fontFamily="@font/inter"
                             android:textColor="@color/cyvia_on_surface_variant" />
