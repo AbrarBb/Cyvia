@@ -113,6 +113,19 @@ public class HomeViewModel extends AndroidViewModel {
 
     /** Returns the current phase name based on cycle day and average cycle length. */
     public String getCyclePhase(int cycleDayNum, int avgCycleLength) {
+        List<CycleEntry> cycles = allCycles.getValue();
+        if (cycles != null && !cycles.isEmpty()) {
+            CycleEntry mostRecent = cycles.get(0);
+            if (mostRecent.isOngoing()) {
+                long todayEpoch = LocalDate.now().toEpochDay();
+                long startEpoch = mostRecent.startDate;
+                long targetEpoch = startEpoch + cycleDayNum - 1;
+                if (targetEpoch <= todayEpoch) {
+                    return "MENSTRUAL";
+                }
+            }
+        }
+
         int periodLen = settings.getAvgPeriodLength();
         if (periodLen <= 0 || periodLen >= avgCycleLength) periodLen = 5;
 

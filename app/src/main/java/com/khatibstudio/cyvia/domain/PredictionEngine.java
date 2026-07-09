@@ -133,7 +133,7 @@ public class PredictionEngine {
         for (CycleEntry cycle : allCycles) {
             LocalDate start = LocalDate.ofEpochDay(cycle.startDate);
             LocalDate end = cycle.isOngoing()
-                    ? LocalDate.now()
+                    ? LocalDate.ofEpochDay(Math.min(LocalDate.now().toEpochDay(), cycle.startDate + 9))
                     : LocalDate.ofEpochDay(cycle.endDate);
 
             LocalDate day = start;

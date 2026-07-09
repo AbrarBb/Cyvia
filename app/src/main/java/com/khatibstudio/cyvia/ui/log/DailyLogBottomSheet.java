@@ -545,6 +545,24 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                     }
                     cycleRepository.insertCycle(newCycle);
                 }
+            } else {
+                // User logged no flow. If there is an ongoing cycle, end it.
+                List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
+                if (cycles != null) {
+                    for (CycleEntry cycle : cycles) {
+                        if (cycle.isOngoing()) {
+                            long start = cycle.startDate;
+                            if (targetDay >= start) {
+                                cycle.endDate = targetDay - 1; // Ended yesterday
+                                if (cycle.endDate < start) {
+                                    cycle.endDate = start;
+                                }
+                                cycleRepository.updateCycle(cycle);
+                            }
+                            break;
+                        }
+                    }
+                }
             }
         });
 
