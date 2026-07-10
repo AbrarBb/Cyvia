@@ -327,6 +327,10 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                             .setNegativeButton("Cancel", null)
                             .setPositiveButton("Delete", (d, i) -> {
                                 logRepository.deleteLog(log);
+                                long tDay = log.date;
+                                CyviaDatabase.databaseWriteExecutor.execute(() -> {
+                                    removeFlowForDate(tDay);
+                                });
                                 dismiss();
                             })
                             .show();
@@ -718,23 +722,8 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                     cycleRepository.insertCycle(newCycle);
                 }
             } else {
-                // User logged no flow. If there is an ongoing cycle, end it.
-                List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
-                if (cycles != null) {
-                    for (CycleEntry cycle : cycles) {
-                        if (cycle.isOngoing()) {
-                            long start = cycle.startDate;
-                            if (targetDay >= start) {
-                                cycle.endDate = targetDay - 1; // Ended yesterday
-                                if (cycle.endDate < start) {
-                                    cycle.endDate = start;
-                                }
-                                cycleRepository.updateCycle(cycle);
-                            }
-                            break;
-                        }
-                    }
-                }
+                // User logged no flow -> completely remove or trim any cycle entry spanning this day
+                removeFlowForDate(targetDay);
             }
         });
 
@@ -742,6 +731,41 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
             adManager.onLoggingFinished();
         }
         dismiss();
+    }
+
+    private void removeFlowForDate(long targetDay) {
+        if (getContext() == null) return;
+        com.khatibstudio.cyvia.data.db.dao.CycleEntryDao dao = CyviaDatabase.getDatabase(requireContext()).cycleEntryDao();
+        List<CycleEntry> cycles = dao.getAllCyclesSync();
+        if (cycles != null) {
+            for (CycleEntry cycle : cycles) {
+                long start = cycle.startDate;
+                long end = cycle.isOngoing() ? LocalDate.now().toEpochDay() : cycle.endDate;
+                if (targetDay >= start && targetDay <= end) {
+                    if (start == end || (cycle.isOngoing() && start == targetDay)) {
+                        dao.deleteCycleEntry(cycle);
+                    } else if (start == targetDay) {
+                        cycle.startDate = targetDay + 1;
+                        dao.updateCycleEntry(cycle);
+                    } else if (end == targetDay || (cycle.isOngoing() && targetDay == LocalDate.now().toEpochDay())) {
+                        cycle.endDate = targetDay - 1;
+                        if (cycle.endDate < start) {
+                            dao.deleteCycleEntry(cycle);
+                        } else {
+                            dao.updateCycleEntry(cycle);
+                        }
+                    } else if (start < targetDay && targetDay < end) {
+                        cycle.endDate = targetDay - 1;
+                        if (cycle.endDate < start) {
+                            dao.deleteCycleEntry(cycle);
+                        } else {
+                            dao.updateCycleEntry(cycle);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     @Override

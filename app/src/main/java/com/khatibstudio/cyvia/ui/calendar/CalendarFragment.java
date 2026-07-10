@@ -153,34 +153,8 @@ public class CalendarFragment extends Fragment {
                         && ChronoUnit.DAYS.between(prediction.nextPeriodStart, today) <= 3));
 
         if (isPeriodDay) {
-            // Period is currently active — ask if it's ended
-            binding.tvPeriodConfirmLabel.setText("Period Ends");
-            binding.cardPeriodConfirm.setVisibility(View.VISIBLE);
-
-            binding.btnPeriodYes.setOnClickListener(v -> {
-                // Confirm period ended: end the ongoing cycle at yesterday
-                CyviaDatabase.databaseWriteExecutor.execute(() -> {
-                    java.util.List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
-                    if (cycles != null) {
-                        for (CycleEntry c : cycles) {
-                            if (c.isOngoing() && c.startDate <= today.toEpochDay()) {
-                                c.endDate = today.minusDays(1).toEpochDay();
-                                if (c.endDate < c.startDate) c.endDate = c.startDate;
-                                cycleRepository.updateCycle(c);
-                                break;
-                            }
-                        }
-                    }
-                });
-                binding.cardPeriodConfirm.setVisibility(View.GONE);
-                dismissBannerForToday();
-            });
-            binding.btnPeriodNo.setOnClickListener(v -> {
-                // Period still ongoing — do nothing, dismiss
-                binding.cardPeriodConfirm.setVisibility(View.GONE);
-                dismissBannerForToday();
-            });
-
+            // Do not show the 'Period Ends' banner during active period days
+            binding.cardPeriodConfirm.setVisibility(View.GONE);
         } else if (isPredictedStart) {
             // Predicted start has arrived — ask if period started
             long daysLate = ChronoUnit.DAYS.between(prediction.nextPeriodStart, today);
