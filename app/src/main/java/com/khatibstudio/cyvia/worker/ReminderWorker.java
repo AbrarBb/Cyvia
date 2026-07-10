@@ -46,10 +46,13 @@ public class ReminderWorker extends Worker {
     public static final String TYPE_PERIOD = "PERIOD";
     public static final String TYPE_OVULATION = "OVULATION";
     public static final String TYPE_LOG_REMINDER = "LOG_REMINDER";
+    /** Sent only when tracking mode is TRYING_TO_CONCEIVE. */
+    public static final String TYPE_FERTILE_TOMORROW = "FERTILE_TOMORROW";
 
     private static final int NOTIF_ID_PERIOD = 1001;
     private static final int NOTIF_ID_OVULATION = 1002;
     private static final int NOTIF_ID_LOG = 1003;
+    private static final int NOTIF_ID_FERTILE = 1004;
 
     public ReminderWorker(@NonNull Context context, @NonNull WorkerParameters params) {
         super(context, params);
@@ -78,6 +81,11 @@ public class ReminderWorker extends Worker {
             case TYPE_LOG_REMINDER:
                 if (forceTest || !hasLoggedToday()) {
                     showLogReminderNotification();
+                }
+                break;
+            case TYPE_FERTILE_TOMORROW:
+                if (forceTest || isFertileWindowOpeningTomorrow()) {
+                    showFertileTomorrowNotification();
                 }
                 break;
         }
@@ -201,5 +209,41 @@ public class ReminderWorker extends Worker {
         } catch (SecurityException e) {
             // POST_NOTIFICATIONS permission not granted — fail silently
         }
+    }
+
+    // ─── Fertile Window Tomorrow (TTC mode only) ──────────────────────────
+
+    /**
+     * Returns true if the fertile window starts exactly 1 day from now,
+     * AND the user's tracking mode is TRYING_TO_CONCEIVE.
+     */
+    private boolean isFertileWindowOpeningTomorrow() {
+        try {
+            CyviaApplication app = CyviaApplication.from(getApplicationContext());
+            SettingsRepository settings = app.getSettingsRepository();
+
+            // Only notify for TTC mode
+            com.khatibstudio.cyvia.data.model.TrackingMode mode = settings.getTrackingMode();
+            if (mode != com.khatibstudio.cyvia.data.model.TrackingMode.TRYING_TO_CONCEIVE) return false;
+
+            CycleRepository cycleRepo = app.getCycleRepository();
+            List<CycleEntry> cycles = cycleRepo.getAllCyclesSync();
+            PredictionEngine engine = new PredictionEngine(settings);
+            CyclePrediction prediction = engine.predict(cycles);
+
+            if (prediction == null || prediction.fertileWindowStart == null) return false;
+
+            long daysUntil = ChronoUnit.DAYS.between(LocalDate.now(), prediction.fertileWindowStart);
+            return daysUntil == 1;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void showFertileTomorrowNotification() {
+        Context ctx = getApplicationContext();
+        sendNotification(ctx, NOTIF_ID_FERTILE,
+                "✨ Your fertile window opens tomorrow!",
+                "You go, future mama! 🌸 Tomorrow is one of your most fertile days. Mochi is rooting for you every step of the way! 💕");
     }
 }

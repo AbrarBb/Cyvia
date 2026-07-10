@@ -62,6 +62,25 @@ public class DailyLog {
     @ColumnInfo(name = "intimacy")
     public Boolean intimacy;
 
+    /**
+     * Whether the user took a pill (birth control or period relief) today.
+     * Null = not recorded. Stored in the Medicine section of the daily log.
+     */
+    @ColumnInfo(name = "pills_taken")
+    public Boolean pillsTaken;
+
+    @ColumnInfo(name = "sex_type")
+    public String sexType;
+
+    @ColumnInfo(name = "exercise_type")
+    public String exerciseType;
+
+    @ColumnInfo(name = "discharge_type")
+    public String dischargeType;
+
+    @ColumnInfo(name = "weight_unit")
+    public String weightUnit;
+
     /** No-arg constructor required by Room. */
     public DailyLog() {}
 

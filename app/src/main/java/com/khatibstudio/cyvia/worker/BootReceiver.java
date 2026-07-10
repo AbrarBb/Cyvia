@@ -106,7 +106,24 @@ public class BootReceiver {
             } else {
                 workManager.cancelUniqueWork("log_reminder");
             }
-        }
+
+        // ─── Fertile Window Tomorrow reminder (TTC mode only) ─────────────
+        Data fertileData = new Data.Builder()
+                .putString(ReminderWorker.KEY_TYPE, ReminderWorker.TYPE_FERTILE_TOMORROW)
+                .build();
+
+        PeriodicWorkRequest fertileWork = new PeriodicWorkRequest.Builder(
+                ReminderWorker.class, 1, TimeUnit.DAYS)
+                .setInitialDelay(calculateInitialDelayToHour(9), TimeUnit.MILLISECONDS)
+                .setInputData(fertileData)
+                .build();
+
+        workManager.enqueueUniquePeriodicWork(
+                "fertile_tomorrow_reminder",
+                policy,
+                fertileWork
+        );
+    }
 
     /**
      * Schedules auto-backup to run every 30 days if enabled by the user.

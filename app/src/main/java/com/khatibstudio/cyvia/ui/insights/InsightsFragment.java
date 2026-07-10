@@ -26,6 +26,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.khatibstudio.cyvia.R;
+import com.khatibstudio.cyvia.ads.AdManager;
 import com.khatibstudio.cyvia.data.db.entity.CycleEntry;
 import com.khatibstudio.cyvia.data.db.entity.DailyLog;
 import com.khatibstudio.cyvia.data.db.entity.SymptomTag;
@@ -52,6 +53,7 @@ public class InsightsFragment extends Fragment {
 
     private FragmentInsightsBinding binding;
     private InsightsViewModel viewModel;
+    private AdManager adManager;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -64,18 +66,18 @@ public class InsightsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(InsightsViewModel.class);
+        adManager = new AdManager(com.khatibstudio.cyvia.CyviaApplication.from(requireContext()).getSettingsRepository());
+        adManager.preloadRewarded(requireContext(), AdManager.REPORT_REWARDED_AD_UNIT_ID);
 
         styleCharts();
         setupObservers();
         updateAnalyticalForecast(null, null, null);
         updateIntimacyGuide();
 
-        com.khatibstudio.cyvia.ads.AdManager adManager = new com.khatibstudio.cyvia.ads.AdManager(
-                com.khatibstudio.cyvia.CyviaApplication.from(requireContext()).getSettingsRepository());
-        adManager.preloadRewarded(requireContext());
-
         binding.cardDoctorReport.setOnClickListener(v -> {
-            adManager.showRewardedAd(requireActivity(), this::generateAndShareDoctorReport);
+            adManager.showRewardedAd(requireActivity(), AdManager.REPORT_REWARDED_AD_UNIT_ID, () -> {
+                generateAndShareDoctorReport();
+            });
         });
 
         binding.cardInsightsFaq.setOnClickListener(v ->
@@ -225,8 +227,9 @@ public class InsightsFragment extends Fragment {
         // Cycle lengths bar chart
         List<BarEntry> cycleEntries = new ArrayList<>();
         List<Integer> cLengths = stats.cycleLengths;
+        final List<String> cDates = stats.cycleStartDates;
         for (int i = 0; i < cLengths.size(); i++) {
-            cycleEntries.add(new BarEntry(i + 1, cLengths.get(i)));
+            cycleEntries.add(new BarEntry(i, cLengths.get(i)));
         }
         if (cycleEntries.isEmpty()) {
             binding.chartCycleLength.setNoDataText("Log a few cycles to see your chart");
@@ -234,15 +237,23 @@ public class InsightsFragment extends Fragment {
         } else {
             BarDataSet dataSet = new BarDataSet(cycleEntries, "Cycle length (days)");
             dataSet.setColor(requireContext().getColor(R.color.cyvia_primary));
-            dataSet.setValueTextColor(requireContext().getColor(R.color.cyvia_on_surface_variant));
-            dataSet.setValueTextSize(10f);
+            dataSet.setValueTextColor(Color.WHITE);
+            dataSet.setValueTextSize(11f);
+            dataSet.setDrawValues(true);
+
+            // X-axis: show actual start date (yyyy/MM/dd) for each bar
             binding.chartCycleLength.getXAxis().setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
                 @Override
                 public String getFormattedValue(float value) {
-                    return "#" + ((int) value);
+                    int idx = Math.round(value);
+                    if (idx >= 0 && idx < cDates.size()) return cDates.get(idx);
+                    return "";
                 }
             });
-            binding.chartCycleLength.getXAxis().setLabelCount(Math.max(cLengths.size(), 2), false);
+            binding.chartCycleLength.getXAxis().setLabelRotationAngle(-45f);
+            binding.chartCycleLength.getXAxis().setTextSize(9f);
+            binding.chartCycleLength.getXAxis().setLabelCount(Math.min(cLengths.size(), 8), false);
+            binding.chartCycleLength.setExtraBottomOffset(20f);
             binding.chartCycleLength.setData(new BarData(dataSet));
             binding.chartCycleLength.animateY(500);
             binding.chartCycleLength.invalidate();
@@ -251,8 +262,9 @@ public class InsightsFragment extends Fragment {
         // Period duration bar chart
         List<BarEntry> periodEntries = new ArrayList<>();
         List<Integer> pLengths = stats.periodLengths;
+        final List<String> pDates = stats.cycleStartDates; // same cycle dates for period chart
         for (int i = 0; i < pLengths.size(); i++) {
-            periodEntries.add(new BarEntry(i + 1, pLengths.get(i)));
+            periodEntries.add(new BarEntry(i, pLengths.get(i)));
         }
         if (periodEntries.isEmpty()) {
             binding.chartPeriodLength.setNoDataText("Log periods to see duration chart");
@@ -260,15 +272,23 @@ public class InsightsFragment extends Fragment {
         } else {
             BarDataSet pDataSet = new BarDataSet(periodEntries, "Period duration (days)");
             pDataSet.setColor(requireContext().getColor(R.color.cyvia_secondary));
-            pDataSet.setValueTextColor(requireContext().getColor(R.color.cyvia_on_surface_variant));
-            pDataSet.setValueTextSize(10f);
+            pDataSet.setValueTextColor(Color.WHITE);
+            pDataSet.setValueTextSize(11f);
+            pDataSet.setDrawValues(true);
+
+            // X-axis: show actual start date for each bar
             binding.chartPeriodLength.getXAxis().setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
                 @Override
                 public String getFormattedValue(float value) {
-                    return "#" + ((int) value);
+                    int idx = Math.round(value);
+                    if (idx >= 0 && idx < pDates.size()) return pDates.get(idx);
+                    return "";
                 }
             });
-            binding.chartPeriodLength.getXAxis().setLabelCount(Math.max(pLengths.size(), 2), false);
+            binding.chartPeriodLength.getXAxis().setLabelRotationAngle(-45f);
+            binding.chartPeriodLength.getXAxis().setTextSize(9f);
+            binding.chartPeriodLength.getXAxis().setLabelCount(Math.min(pLengths.size(), 8), false);
+            binding.chartPeriodLength.setExtraBottomOffset(20f);
             binding.chartPeriodLength.setData(new BarData(pDataSet));
             binding.chartPeriodLength.animateY(500);
             binding.chartPeriodLength.invalidate();
@@ -290,7 +310,9 @@ public class InsightsFragment extends Fragment {
                 for (String sId : ids) {
                     try {
                         int id = Integer.parseInt(sId.trim());
-                        counts.put(id, counts.getOrDefault(id, 0) + 1);
+                        if (tagNames.containsKey(id)) {
+                            counts.put(id, counts.getOrDefault(id, 0) + 1);
+                        }
                     } catch (NumberFormatException ignored) {}
                 }
             }
@@ -346,17 +368,21 @@ public class InsightsFragment extends Fragment {
         }
 
         List<PieEntry> entries = new ArrayList<>();
-        String[] moodNames = {"Happy", "Calm", "Sad", "Anxious", "Irritable", "Energetic", "Tired"};
-        Mood[] moods = {Mood.HAPPY, Mood.CALM, Mood.SAD, Mood.ANXIOUS,
-                Mood.IRRITABLE, Mood.ENERGETIC, Mood.TIRED};
+        String[] moodNames = {"Normal", "Happy", "Sad", "Calm", "Anxious", "Energetic", "Sensitive", "Romantic", "Lonely", "Mood Swing", "Food Craving"};
+        Mood[] moods = {Mood.NORMAL, Mood.HAPPY, Mood.SAD, Mood.CALM, Mood.ANXIOUS,
+                Mood.ENERGETIC, Mood.SENSITIVE, Mood.ROMANTIC, Mood.LONELY, Mood.MOOD_SWING, Mood.FOOD_CRAVING};
         int[] moodColors = {
-                requireContext().getColor(R.color.mood_happy),
                 requireContext().getColor(R.color.mood_calm),
+                requireContext().getColor(R.color.mood_happy),
                 requireContext().getColor(R.color.mood_sad),
+                requireContext().getColor(R.color.mood_calm),
                 requireContext().getColor(R.color.mood_anxious),
-                requireContext().getColor(R.color.mood_irritable),
                 requireContext().getColor(R.color.mood_energetic),
-                requireContext().getColor(R.color.mood_tired)
+                requireContext().getColor(R.color.mood_sad),
+                requireContext().getColor(R.color.mood_happy),
+                requireContext().getColor(R.color.mood_sad),
+                requireContext().getColor(R.color.mood_irritable),
+                requireContext().getColor(R.color.mood_happy)
         };
 
         List<Integer> usedColors = new ArrayList<>();
@@ -445,8 +471,8 @@ public class InsightsFragment extends Fragment {
                         } catch (NumberFormatException ignored) {}
                     }
                 }
-                if (l.mood == Mood.TIRED) personalTired += 6;
-                if (l.mood == Mood.SAD || l.mood == Mood.ANXIOUS || l.mood == Mood.IRRITABLE) personalMood += 5;
+                if (l.mood == Mood.ENERGETIC) personalTired += 6; // track high-energy as counter to fatigue
+                if (l.mood == Mood.SAD || l.mood == Mood.ANXIOUS || l.mood == Mood.MOOD_SWING || l.mood == Mood.LONELY) personalMood += 5;
             }
         }
 

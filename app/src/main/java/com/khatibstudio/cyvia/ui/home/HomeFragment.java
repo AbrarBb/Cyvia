@@ -322,7 +322,13 @@ public class HomeFragment extends Fragment {
             binding.cardMochiBanner.setVisibility(minimalMode ? View.GONE : View.VISIBLE);
         }
 
-        if ("MENSTRUAL".equals(phase) || cycleDay <= avgPeriodLen) {
+        if (daysUntil < 0) {
+            binding.tvStatusLabel.setText("Period Late");
+            long lateDays = Math.abs(daysUntil);
+            binding.tvStatusMain.setText(lateDays + (lateDays == 1 ? " Day Late" : " Days Late"));
+            binding.tvFertileDates.setVisibility(View.VISIBLE);
+            binding.tvFertileDates.setText("Tap Calendar or Quick Log to update your flow status");
+        } else if ("MENSTRUAL".equals(phase) || cycleDay <= avgPeriodLen) {
             binding.tvStatusLabel.setText("Period Phase");
             binding.tvStatusMain.setText("Day " + cycleDay + " of Flow");
             binding.tvFertileDates.setVisibility(View.VISIBLE);
@@ -404,27 +410,27 @@ public class HomeFragment extends Fragment {
             case "MENSTRUAL":
                 binding.tvPhaseName.setText(getString(R.string.home_phase_menstrual));
                 binding.imgPhaseIcon.setImageResource(R.drawable.ic_phase_menstrual);
-                binding.tvFertileDates.setText("Low chance of getting pregnant 2%");
                 break;
             case "FOLLICULAR":
                 binding.tvPhaseName.setText(getString(R.string.home_phase_follicular));
                 binding.imgPhaseIcon.setImageResource(R.drawable.ic_phase_follicular);
-                binding.tvFertileDates.setText("Low chance of getting pregnant 5%");
                 break;
             case "OVULATORY":
                 binding.tvPhaseName.setText(getString(R.string.home_phase_ovulatory));
                 binding.imgPhaseIcon.setImageResource(R.drawable.ic_phase_ovulatory);
-                binding.tvFertileDates.setText("High chance of getting pregnant 88%");
                 break;
             case "LUTEAL":
                 binding.tvPhaseName.setText(getString(R.string.home_phase_luteal));
                 binding.imgPhaseIcon.setImageResource(R.drawable.ic_phase_luteal);
-                binding.tvFertileDates.setText("Low chance of getting pregnant 3%");
                 break;
         }
 
         updateMochiCareMessage();
         refreshCycleRing();
+        CyclePrediction pred = viewModel.getPrediction().getValue();
+        if (pred != null && pred.hasData()) {
+            updateStatusCard(pred);
+        }
     }
 
     private void updateMochiCareMessage() {

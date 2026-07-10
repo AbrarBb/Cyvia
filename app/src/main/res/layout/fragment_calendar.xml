@@ -107,6 +107,79 @@
     <!-- Divider -->
     <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider" android:layout_marginStart="@dimen/screen_padding_horizontal" android:layout_marginEnd="@dimen/screen_padding_horizontal" />
 
+    <!-- ── Period Confirmation Banner ── shown when period is active/overdue ── -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_period_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_padding_horizontal"
+        android:layout_marginEnd="@dimen/screen_padding_horizontal"
+        android:layout_marginTop="@dimen/space_8"
+        android:layout_marginBottom="@dimen/space_4"
+        android:visibility="gone"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1.5dp"
+        app:strokeColor="@color/cyvia_primary"
+        app:cardBackgroundColor="@color/cyvia_primary_container">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_phase_menstrual"
+                app:tint="@color/cyvia_primary"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="Period" />
+
+            <TextView
+                android:id="@+id/tv_period_confirm_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Period Ends"
+                android:textSize="14sp"
+                android:fontFamily="@font/nunito"
+                android:textStyle="bold"
+                android:textColor="@color/cyvia_on_primary_container" />
+
+            <!-- Yes button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_period_yes"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yes"
+                android:textSize="13sp"
+                android:layout_marginEnd="6dp"
+                app:cornerRadius="20dp"
+                android:backgroundTint="@color/cyvia_surface"
+                android:textColor="@color/cyvia_on_background" />
+
+            <!-- No button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_period_no"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No"
+                android:textSize="13sp"
+                app:cornerRadius="20dp"
+                android:backgroundTint="@color/cyvia_primary"
+                android:textColor="@color/cyvia_on_primary" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
     <!-- Selected day detail area & Mochi Cheering Hub (Fills middle space) -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -213,6 +286,176 @@
                             android:fontFamily="@font/inter"
                             android:textColor="@color/cyvia_on_surface" />
                     </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Sex Life Prediction Card (Beta) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_sex_life_prediction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1.5dp"
+                app:strokeColor="@color/cyvia_outline"
+                app:cardBackgroundColor="@color/cyvia_surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sex Life Prediction 🌸"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/nunito"
+                        android:textColor="@color/cyvia_on_background" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="*Predictions based on cycle and pregnancy probability data"
+                        android:textSize="11sp"
+                        android:fontFamily="@font/inter"
+                        android:textColor="@color/cyvia_on_surface_variant"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Row 1: No Sex -->
+                    <LinearLayout
+                        android:id="@+id/row_pred_nope"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="10dp"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_sex_nope"
+                            android:layout_marginEnd="12dp"
+                            android:contentDescription="No sex" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="No Sex (Period days)"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/nunito"
+                                android:textColor="@color/cyvia_on_background" />
+
+                            <TextView
+                                android:id="@+id/tv_pred_nope_dates"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="—"
+                                android:textSize="12sp"
+                                android:fontFamily="@font/inter"
+                                android:textColor="@color/cyvia_on_surface_variant" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Row 2: Protected Sex -->
+                    <LinearLayout
+                        android:id="@+id/row_pred_protected"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="10dp"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_sex_protected"
+                            android:layout_marginEnd="12dp"
+                            android:contentDescription="Protected sex" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_pred_protected_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Protected Sex (High pregnancy chance)"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/nunito"
+                                android:textColor="@color/cyvia_on_background" />
+
+                            <TextView
+                                android:id="@+id/tv_pred_protected_dates"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="—"
+                                android:textSize="12sp"
+                                android:fontFamily="@font/inter"
+                                android:textColor="@color/cyvia_on_surface_variant" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Row 3: Unprotected Sex -->
+                    <LinearLayout
+                        android:id="@+id/row_pred_unprotected"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_sex_unprotected"
+                            android:layout_marginEnd="12dp"
+                            android:contentDescription="Unprotected sex" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_pred_unprotected_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Unprotected Sex (Low pregnancy chance)"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/nunito"
+                                android:textColor="@color/cyvia_on_background" />
+
+                            <TextView
+                                android:id="@+id/tv_pred_unprotected_dates"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="—"
+                                android:textSize="12sp"
+                                android:fontFamily="@font/inter"
+                                android:textColor="@color/cyvia_on_surface_variant" />
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

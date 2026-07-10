@@ -27,6 +27,7 @@ import com.khatibstudio.cyvia.billing.BillingManager;
 import com.khatibstudio.cyvia.data.model.TrackingMode;
 import com.khatibstudio.cyvia.data.repository.CycleRepository;
 import com.khatibstudio.cyvia.data.repository.LogRepository;
+import com.khatibstudio.cyvia.ads.AdManager;
 import com.khatibstudio.cyvia.data.repository.SettingsRepository;
 import com.khatibstudio.cyvia.data.repository.SymptomRepository;
 import com.khatibstudio.cyvia.databinding.FragmentSettingsBinding;
@@ -51,6 +52,7 @@ public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding binding;
     private SettingsRepository settings;
+    private AdManager adManager;
     private CycleRepository cycleRepository;
     private LogRepository logRepository;
     private SymptomRepository symptomRepository;
@@ -80,6 +82,8 @@ public class SettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         CyviaApplication app = CyviaApplication.from(requireContext());
         settings = app.getSettingsRepository();
+        adManager = new AdManager(settings);
+        adManager.preloadRewarded(requireContext(), AdManager.THEME_REWARDED_AD_UNIT_ID);
         cycleRepository = app.getCycleRepository();
         logRepository = app.getLogRepository();
         symptomRepository = app.getSymptomRepository();
@@ -243,8 +247,15 @@ public class SettingsFragment extends Fragment {
             if (checkedId == R.id.btn_theme_light) mode = SettingsRepository.THEME_LIGHT;
             else if (checkedId == R.id.btn_theme_dark) mode = SettingsRepository.THEME_DARK;
             else mode = SettingsRepository.THEME_SYSTEM;
-            settings.setThemeMode(mode);
-            applyTheme(mode);
+            if (!settings.isAdsRemoved() && !mode.equals(settings.getThemeMode())) {
+                adManager.showRewardedAd(requireActivity(), AdManager.THEME_REWARDED_AD_UNIT_ID, () -> {
+                    settings.setThemeMode(mode);
+                    applyTheme(mode);
+                });
+            } else {
+                settings.setThemeMode(mode);
+                applyTheme(mode);
+            }
         });
 
         // Export

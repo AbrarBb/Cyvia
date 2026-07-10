@@ -176,10 +176,23 @@ public class CycleRingView extends View {
         invalidate();
     }
 
+    private boolean isNightMode() {
+        return (getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (ringRect.width() <= 0 || ringRect.height() <= 0) return;
+
+        boolean night = isNightMode();
+        try {
+            trackPaint.setColor(ContextCompat.getColor(getContext(), R.color.cyvia_outline));
+        } catch (Exception e) {
+            trackPaint.setColor(night ? Color.parseColor("#5B5377") : Color.parseColor("#DDD6FE"));
+        }
+        tickPaint.setColor(night ? Color.parseColor("#6E648B") : Color.parseColor("#9E9E9E"));
+        fertilePaint.setColor(night ? Color.parseColor("#0369A1") : Color.parseColor("#C0F3FF"));
 
         float anglePerDay = 360f / (float) cycleLength;
         float cx = ringRect.centerX();
@@ -232,10 +245,10 @@ public class CycleRingView extends View {
             float tx = cx + (float) Math.cos(tickAngleRad) * radius;
             float ty = cy + (float) Math.sin(tickAngleRad) * radius;
             if (d % 5 == 0 || d == 1) {
-                tickPaint.setAlpha(200);
+                tickPaint.setAlpha(night ? 220 : 200);
                 canvas.drawCircle(tx, ty, 3f * density, tickPaint);
             } else {
-                tickPaint.setAlpha(110);
+                tickPaint.setAlpha(night ? 140 : 110);
                 canvas.drawCircle(tx, ty, 1.8f * density, tickPaint);
             }
         }
@@ -259,11 +272,16 @@ public class CycleRingView extends View {
             canvas.drawCircle(ovX, ovY, 2.2f * density, indicatorPaint);
         }
 
+        int colorPeriod = night ? Color.parseColor("#FF8A80") : Color.parseColor("#EF5350");
+        int colorFollicular = night ? Color.parseColor("#64B5F6") : Color.parseColor("#1E88E5");
+        int colorOvulation = night ? Color.parseColor("#4DD0E1") : Color.parseColor("#0097A7");
+        int colorLuteal = night ? Color.parseColor("#FFB74D") : Color.parseColor("#FB8C00");
+
         // Draw separate static phase labels when current day dot is NOT inside that phase
         if (!isCurrentInPeriod) {
             float periodMidDay = (1 + periodLength) / 2f;
             float periodMidAngleDeg = -90f + (periodMidDay - 0.5f) * anglePerDay;
-            drawSmartLabel(canvas, "Period", periodMidAngleDeg, Color.parseColor("#EF5350"), 11.5f * density);
+            drawSmartLabel(canvas, "Period", periodMidAngleDeg, colorPeriod, 11.5f * density);
         }
 
         if (!minimalMode) {
@@ -271,20 +289,20 @@ public class CycleRingView extends View {
             if (!isCurrentInFollicular && fertileStartDay > periodLength + 1) {
                 float follMidDay = periodLength + (fertileStartDay - 1 - periodLength) / 2f;
                 float follMidAngleDeg = -90f + (follMidDay - 0.5f) * anglePerDay;
-                drawSmartLabel(canvas, "Follicular", follMidAngleDeg, Color.parseColor("#1E88E5"), 11f * density);
+                drawSmartLabel(canvas, "Follicular", follMidAngleDeg, colorFollicular, 11f * density);
             }
 
             // Ovulation label
             if (!isCurrentInFertile && fertileEndDay >= fertileStartDay) {
                 float ovAngleDeg = -90f + (ovulationDay - 0.5f) * anglePerDay;
-                drawSmartLabel(canvas, "Ovulation", ovAngleDeg, Color.parseColor("#0097A7"), 11.5f * density);
+                drawSmartLabel(canvas, "Ovulation", ovAngleDeg, colorOvulation, 11.5f * density);
             }
 
             // Luteal label
             if (!isCurrentInLuteal && cycleLength > fertileEndDay) {
                 float lutealMidDay = fertileEndDay + (cycleLength - fertileEndDay) / 2f;
                 float lutealMidAngleDeg = -90f + (lutealMidDay - 0.5f) * anglePerDay;
-                drawSmartLabel(canvas, "Luteal", lutealMidAngleDeg, Color.parseColor("#FB8C00"), 11f * density);
+                drawSmartLabel(canvas, "Luteal", lutealMidAngleDeg, colorLuteal, 11f * density);
             }
         }
 
@@ -300,23 +318,23 @@ public class CycleRingView extends View {
 
         // Draw unified Current Day label (combined with phase)
         String dotLabel = "Day " + currentDay;
-        int dotColor = Color.parseColor("#EF5350");
+        int dotColor = colorPeriod;
         if (isCurrentInPeriod) {
             dotLabel = "Day " + currentDay + "\nPeriod";
-            dotColor = Color.parseColor("#EF5350");
+            dotColor = colorPeriod;
         } else if (isCurrentInFollicular) {
             dotLabel = "Day " + currentDay + "\nFollicular";
-            dotColor = Color.parseColor("#1E88E5");
+            dotColor = colorFollicular;
         } else if (isCurrentInFertile) {
             if (currentDay == ovulationDay) {
                 dotLabel = "Day " + currentDay + "\nOvulation";
             } else {
                 dotLabel = "Day " + currentDay + "\nFertile";
             }
-            dotColor = Color.parseColor("#0097A7");
+            dotColor = colorOvulation;
         } else if (isCurrentInLuteal) {
             dotLabel = "Day " + currentDay + "\nLuteal";
-            dotColor = Color.parseColor("#FB8C00");
+            dotColor = colorLuteal;
         }
         drawSmartLabel(canvas, dotLabel, currentAngleDeg, dotColor, 12f * density);
     }

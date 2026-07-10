@@ -116,11 +116,10 @@ public class HomeViewModel extends AndroidViewModel {
         List<CycleEntry> cycles = allCycles.getValue();
         if (cycles != null && !cycles.isEmpty()) {
             CycleEntry mostRecent = cycles.get(0);
-            if (mostRecent.isOngoing()) {
-                long todayEpoch = LocalDate.now().toEpochDay();
+            if (!mostRecent.isOngoing()) {
                 long startEpoch = mostRecent.startDate;
                 long targetEpoch = startEpoch + cycleDayNum - 1;
-                if (targetEpoch <= todayEpoch) {
+                if (targetEpoch <= mostRecent.endDate) {
                     return "MENSTRUAL";
                 }
             }
@@ -130,8 +129,8 @@ public class HomeViewModel extends AndroidViewModel {
         if (periodLen <= 0 || periodLen >= avgCycleLength) periodLen = 5;
 
         int ovDay = Math.max(periodLen + 6, avgCycleLength - 14);
-        int fertileStart = ovDay - 2;
-        int fertileEnd = ovDay + 2;
+        int fertileStart = Math.max(periodLen + 1, ovDay - 2);
+        int fertileEnd = Math.min(avgCycleLength, ovDay + 2);
 
         if (cycleDayNum <= periodLen) return "MENSTRUAL";
         if (cycleDayNum < fertileStart) return "FOLLICULAR";

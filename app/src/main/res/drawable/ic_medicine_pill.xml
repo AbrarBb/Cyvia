@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- Pink circle background -->
+    <path
+        android:fillColor="#F48FB1"
+        android:pathData="M32,4 A28,28 0,1,1 31.999,4Z"/>
+    <!-- Pill capsule body left half -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M20,26 A8,8 0,0,0 20,38 L32,38 L32,26 Z"/>
+    <!-- Pill capsule body right half -->
+    <path
+        android:fillColor="#FCE4EC"
+        android:pathData="M32,26 L44,26 A8,8 0,0,1 44,38 L32,38 Z"/>
+    <!-- Dividing line in the middle of the pill -->
+    <path
+        android:fillColor="#F48FB1"
+        android:strokeColor="#F48FB1"
+        android:strokeWidth="1.5"
+        android:pathData="M32,26 L32,38"/>
+</vector>

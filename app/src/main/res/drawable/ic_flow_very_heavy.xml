@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- Very Heavy Flow: 4 bold drops in a 2x2 grid -->
+    <path
+        android:fillColor="#C62828"
+        android:pathData="M16,8 C16,8 10,16 10,22 A6,6 0,0,0 22,22 C22,16 16,8 16,8Z"/>
+    <path
+        android:fillColor="#C62828"
+        android:pathData="M32,8 C32,8 26,16 26,22 A6,6 0,0,0 38,22 C38,16 32,8 32,8Z"/>
+    <path
+        android:fillColor="#C62828"
+        android:pathData="M16,34 C16,34 10,42 10,48 A6,6 0,0,0 22,48 C22,42 16,34 16,34Z"/>
+    <path
+        android:fillColor="#C62828"
+        android:pathData="M32,34 C32,34 26,42 26,48 A6,6 0,0,0 38,48 C38,42 32,34 32,34Z"/>
+    <!-- Extra small drop for "very" -->
+    <path
+        android:fillColor="#C62828"
+        android:pathData="M50,20 C50,20 46,26 46,30 A4,4 0,0,0 54,30 C54,26 50,20 50,20Z"/>
+    <path
+        android:fillColor="#C62828"
+        android:pathData="M50,44 C50,44 46,50 46,54 A4,4 0,0,0 54,54 C54,50 50,44 50,44Z"/>
+</vector>

@@ -1096,7 +1096,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Version 1.0.0"
+            android:text="Version 1.1.2"
             android:textSize="12.5sp"
             android:fontFamily="@font/inter"
             android:textColor="@color/cyvia_on_surface_variant" />

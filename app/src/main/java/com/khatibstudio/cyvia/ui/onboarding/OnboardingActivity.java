@@ -153,6 +153,8 @@ public class OnboardingActivity extends AppCompatActivity {
             if (privacyPage != null && privacyPage.isMinorSafeSelected()) {
                 settings.setMinorSafeMode(true);
                 settings.setTrackIntimacyEnabled(false);
+            } else if (!settings.hasTrackIntimacyPreference()) {
+                settings.setTrackIntimacyEnabled(false);
             }
 
             // Save preferences from the last page

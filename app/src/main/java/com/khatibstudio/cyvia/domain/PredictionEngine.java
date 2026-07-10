@@ -42,8 +42,8 @@ public class PredictionEngine {
     /** Luteal phase length (days from ovulation to next period). */
     private static final int LUTEAL_PHASE_DAYS = 14;
 
-    /** Maximum fertile window span before ovulation. */
-    private static final int FERTILE_WINDOW_BEFORE = 5;
+    /** Maximum fertile window span before ovulation. Changed to 1 to limit window to 3 days total around ovulation (ov-1, ov, ov+1) */
+    private static final int FERTILE_WINDOW_BEFORE = 1;
 
     /** Fertile window days after ovulation. */
     private static final int FERTILE_WINDOW_AFTER = 1;

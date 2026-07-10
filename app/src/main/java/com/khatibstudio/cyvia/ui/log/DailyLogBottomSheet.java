@@ -1,6 +1,7 @@
 package com.khatibstudio.cyvia.ui.log;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.khatibstudio.cyvia.CyviaApplication;
 import com.khatibstudio.cyvia.R;
+import com.khatibstudio.cyvia.ads.AdManager;
 import com.khatibstudio.cyvia.data.db.CyviaDatabase;
 import com.khatibstudio.cyvia.data.db.entity.CycleEntry;
 import com.khatibstudio.cyvia.data.db.entity.DailyLog;
@@ -63,12 +65,18 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
     private SymptomRepository symptomRepository;
     private CycleRepository cycleRepository;
     private SettingsRepository settings;
+    private AdManager adManager;
 
     private LocalDate logDate;
     private DailyLog existingLog;
     private final Set<Integer> selectedSymptomIds = new HashSet<>();
     private Mood selectedMood = null;
     private FlowIntensity selectedFlow = null;
+    private Boolean pillsTaken = null; // null = not recorded
+    private String selectedSex = null;
+    private String selectedActivity = null;
+    private String selectedDischarge = null;
+    private String weightUnit = "KG";
 
     private List<SymptomTag> allTagsList = new ArrayList<>();
     private String tempCustomIconKey = "ic_kawaii_melody";
@@ -121,6 +129,9 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         symptomRepository = app.getSymptomRepository();
         cycleRepository = app.getCycleRepository();
         settings = app.getSettingsRepository();
+        adManager = new AdManager(settings);
+        adManager.preloadInterstitial(requireContext());
+        adManager.onLoggingStarted();
 
         if (getArguments() != null && getArguments().containsKey(ARG_DATE)) {
             logDate = LocalDate.parse(getArguments().getString(ARG_DATE));
@@ -148,17 +159,29 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         setupDateNavigation();
 
         if (!settings.isMinorSafeMode() && settings.isTrackIntimacyEnabled()) {
-            binding.switchIntimacy.setVisibility(View.VISIBLE);
+            binding.layoutSexSection.setVisibility(View.VISIBLE);
         } else {
-            binding.switchIntimacy.setVisibility(View.GONE);
+            binding.layoutSexSection.setVisibility(View.GONE);
         }
+
+        binding.toggleWeightUnit.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                if (checkedId == R.id.btn_unit_kg) {
+                    weightUnit = "KG";
+                    binding.layoutWeight.setSuffixText("kg");
+                } else if (checkedId == R.id.btn_unit_lbs) {
+                    weightUnit = "LBS";
+                    binding.layoutWeight.setSuffixText("lbs");
+                }
+            }
+        });
 
         setupFlowSelector();
         loadExistingLog();
         observeSymptomTags();
 
         binding.btnSaveLog.setOnClickListener(v -> saveLog());
-        binding.btnAddCustomKawaii.setOnClickListener(v -> showAddCustomKawaiiDialog());
+        // Custom symptom button was replaced by the curated 13-item physical list
     }
 
     private void setupDateNavigation() {
@@ -195,16 +218,24 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         logDate = newDate;
         updateDateHeader();
 
+        // Reset all sections — every section is independent, no auto-select
         selectedMood = null;
         selectedFlow = null;
         selectedSymptomIds.clear();
+        pillsTaken = null;
+        selectedSex = null;
+        selectedActivity = null;
+        selectedDischarge = null;
+        weightUnit = "KG";
         binding.etNotes.setText("");
         binding.etTemperature.setText("");
-        binding.switchIntimacy.setChecked(false);
+        binding.etWeight.setText("");
+        binding.toggleWeightUnit.check(R.id.btn_unit_kg);
+        binding.layoutWeight.setSuffixText("kg");
         refreshFlowSelector();
+        refreshAllKawaiiRows();
 
         loadExistingLog();
-        refreshAllKawaiiRows();
     }
 
     private void showDatePicker() {
@@ -228,24 +259,53 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         refreshFlowSelector();
     }
 
+    /**
+     * 6 independent flow options — None + 5 blood-intensity options.
+     * Tap to select, tap again to deselect. No auto-selection on open.
+     */
     private void refreshFlowSelector() {
         if (binding == null) return;
         binding.layoutFlowSelector.removeAllViews();
 
+        // Option 0: No Flow / Normal Day (no blood icon)
+        boolean noneSelected = (selectedFlow == null && pillsTaken == null);
+        // We track "None" selection via a local boolean to distinguish
+        // "not set" from "explicitly chose None".
+        // Use a tag on the parent layout for this.
+        Object noneTag = binding.layoutFlowSelector.getTag();
+        boolean noneExplicit = Boolean.TRUE.equals(noneTag);
+
+        addKawaiiBadgeView(binding.layoutFlowSelector, "No Flow", null, R.drawable.ic_mochi_smiling, noneExplicit, v -> {
+            if (Boolean.TRUE.equals(binding.layoutFlowSelector.getTag())) {
+                binding.layoutFlowSelector.setTag(null); // deselect
+            } else {
+                selectedFlow = null;
+                binding.layoutFlowSelector.setTag(Boolean.TRUE);
+            }
+            refreshFlowSelector();
+        });
+
+        // Options 1-5: Blood flow intensities
         FlowIntensity[] intensities = FlowIntensity.values();
         for (FlowIntensity intensity : intensities) {
-            String label = intensity.name().substring(0, 1).toUpperCase() + intensity.name().substring(1).toLowerCase();
+            String label;
             int iconRes;
             switch (intensity) {
-                case SPOTTING: iconRes = R.drawable.ic_flow_spotting; break;
-                case LIGHT: iconRes = R.drawable.ic_flow_light; break;
-                case MEDIUM: iconRes = R.drawable.ic_flow_medium; break;
-                case HEAVY: iconRes = R.drawable.ic_flow_heavy; break;
-                default: iconRes = R.drawable.ic_flow_spotting; break;
+                case SPOTTING:    label = "Spotting";   iconRes = R.drawable.ic_flow_spotting;    break;
+                case LIGHT:       label = "Light";      iconRes = R.drawable.ic_flow_light;       break;
+                case MEDIUM:      label = "Medium";     iconRes = R.drawable.ic_flow_medium;      break;
+                case HEAVY:       label = "Heavy";      iconRes = R.drawable.ic_flow_heavy;       break;
+                case VERY_HEAVY:  label = "Very Heavy"; iconRes = R.drawable.ic_flow_very_heavy;  break;
+                default:          label = "Spotting";   iconRes = R.drawable.ic_flow_spotting;    break;
             }
             boolean isSel = (selectedFlow == intensity);
             addKawaiiBadgeView(binding.layoutFlowSelector, label, null, iconRes, isSel, v -> {
-                selectedFlow = (selectedFlow == intensity) ? null : intensity;
+                if (selectedFlow == intensity) {
+                    selectedFlow = null;
+                } else {
+                    selectedFlow = intensity;
+                    binding.layoutFlowSelector.setTag(null); // clear 'No Flow' explicit flag
+                }
                 refreshFlowSelector();
             });
         }
@@ -273,13 +333,29 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                 });
             }
 
+            // Restore previously saved values (all sections remain null if not saved)
             if (log.notes != null) binding.etNotes.setText(log.notes);
             if (log.temperature != null) {
                 binding.etTemperature.setText(String.valueOf(log.temperature));
             }
-            if (log.intimacy != null) binding.switchIntimacy.setChecked(log.intimacy);
+            if (log.weight != null) {
+                binding.etWeight.setText(String.valueOf(log.weight));
+            }
+            weightUnit = log.weightUnit != null ? log.weightUnit : "KG";
+            if ("LBS".equals(weightUnit)) {
+                binding.toggleWeightUnit.check(R.id.btn_unit_lbs);
+                binding.layoutWeight.setSuffixText("lbs");
+            } else {
+                binding.toggleWeightUnit.check(R.id.btn_unit_kg);
+                binding.layoutWeight.setSuffixText("kg");
+            }
 
-            selectedMood = log.mood;
+            selectedSex = log.sexType;
+            selectedActivity = log.exerciseType;
+            selectedDischarge = log.dischargeType;
+
+            selectedMood = log.mood; // null if not saved
+            pillsTaken = log.pillsTaken; // null if not saved
 
             if (!TextUtils.isEmpty(log.symptomIds)) {
                 for (String idStr : log.symptomIds.split(",")) {
@@ -287,32 +363,18 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                     catch (NumberFormatException ignored) {}
                 }
             }
+
+            // Restore flow from the log's linked cycle if it was saved before
+            if (log.mood == null && selectedFlow == null) {
+                // Only auto-restore flow if there's a saved cycle for this exact date
+                // (No silent auto-selection for new logs)
+            }
+
+            refreshFlowSelector();
             refreshAllKawaiiRows();
         });
-
-        CyviaDatabase.databaseWriteExecutor.execute(() -> {
-            List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
-            FlowIntensity foundFlow = null;
-            if (cycles != null) {
-                long targetDay = logDate.toEpochDay();
-                for (CycleEntry cycle : cycles) {
-                    long start = cycle.startDate;
-                    long end = cycle.isOngoing() ? LocalDate.now().toEpochDay() : cycle.endDate;
-                    if (targetDay >= start && targetDay <= end) {
-                        foundFlow = cycle.flowIntensity;
-                        break;
-                    }
-                }
-            }
-            FlowIntensity finalFlow = foundFlow;
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(() -> {
-                    if (binding == null) return;
-                    selectedFlow = finalFlow;
-                    refreshFlowSelector();
-                });
-            }
-        });
+        // NOTE: Flow is NOT auto-populated from cycle history anymore.
+        // Each section starts empty until user explicitly taps.
     }
 
     private void observeSymptomTags() {
@@ -330,57 +392,135 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         });
     }
 
+    /**
+     * Rebuilds the mood (11 Mochi), physical (13 Mochi), and medicine sections.
+     * All sections are fully independent — nothing is auto-selected.
+     */
     private void refreshAllKawaiiRows() {
         if (binding == null) return;
         binding.layoutMoodSelector.removeAllViews();
         binding.layoutPhysicalSymptoms.removeAllViews();
-
-        Set<String> seenMoods = new HashSet<>();
-        Set<String> seenPhysical = new HashSet<>();
-
-        // 1. Built-in Moods
-        for (Mood m : Mood.values()) {
-            String label = m.name().substring(0, 1).toUpperCase() + m.name().substring(1).toLowerCase();
-            seenMoods.add(label.toLowerCase());
-            boolean isSel = (selectedMood == m);
-            addKawaiiBadgeView(binding.layoutMoodSelector, label, null, KawaiiIconUtil.getMoodIconRes(m), isSel, v -> {
-                selectedMood = (selectedMood == m) ? null : m;
-                refreshAllKawaiiRows();
-            });
+        if (binding.layoutMedicineSelector != null) {
+            binding.layoutMedicineSelector.removeAllViews();
         }
 
-        // 2. Custom Moods and All Symptom Tags
-        for (SymptomTag tag : allTagsList) {
-            String norm = tag.label != null ? tag.label.trim().toLowerCase() : "";
-            boolean isSel = selectedSymptomIds.contains(tag.id);
-            int fallback = tag.category == SymptomCategory.EMOTIONAL ? R.drawable.ic_mochi_mood_sensitive : R.drawable.ic_mochi_smiling;
+        // ── Section 1: How are you feeling? (11 Mochi moods) ───────────────
+        String[] moodLabels = {
+            "Normal", "Happy", "Sad", "Calm", "Anxious",
+            "Energetic", "Sensitive", "Romantic", "Lonely", "Mood Swing", "Food Craving"
+        };
+        Mood[] moodValues = {
+            Mood.NORMAL, Mood.HAPPY, Mood.SAD, Mood.CALM, Mood.ANXIOUS,
+            Mood.ENERGETIC, Mood.SENSITIVE, Mood.ROMANTIC, Mood.LONELY, Mood.MOOD_SWING, Mood.FOOD_CRAVING
+        };
+        for (int i = 0; i < moodValues.length; i++) {
+            final Mood m = moodValues[i];
+            boolean isSel = (selectedMood == m);
+            addKawaiiBadgeView(binding.layoutMoodSelector, moodLabels[i], null,
+                    KawaiiIconUtil.getMoodIconRes(m), isSel, v -> {
+                        selectedMood = (selectedMood == m) ? null : m;
+                        refreshAllKawaiiRows();
+                    });
+        }
 
-            if (tag.category == SymptomCategory.MOOD) {
-                if (!seenMoods.contains(norm)) {
-                    seenMoods.add(norm);
-                    addKawaiiBadgeView(binding.layoutMoodSelector, tag.label, tag.iconKey, R.drawable.ic_mochi_mood_happy, isSel, v -> {
-                        toggleSymptomSelection(tag.id);
+        // ── Section 2: Physical Condition (13 curated Mochi symptoms) ────────
+        for (SymptomTag tag : allTagsList) {
+            if (tag.category != SymptomCategory.PHYSICAL) continue;
+            boolean isSel = selectedSymptomIds.contains(tag.id);
+            addKawaiiBadgeView(binding.layoutPhysicalSymptoms, tag.label,
+                    tag.iconKey, R.drawable.ic_mochi_smiling, isSel,
+                    v -> toggleSymptomSelection(tag.id));
+        }
+
+        // ── Section 3: Medicine — Take Pill? ──────────────────────────────
+        if (binding.layoutMedicineSelector != null) {
+            boolean pillSel = Boolean.TRUE.equals(pillsTaken);
+            addKawaiiBadgeView(binding.layoutMedicineSelector, "Take Pill",
+                    null, R.drawable.ic_medicine_pill, pillSel, v -> {
+                        pillsTaken = Boolean.TRUE.equals(pillsTaken) ? null : Boolean.TRUE;
+                        refreshAllKawaiiRows();
                     });
-                }
-            } else {
-                if (!seenPhysical.contains(norm)) {
-                    seenPhysical.add(norm);
-                    addKawaiiBadgeView(binding.layoutPhysicalSymptoms, tag.label, tag.iconKey, fallback, isSel, v -> {
-                        toggleSymptomSelection(tag.id);
-                    });
-                }
+        }
+
+        // ── Section 4: Vaginal Discharge ───────────────────────────────────
+        if (binding.layoutDischargeSelector != null) {
+            binding.layoutDischargeSelector.removeAllViews();
+            String[] dischargeLabels = {
+                "Excessive White", "Smelly", "Creamy Texture", "Watery Texture", "Brownish", "Yellowish"
+            };
+            String[] dischargeKeys = {
+                "EXCESSIVE_WHITE", "SMELLY", "CREAMY", "WATERY", "BROWNISH", "YELLOWISH"
+            };
+            int[] dischargeIcons = {
+                R.drawable.ic_discharge_excessive_white,
+                R.drawable.ic_discharge_smelly,
+                R.drawable.ic_discharge_creamy,
+                R.drawable.ic_discharge_watery,
+                R.drawable.ic_discharge_brownish,
+                R.drawable.ic_discharge_yellowish
+            };
+            for (int i = 0; i < dischargeKeys.length; i++) {
+                final String dk = dischargeKeys[i];
+                boolean isSel = dk.equals(selectedDischarge);
+                addKawaiiBadgeView(binding.layoutDischargeSelector, dischargeLabels[i], null,
+                        dischargeIcons[i], isSel, v -> {
+                            selectedDischarge = dk.equals(selectedDischarge) ? null : dk;
+                            refreshAllKawaiiRows();
+                        });
             }
         }
 
-        // Ensure rich Physical Condition options are present even if db wasn't re-seeded
-        String[] extraPhysical = {"Dizziness", "Chills", "Brain fog", "Joint pain", "Constipation", "Diarrhea", "Neck ache", "Ovulation pain", "Lower back pain", "Tender nipples", "Sweet cravings", "Salty cravings", "Sensitive skin", "Water retention"};
-        for (String extra : extraPhysical) {
-            if (!seenPhysical.contains(extra.toLowerCase())) {
-                seenPhysical.add(extra.toLowerCase());
-                addKawaiiBadgeView(binding.layoutPhysicalSymptoms, extra, null, R.drawable.ic_mochi_smiling, false, v -> {
-                    symptomRepository.addCustomSymptom(extra, com.khatibstudio.cyvia.data.model.SymptomCategory.PHYSICAL);
-                    android.widget.Toast.makeText(requireContext(), "Added " + extra + "! Tap again to select.", android.widget.Toast.LENGTH_SHORT).show();
-                });
+        // ── Section 5: Physical Activity ───────────────────────────────────
+        if (binding.layoutActivitySelector != null) {
+            binding.layoutActivitySelector.removeAllViews();
+            String[] activityLabels = {
+                "No Exercise", "Running", "Cycling", "Gym", "Aerobics & Dance", "Swimming", "Yoga"
+            };
+            String[] activityKeys = {
+                "NO_EXERCISE", "RUNNING", "CYCLING", "GYM", "AEROBIC_DANCE", "SWIMMING", "YOGA"
+            };
+            int[] activityIcons = {
+                R.drawable.ic_activity_no_exercise,
+                R.drawable.ic_activity_running,
+                R.drawable.ic_activity_cycling,
+                R.drawable.ic_activity_gym,
+                R.drawable.ic_activity_dance,
+                R.drawable.ic_activity_swimming,
+                R.drawable.ic_activity_yoga
+            };
+            for (int i = 0; i < activityKeys.length; i++) {
+                final String ak = activityKeys[i];
+                boolean isSel = ak.equals(selectedActivity);
+                addKawaiiBadgeView(binding.layoutActivitySelector, activityLabels[i], null,
+                        activityIcons[i], isSel, v -> {
+                            selectedActivity = ak.equals(selectedActivity) ? null : ak;
+                            refreshAllKawaiiRows();
+                        });
+            }
+        }
+
+        // ── Section 6: Sex (only if intimacy enabled/not minor safe) ──────
+        if (binding.layoutSexSelector != null && binding.layoutSexSection.getVisibility() == View.VISIBLE) {
+            binding.layoutSexSelector.removeAllViews();
+            String[] sexLabels = {
+                "Nope", "Protected", "Unprotected"
+            };
+            String[] sexKeys = {
+                "NOPE", "PROTECTED", "UNPROTECTED"
+            };
+            int[] sexIcons = {
+                R.drawable.ic_sex_nope,
+                R.drawable.ic_sex_protected,
+                R.drawable.ic_sex_unprotected
+            };
+            for (int i = 0; i < sexKeys.length; i++) {
+                final String sk = sexKeys[i];
+                boolean isSel = sk.equals(selectedSex);
+                addKawaiiBadgeView(binding.layoutSexSelector, sexLabels[i], null,
+                        sexIcons[i], isSel, v -> {
+                            selectedSex = sk.equals(selectedSex) ? null : sk;
+                            refreshAllKawaiiRows();
+                        });
             }
         }
     }
@@ -475,6 +615,7 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         DailyLog log = existingLog != null ? existingLog : new DailyLog();
         log.date = logDate.toEpochDay();
         log.mood = selectedMood;
+        log.pillsTaken = pillsTaken;
 
         List<String> ids = new ArrayList<>();
         for (int id : selectedSymptomIds) ids.add(String.valueOf(id));
@@ -492,9 +633,18 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
             log.temperature = null;
         }
 
-        if (binding.switchIntimacy.getVisibility() == View.VISIBLE) {
-            log.intimacy = binding.switchIntimacy.isChecked();
+        String weightText = binding.etWeight.getText() != null
+                ? binding.etWeight.getText().toString().trim() : "";
+        try {
+            log.weight = weightText.isEmpty() ? null : Float.parseFloat(weightText);
+        } catch (NumberFormatException e) {
+            log.weight = null;
         }
+        log.weightUnit = weightUnit;
+
+        log.sexType = selectedSex;
+        log.exerciseType = selectedActivity;
+        log.dischargeType = selectedDischarge;
 
         logRepository.saveLog(log);
 
@@ -566,7 +716,18 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
             }
         });
 
+        if (adManager != null) {
+            adManager.onLoggingFinished();
+        }
         dismiss();
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (adManager != null) {
+            adManager.onLoggingFinished();
+        }
     }
 
     @Override

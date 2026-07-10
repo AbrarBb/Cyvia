@@ -64,7 +64,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Generate Doctor Report"
+                        android:text="Cycle Summary Report"
                         android:textSize="17sp"
                         android:fontFamily="@font/nunito"
                         android:textStyle="bold"
@@ -73,7 +73,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Download comprehensive medical summary from beginning to end (Ad supported)"
+                        android:text="Download comprehensive cycle summary report from beginning to end"
                         android:textSize="12.5sp"
                         android:fontFamily="@font/inter"
                         android:textColor="@color/cyvia_on_surface_variant"

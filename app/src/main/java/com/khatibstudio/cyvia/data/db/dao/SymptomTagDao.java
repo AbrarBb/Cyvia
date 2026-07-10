@@ -58,4 +58,7 @@ public interface SymptomTagDao {
     /** Check if default symptoms have already been seeded. */
     @Query("SELECT COUNT(*) FROM symptom_tags WHERE is_custom = 0")
     int getDefaultSymptomCount();
+
+    @Query("DELETE FROM symptom_tags WHERE is_custom = 0")
+    void deleteDefaultSymptoms();
 }

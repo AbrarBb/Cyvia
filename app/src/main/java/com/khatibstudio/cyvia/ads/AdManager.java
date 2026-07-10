@@ -2,11 +2,14 @@ package com.khatibstudio.cyvia.ads;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -16,6 +19,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.khatibstudio.cyvia.BuildConfig;
 import com.khatibstudio.cyvia.CyviaApplication;
 import com.khatibstudio.cyvia.data.repository.SettingsRepository;
 
@@ -37,15 +41,17 @@ public class AdManager {
 
     private static final String TAG = "AdManager";
 
-    // ─── Test Ad Unit IDs (replace with real IDs before publishing) ───────
-    // Real IDs will be provided by the developer.
-    // DO NOT hardcode real IDs in version control.
+    // ─── Test Ad Unit IDs ─────────────────────────────────────────────────
     public static final String BANNER_AD_UNIT_ID =
-            "ca-app-pub-3940256099942544/6300978111";       // Google test banner
+            "ca-app-pub-3940256099942544/6300978111";       // Test Banner
     public static final String INTERSTITIAL_AD_UNIT_ID =
-            "ca-app-pub-3940256099942544/1033173712";       // Google test interstitial
+            "ca-app-pub-3940256099942544/1033173712";       // Test Interstitial
     public static final String REWARDED_AD_UNIT_ID =
-            "ca-app-pub-3940256099942544/5224354917";       // Google test rewarded
+            "ca-app-pub-3940256099942544/5224354917";       // Test Rewarded
+    public static final String REPORT_REWARDED_AD_UNIT_ID =
+            "ca-app-pub-3940256099942544/5224354917";       // Test Rewarded
+    public static final String THEME_REWARDED_AD_UNIT_ID =
+            "ca-app-pub-3940256099942544/5224354917";       // Test Rewarded
 
     /** Minimum time between interstitial shows (8 minutes). */
     private static final long INTERSTITIAL_COOLDOWN_MS = TimeUnit.MINUTES.toMillis(8);
@@ -78,7 +84,6 @@ public class AdManager {
             return;
         }
 
-        container.setVisibility(View.VISIBLE);
         CyviaApplication.from(activity).initAdMobIfNeeded(status -> {
             activity.runOnUiThread(() -> {
                 if (activity.isDestroyed() || activity.isFinishing()) return;
@@ -86,33 +91,92 @@ public class AdManager {
                 adView.setAdUnitId(BANNER_AD_UNIT_ID);
                 adView.setAdSize(AdSize.BANNER);
 
+                adView.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdLoaded() {
+                        Log.d(TAG, "Banner ad loaded successfully (" + BANNER_AD_UNIT_ID + ").");
+                        container.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError error) {
+                        Log.w(TAG, "Banner ad failed to load (" + BANNER_AD_UNIT_ID + "): " + error.getMessage() + " [Code: " + error.getCode() + "]");
+                        container.setVisibility(View.GONE);
+                    }
+                });
+
                 container.removeAllViews();
                 container.addView(adView);
-
-                AdRequest adRequest = new AdRequest.Builder().build();
-                adView.loadAd(adRequest);
+                adView.loadAd(new AdRequest.Builder().build());
             });
         });
-        // Banner fails gracefully — if offline, container stays but shows nothing visible
     }
 
-    // ─── Interstitial (Disabled by Policy) ───────────────────────────────
-
-    /**
-     * Interstitial ads are disabled by policy to protect user privacy and avoid intrusive UX
-     * during intimate health log entry moments.
-     */
+    // ─── Interstitial (Save Log Interstitial) ─────────────────────────────
     public void preloadInterstitial(Context context) {
-        // No-op: Interstitials disabled
-        Log.d(TAG, "Interstitial ads disabled by policy.");
+        if (settings.isAdsRemoved()) return;
+        if (interstitialAd != null) return;
+
+        CyviaApplication.from(context).initAdMobIfNeeded(status -> {
+            new Handler(Looper.getMainLooper()).post(() -> {
+                AdRequest adRequest = new AdRequest.Builder().build();
+                InterstitialAd.load(context, INTERSTITIAL_AD_UNIT_ID, adRequest,
+                        new InterstitialAdLoadCallback() {
+                            @Override
+                            public void onAdLoaded(@NonNull InterstitialAd ad) {
+                                interstitialAd = ad;
+                                Log.d(TAG, "Interstitial ad loaded (" + INTERSTITIAL_AD_UNIT_ID + ")");
+                            }
+
+                            @Override
+                            public void onAdFailedToLoad(@NonNull LoadAdError error) {
+                                Log.w(TAG, "Interstitial ad failed to load (" + INTERSTITIAL_AD_UNIT_ID + "): " + error.getMessage() + " [Code: " + error.getCode() + "]");
+                                interstitialAd = null;
+                            }
+                        });
+            });
+        });
     }
 
-    /**
-     * Interstitial ads are disabled by policy.
-     */
     public void maybeShowInterstitial(Activity activity) {
-        // No-op: Never show full-screen intrusive ads on saving health logs
-        Log.d(TAG, "Interstitial ads disabled by policy.");
+        maybeShowInterstitial(activity, null);
+    }
+
+    public void maybeShowInterstitial(Activity activity, Runnable onDismissed) {
+        if (settings.isAdsRemoved() || isLoggingInProgress) {
+            if (onDismissed != null) onDismissed.run();
+            return;
+        }
+
+        long now = System.currentTimeMillis();
+        if (now - settings.getLastInterstitialTime() < INTERSTITIAL_COOLDOWN_MS) {
+            Log.d(TAG, "Interstitial skipped due to cooldown.");
+            if (onDismissed != null) onDismissed.run();
+            return;
+        }
+
+        if (interstitialAd != null) {
+            interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    interstitialAd = null;
+                    settings.setLastInterstitialTime(System.currentTimeMillis());
+                    preloadInterstitial(activity);
+                    if (onDismissed != null) onDismissed.run();
+                }
+
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull com.google.android.gms.ads.AdError adError) {
+                    interstitialAd = null;
+                    preloadInterstitial(activity);
+                    if (onDismissed != null) onDismissed.run();
+                }
+            });
+            interstitialAd.show(activity);
+        } else {
+            preloadInterstitial(activity);
+            if (onDismissed != null) onDismissed.run();
+        }
     }
 
     // ─── State control ───────────────────────────────────────────────────
@@ -145,29 +209,39 @@ public class AdManager {
     // ─── Rewarded Ad ─────────────────────────────────────────────────────
 
     public void preloadRewarded(Context context) {
+        preloadRewarded(context, REWARDED_AD_UNIT_ID);
+    }
+
+    public void preloadRewarded(Context context, String adUnitId) {
         if (settings.isAdsRemoved()) return;
         if (rewardedAd != null) return;
 
         CyviaApplication.from(context).initAdMobIfNeeded(status -> {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            RewardedAd.load(context, REWARDED_AD_UNIT_ID, adRequest,
-                    new RewardedAdLoadCallback() {
-                        @Override
-                        public void onAdLoaded(@NonNull RewardedAd ad) {
-                            rewardedAd = ad;
-                            Log.d(TAG, "Rewarded ad loaded");
-                        }
+            new Handler(Looper.getMainLooper()).post(() -> {
+                AdRequest adRequest = new AdRequest.Builder().build();
+                RewardedAd.load(context, adUnitId, adRequest,
+                        new RewardedAdLoadCallback() {
+                            @Override
+                            public void onAdLoaded(@NonNull RewardedAd ad) {
+                                rewardedAd = ad;
+                                Log.d(TAG, "Rewarded ad loaded (" + adUnitId + ")");
+                            }
 
-                        @Override
-                        public void onAdFailedToLoad(@NonNull LoadAdError error) {
-                            Log.d(TAG, "Rewarded ad failed to load: " + error.getMessage());
-                            rewardedAd = null;
-                        }
-                    });
+                            @Override
+                            public void onAdFailedToLoad(@NonNull LoadAdError error) {
+                                Log.w(TAG, "Rewarded ad failed to load (" + adUnitId + "): " + error.getMessage() + " [Code: " + error.getCode() + "]");
+                                rewardedAd = null;
+                            }
+                        });
+            });
         });
     }
 
     public void showRewardedAd(Activity activity, Runnable onRewardEarned) {
+        showRewardedAd(activity, REWARDED_AD_UNIT_ID, onRewardEarned);
+    }
+
+    public void showRewardedAd(Activity activity, String adUnitId, Runnable onRewardEarned) {
         if (settings.isAdsRemoved()) {
             if (onRewardEarned != null) onRewardEarned.run();
             return;
@@ -181,56 +255,58 @@ public class AdManager {
         }
 
         if (rewardedAd != null) {
-            displayLoadedRewardedAd(activity, onRewardEarned);
+            displayLoadedRewardedAd(activity, adUnitId, onRewardEarned);
         } else {
             android.app.ProgressDialog progressDialog = new android.app.ProgressDialog(activity);
-            progressDialog.setMessage("Loading video ad to unlock report...");
+            progressDialog.setMessage("Loading video ad to unlock...");
             progressDialog.setCancelable(false);
             progressDialog.show();
 
             CyviaApplication.from(activity).initAdMobIfNeeded(status -> {
-                AdRequest adRequest = new AdRequest.Builder().build();
-                RewardedAd.load(activity, REWARDED_AD_UNIT_ID, adRequest,
-                        new RewardedAdLoadCallback() {
-                            @Override
-                            public void onAdLoaded(@NonNull RewardedAd ad) {
-                                if (progressDialog.isShowing()) progressDialog.dismiss();
-                                rewardedAd = ad;
-                                displayLoadedRewardedAd(activity, onRewardEarned);
-                            }
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    AdRequest adRequest = new AdRequest.Builder().build();
+                    RewardedAd.load(activity, adUnitId, adRequest,
+                            new RewardedAdLoadCallback() {
+                                @Override
+                                public void onAdLoaded(@NonNull RewardedAd ad) {
+                                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                                    rewardedAd = ad;
+                                    displayLoadedRewardedAd(activity, adUnitId, onRewardEarned);
+                                }
 
-                            @Override
-                            public void onAdFailedToLoad(@NonNull LoadAdError error) {
-                                if (progressDialog.isShowing()) progressDialog.dismiss();
-                                Log.d(TAG, "Rewarded ad failed to load: " + error.getMessage());
-                                lastRewardedAdShowTimeMs = System.currentTimeMillis();
-                                android.widget.Toast.makeText(activity, "Ad temporarily unavailable. Generating report...", android.widget.Toast.LENGTH_SHORT).show();
-                                if (onRewardEarned != null) onRewardEarned.run();
-                            }
-                        });
+                                @Override
+                                public void onAdFailedToLoad(@NonNull LoadAdError error) {
+                                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                                    Log.w(TAG, "Rewarded ad failed to load (" + adUnitId + "): " + error.getMessage() + " [Code: " + error.getCode() + "]");
+                                    lastRewardedAdShowTimeMs = System.currentTimeMillis();
+                                    android.widget.Toast.makeText(activity, "Ad temporarily unavailable. Continuing...", android.widget.Toast.LENGTH_SHORT).show();
+                                    if (onRewardEarned != null) onRewardEarned.run();
+                                }
+                            });
+                });
             });
         }
     }
 
-    private void displayLoadedRewardedAd(Activity activity, Runnable onRewardEarned) {
+    private void displayLoadedRewardedAd(Activity activity, String adUnitId, Runnable onRewardEarned) {
         if (rewardedAd == null) return;
         final boolean[] rewardEarned = {false};
         rewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
             @Override
             public void onAdDismissedFullScreenContent() {
                 rewardedAd = null;
-                preloadRewarded(activity);
+                preloadRewarded(activity, adUnitId);
                 if (rewardEarned[0]) {
                     if (onRewardEarned != null) onRewardEarned.run();
                 } else {
-                    android.widget.Toast.makeText(activity, "Please watch the full ad to generate your Doctor Report ✨", android.widget.Toast.LENGTH_LONG).show();
+                    android.widget.Toast.makeText(activity, "Please watch the full ad to earn your reward ✨", android.widget.Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onAdFailedToShowFullScreenContent(@NonNull com.google.android.gms.ads.AdError adError) {
                 rewardedAd = null;
-                preloadRewarded(activity);
+                preloadRewarded(activity, adUnitId);
                 lastRewardedAdShowTimeMs = System.currentTimeMillis();
                 if (onRewardEarned != null) onRewardEarned.run();
             }

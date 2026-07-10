@@ -1,0 +1,48 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Bicycle Wheels -->
+    <path
+        android:strokeColor="#78909C"
+        android:strokeWidth="3.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M25,75 A12,12 0,1,1 25,74.9 Z M75,75 A12,12 0,1,1 75,74.9 Z" />
+    <!-- Bicycle Frame lines -->
+    <path
+        android:strokeColor="#FF7043"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M25,75 L45,75 L62,56 M45,75 L52,52 L75,75 M52,52 L72,52 L75,40" />
+    <!-- Mochi Body sitting on the seat (Seat is around x=52, y=52) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,38 C32,22 72,22 72,38 C72,52 68,64 50,64 C32,64 32,52 32,38 Z" />
+    <!-- Ears -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M35,28 L28,8 L46,18 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M35,25 L31,14 L42,20 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M68,28 L75,8 L57,18 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M66,25 L70,14 L59,20 Z" />
+    <!-- Happy eyes -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M44,36 Q48,34 50,36 M58,36 Q60,34 64,36" />
+    <!-- Cute open smile mouth -->
+    <path
+        android:fillColor="#FF8A80"
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="1.5"
+        android:pathData="M52,41 Q55,45 58,41 Z" />
+</vector>

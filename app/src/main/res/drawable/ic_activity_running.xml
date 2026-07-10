@@ -1,0 +1,59 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Action/Wind lines behind -->
+    <path
+        android:strokeColor="#B0BEC5"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M10,40 L22,40 M8,52 L18,52 M12,64 L24,64" />
+    <!-- Tail -->
+    <path
+        android:fillColor="#8C52FF"
+        android:pathData="M65,72 Q82,75 80,55 Q78,45 70,48" />
+    <!-- Running Body (Tilted forward) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M35,46 C35,28 80,32 76,52 C72,70 62,82 45,78 C30,75 35,62 35,46 Z" />
+    <!-- Ears (Tilted backward) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,35 L22,18 L44,28 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M34,32 L26,22 L39,28 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M70,39 L74,18 L55,28 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M68,36 L71,24 L59,29 Z" />
+    <!-- Running little feet -->
+    <path
+        android:fillColor="#ECEFF1"
+        android:pathData="M34,78 Q26,88 28,92 Q34,92 38,82 Z" />
+    <path
+        android:fillColor="#CFD8DC"
+        android:pathData="M52,78 Q58,88 64,88 Q66,84 56,76 Z" />
+    <!-- Happy squinting eyes -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M44,48 L48,44 L44,40 M58,48 L62,44 L58,40" />
+    <!-- Pink Cheeks -->
+    <path
+        android:fillColor="#FFB3DE"
+        android:pathData="M40,54 A3,3 0,1,1 40,53.9 Z" />
+    <path
+        android:fillColor="#FFB3DE"
+        android:pathData="M66,54 A3,3 0,1,1 66,53.9 Z" />
+    <!-- Determined open mouth -->
+    <path
+        android:fillColor="#FF8A80"
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="1.5"
+        android:pathData="M50,52 Q53,58 56,52 Z" />
+</vector>

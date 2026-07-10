@@ -46,24 +46,31 @@ Beyond tracking, Cyvia introduces the **Mochi Care Engine**—an intelligent, dy
   * `No Periods (Contraception)`: Intelligently suppresses fertile window and pregnancy messaging.
   * `Postpartum` & `Perimenopause`: Shows predictions with realistic reliability caveats rather than false precision.
 
-###  Comprehensive Logging & Mochi Character Poses
+### 📝 Comprehensive Logging & Mochi Character Poses
 * **Consolidated Two-Section Logs**: Easily track moods and symptoms across just two unified sections: "How are you feeling?" (Moods) and "Physical Symptoms".
 * **Flow Intensity Cards**: Select your cycle flow level (Spotting, Light, Medium, Heavy) using intuitive, custom card selectors instead of plain text toggles.
-* **Mochi Poses Only**: Choose from 13+ expressive kawaii-style Mochi cat poses (reading, drinking tea, stretching, sparkles, heart eyes, cozy, hugging, waving, sleeping, smiling, sick, celebrating, etc.) matching your logged feelings. Sanrio or other external character icons are sanitized out.
+* **Mochi Poses Only**: Choose from 13+ expressive kawaii-style Mochi cat poses (reading, drinking tea, stretching, sparkles, heart eyes, cozy, hugging, waving, sleeping, smiling, sick, celebrating, etc.) matching your logged feelings.
+* **Health Logging Dimensions**:
+  * **Intimacy & Sex**: Log status as `Nope` (broken heart), `Protected` (heart in shield), or `Unprotected` (love heart).
+  * **Physical Activity**: Log exercise type: `No Exercise` (chill Mochi), `Running`, `Cycling`, `Gym`, `Aerobics & Dance`, `Swimming`, or `Yoga`.
+  * **Vaginal Discharge**: Log discharge type: `Excessive White`, `Smelly` (nose-closed Mochi), `Creamy`, `Watery`, `Brownish`, or `Yellowish`.
+  * **Weight Tracking**: Side-by-side with Temperature, with a dynamic units selector (`kg` / `lbs`).
 * **Custom Image Uploads**: Upload your own photos or custom icons from your device gallery to personalize symptom tracking!
 
-###  Rich Visualizations & Offline Analytics
+### 📊 Rich Visualizations & Offline Analytics
 * **Interactive Cycle Ring**: A custom animated circular chart displaying your current cycle day, period length, follicular phase, fertile window, and ovulation marker with pulse/glow animations (`CycleRingView`).
 * **Multi-Month Calendar View**: Colour-coded calendar showing confirmed period days, predicted future periods (projected up to **12 cycles / 1 year ahead**!), ovulation days, and fertile windows (`CalendarFragment`).
-* **Health Insights & Charts**: View your Regularity Score (0–100), shortest/longest cycles, average cycle/period lengths, and visual charts powered offline by MPAndroidChart (`CycleStatsCalculator`, `InsightsFragment`).
+* **Calendar Sex Life Prediction**: A minimal prediction card positioned beneath the calendar. It groups dates of the selected month into `No Sex` (during period), `Protected Sex` (fertile/ovulation days), and `Unprotected Sex` (low-risk days), adjusting advice automatically if the user is in `Trying to Conceive` mode.
+* **Health Insights & Charts**: View your Regularity Score (0–100), shortest/longest cycles, average cycle/period lengths, and visual charts powered offline by MPAndroidChart. Symptoms chart automatically filters out inactive tags to maintain a clean display (`CycleStatsCalculator`, `InsightsFragment`).
 
-###  Discreet Reminders & Background Workers
+### 🔔 Discreet Reminders & Background Workers
 * **WorkManager Integration**: Reliable, energy-efficient background scheduling for period reminders, ovulation alerts, and daily check-ins (`ReminderWorker`, `AutoBackupWorker`).
 * **Discreet Notifications**: Friendly, reassuring notification copy that respects your privacy. Zero spam, upsells, or subscription nags.
 
-###  User-Friendly Monetization
-* **Non-Intrusive Banner Ads**: Displayed strictly at the bottom of select screens (Home and Calendar) without obstructing tappable UI (`AdManager`).
-* **Zero Interstitials / Popups**: Interstitial ads are completely disabled and removed—never interrupting your health logging or navigation.
+### 💰 User-Friendly Monetization & Testing
+* **Non-Intrusive Banner Ads**: Displayed strictly at the bottom of select screens (Home and Calendar) without obstructing any tappable UI (`AdManager`).
+* **Future Calendar Navigation Ad-Gate**: Restored and refined the next-month ad gate. Navigating to the current and next month is free; navigating beyond 1 month in the future requires viewing a rewarded ad unless ads are removed.
+* **100% Ad-Free Logging**: Zero interstitial popups or automatic ad interruptions during log saving or day-to-day use.
 * **One-Time "Remove Ads" IAP**: Simple, non-consumable Google Play Billing integration to remove ads permanently with a single purchase (`BillingManager`).
 
 ---

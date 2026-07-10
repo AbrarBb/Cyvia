@@ -1,0 +1,54 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Tail -->
+    <path
+        android:fillColor="#8C52FF"
+        android:pathData="M70,70 Q90,65 85,45 Q82,35 75,40 Q70,45 73,55 Q75,65 65,70 Z" />
+    <!-- Mochi Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M25,50 C25,30 75,30 75,50 C75,70 70,85 50,85 C30,85 25,70 25,50 Z" />
+    <!-- Ears -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M28,40 L20,18 L42,30 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M28,36 L24,24 L37,31 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M72,40 L80,18 L58,30 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M72,36 L76,24 L63,31 Z" />
+    <!-- Eyes showing focus/effort -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M38,44 Q42,40 46,44 M54,44 Q58,40 62,44" />
+    <!-- Small determined mouth -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M48,50 L52,50" />
+    <!-- Mochi Arm holding Dumbbell (on the left side) -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="7"
+        android:strokeLineCap="round"
+        android:pathData="M26,58 L14,58" />
+    <!-- Dumbbell shape (handle and weight plates) -->
+    <path
+        android:strokeColor="#455A64"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M8,58 L20,58" />
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M6,50 L10,50 L10,66 L6,66 Z M18,50 L22,50 L22,66 L18,66 Z" />
+</vector>

@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Creamy swirl/liquid pattern -->
+    <path
+        android:strokeColor="#FFCC80"
+        android:strokeWidth="1.5"
+        android:fillColor="#FFFDE7"
+        android:strokeLineJoin="round"
+        android:pathData="M12,3 C12,3 7,9 7,14 C7,17.5 9.5,20 12,20 C14.5,20 17,17.5 17,14 C17,9 12,3 12,3 Z" />
+    <path
+        android:strokeColor="#FFB74D"
+        android:strokeWidth="1"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M9.5,12 Q12,14 14.5,12 Q12,17 9.5,16" />
+</vector>

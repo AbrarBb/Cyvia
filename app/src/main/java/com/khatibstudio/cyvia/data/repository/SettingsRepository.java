@@ -105,6 +105,10 @@ public class SettingsRepository {
         return prefs.getBoolean(KEY_TRACK_INTIMACY, false);
     }
 
+    public boolean hasTrackIntimacyPreference() {
+        return prefs.contains(KEY_TRACK_INTIMACY);
+    }
+
     public void setTrackIntimacyEnabled(boolean enabled) {
         prefs.edit().putBoolean(KEY_TRACK_INTIMACY, enabled).apply();
     }

@@ -15,5 +15,8 @@ public enum FlowIntensity {
     MEDIUM,
 
     /** Heavy flow */
-    HEAVY
+    HEAVY,
+
+    /** Very heavy flow */
+    VERY_HEAVY
 }

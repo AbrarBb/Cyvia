@@ -102,7 +102,7 @@ public class MochiCareEngine {
         // 2. Check mood next if logged today
         if (todayLog != null && todayLog.mood != null) {
             Mood mood = todayLog.mood;
-            if (mood == Mood.SAD || mood == Mood.ANXIOUS || mood == Mood.IRRITABLE) {
+            if (mood == Mood.SAD || mood == Mood.ANXIOUS || mood == Mood.MOOD_SWING) {
                 if (hour < 12) {
                     String[] msgs = {
                         "Emotional waves can feel heavy in the morning. Remember that every emotion is temporary and valid.",
@@ -143,7 +143,7 @@ public class MochiCareEngine {
                     };
                     return msgs[(dayOfYear + hour) % msgs.length];
                 }
-            } else if (mood == Mood.TIRED) {
+            } else if (mood == Mood.LONELY) {
                 String[] msgs = {
                     "Feeling tired is your body asking for replenishment. Permit yourself to rest whenever you can today.",
                     "Honor your fatigue today without self-judgment. Early rest tonight will help rebuild your energy."

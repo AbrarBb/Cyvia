@@ -155,7 +155,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Physical Symptoms"
+                android:text="Physical Condition"
                 android:textSize="@dimen/text_body_large"
                 android:fontFamily="@font/nunito"
                 android:textStyle="bold"
@@ -175,16 +175,109 @@
                     android:orientation="horizontal" />
             </HorizontalScrollView>
 
-            <!-- Add custom symptom with icon/photo -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_add_custom_kawaii"
-                style="@style/Widget.Material3.Button.TonalButton"
+            <!-- ── Medicine — Take Pill ────────────────────────────────────── -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medicine"
+                android:textSize="@dimen/text_body_large"
+                android:fontFamily="@font/nunito"
+                android:textStyle="bold"
+                android:textColor="@color/cyvia_on_background"
+                android:layout_marginBottom="@dimen/space_8" />
+
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/ic_add_circle"
-                android:text="Add Custom Symptom"
-                app:cornerRadius="16dp"
-                android:layout_marginBottom="@dimen/space_20" />
+                android:scrollbars="none"
+                android:layout_marginBottom="@dimen/space_20">
+
+                <LinearLayout
+                    android:id="@+id/layout_medicine_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <!-- ── Vaginal Discharge ──────────────────────────────────────── -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vaginal Discharge"
+                android:textSize="@dimen/text_body_large"
+                android:fontFamily="@font/nunito"
+                android:textStyle="bold"
+                android:textColor="@color/cyvia_on_background"
+                android:layout_marginBottom="@dimen/space_8" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginBottom="@dimen/space_20">
+
+                <LinearLayout
+                    android:id="@+id/layout_discharge_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <!-- ── Physical Activity ──────────────────────────────────────── -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Physical Activity"
+                android:textSize="@dimen/text_body_large"
+                android:fontFamily="@font/nunito"
+                android:textStyle="bold"
+                android:textColor="@color/cyvia_on_background"
+                android:layout_marginBottom="@dimen/space_8" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginBottom="@dimen/space_20">
+
+                <LinearLayout
+                    android:id="@+id/layout_activity_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <!-- ── Sex Section ───────────────────────────────────────────── -->
+            <LinearLayout
+                android:id="@+id/layout_sex_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sex"
+                    android:textSize="@dimen/text_body_large"
+                    android:fontFamily="@font/nunito"
+                    android:textStyle="bold"
+                    android:textColor="@color/cyvia_on_background"
+                    android:layout_marginBottom="@dimen/space_8" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="@dimen/space_20">
+
+                    <LinearLayout
+                        android:id="@+id/layout_sex_selector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+            </LinearLayout>
 
             <!-- ── Notes ─────────────────────────────────────────────────── -->
             <com.google.android.material.textfield.TextInputLayout
@@ -204,33 +297,86 @@
                     android:fontFamily="@font/inter" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- ── Temperature (optional) ─────────────────────────────────── -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_temperature"
+            <!-- ── Temperature and Weight (optional side-by-side) ─────────── -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                android:hint="@string/log_temperature_label"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
                 android:layout_marginBottom="@dimen/space_16">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_temperature"
-                    android:layout_width="match_parent"
+                <!-- Temperature -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_temperature"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:fontFamily="@font/inter" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:hint="Temp (°C)">
 
-            <!-- ── Intimacy toggle (hidden in minor-safe mode) ─────────────── -->
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switch_intimacy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/log_intimacy_label"
-                android:fontFamily="@font/inter"
-                android:textColor="@color/cyvia_on_background"
-                android:layout_marginBottom="@dimen/space_24"
-                android:visibility="gone" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_temperature"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:fontFamily="@font/inter" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Weight -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_weight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:hint="Weight"
+                        app:suffixText="kg">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_weight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:fontFamily="@font/inter" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Unit toggle -->
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/toggle_weight_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="4dp"
+                        app:singleSelection="true"
+                        app:checkedButton="@+id/btn_unit_kg">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_unit_kg"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="kg"
+                            android:textSize="11sp"
+                            android:padding="0dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_unit_lbs"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="lbs"
+                            android:textSize="11sp"
+                            android:padding="0dp" />
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+                </LinearLayout>
+            </LinearLayout>
 
             <!-- ── Save button ────────────────────────────────────────────── -->
             <com.google.android.material.button.MaterialButton

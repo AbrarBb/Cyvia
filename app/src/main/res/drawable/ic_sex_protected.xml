@@ -1,0 +1,17 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Shield outline -->
+    <path
+        android:strokeColor="#81C784"
+        android:strokeWidth="2"
+        android:fillColor="#E8F5E9"
+        android:strokeLineJoin="round"
+        android:pathData="M12,2 L4,5 L4,11 C4,16.52 7.42,20.74 12,22 C16.58,20.74 20,16.52 20,11 L20,5 L12,2 Z"/>
+    <!-- Small heart inside -->
+    <path
+        android:fillColor="#E57373"
+        android:pathData="M12,15.5l-0.85,-0.77C8.13,12.01 6.13,10.2 6.13,7.99c0,-1.8 1.41,-3.21 3.21,-3.21c1.02,0 1.99,0.47 2.62,1.22c0.63,-0.75 1.6,-1.22 2.62,-1.22c1.8,0 3.21,1.41 3.21,3.21c0,2.21 -2,4.02 -5.02,6.74L12,15.5z"/>
+</vector>

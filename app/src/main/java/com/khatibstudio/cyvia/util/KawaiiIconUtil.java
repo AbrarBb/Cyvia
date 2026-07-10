@@ -73,20 +73,23 @@ public class KawaiiIconUtil {
 
     /**
      * Returns the Mochi-pose drawable resource ID for a built-in Mood.
+     * Every value maps to a Mochi character — no other characters used.
      */
     public static int getMoodIconRes(Mood mood) {
-        if (mood == null) return R.drawable.ic_mochi_mood_calm;
+        if (mood == null) return R.drawable.ic_mochi_smiling;
         switch (mood) {
-            case HAPPY: return R.drawable.ic_mochi_mood_happy;
-            case CALM: return R.drawable.ic_mochi_mood_calm;
-            case SAD: return R.drawable.ic_mochi_mood_sad;
-            case ANXIOUS: return R.drawable.ic_mochi_mood_anxious;
-            case IRRITABLE: return R.drawable.ic_mochi_mood_irritable;
-            case ENERGETIC: return R.drawable.ic_mochi_mood_energetic;
-            case TIRED: return R.drawable.ic_mochi_mood_tired;
-            case SENSITIVE: return R.drawable.ic_mochi_mood_sensitive;
-            case FRISKY: return R.drawable.ic_mochi_mood_frisky;
-            default: return R.drawable.ic_mochi_mood_calm;
+            case NORMAL:      return R.drawable.ic_mochi_smiling;
+            case HAPPY:       return R.drawable.ic_mochi_mood_happy;
+            case SAD:         return R.drawable.ic_mochi_mood_sad;
+            case CALM:        return R.drawable.ic_mochi_mood_calm;
+            case ANXIOUS:     return R.drawable.ic_mochi_mood_anxious;
+            case ENERGETIC:   return R.drawable.ic_mochi_mood_energetic;
+            case SENSITIVE:   return R.drawable.ic_mochi_mood_sensitive;
+            case ROMANTIC:    return R.drawable.ic_mochi_heart_eyes;
+            case LONELY:      return R.drawable.ic_forecast_lonely;
+            case MOOD_SWING:  return R.drawable.ic_mochi_mood_irritable;
+            case FOOD_CRAVING:return R.drawable.ic_mochi_drinking_tea;
+            default:          return R.drawable.ic_mochi_smiling;
         }
     }
 

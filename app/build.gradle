@@ -10,11 +10,11 @@ android {
         applicationId "com.khatibstudio.cyvia"
         minSdk 24
         targetSdk 35
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // AdMob test App ID — replace with your real ID before publishing
+        // AdMob official Test App ID for development
         manifestPlaceholders = [
             admobAppId: "ca-app-pub-3940256099942544~3347511713"
         ]

@@ -2,6 +2,8 @@ package com.khatibstudio.cyvia.domain;
 
 import com.khatibstudio.cyvia.data.db.entity.CycleEntry;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,11 @@ public class CycleStatsCalculator {
         public List<Integer> cycleLengths = new ArrayList<>();
         /** Period duration lengths in chronological order for charting. */
         public List<Integer> periodLengths = new ArrayList<>();
+        /**
+         * Start dates matching each cycleLengths entry, formatted as "yyyy/MM/dd".
+         * Same chronological order. Used for bar-chart X-axis labels.
+         */
+        public List<String> cycleStartDates = new ArrayList<>();
 
         public boolean hasData() {
             return totalCycles > 0;
@@ -77,8 +84,10 @@ public class CycleStatsCalculator {
         }
 
         // Compute inter-cycle lengths from consecutive start dates
+        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         List<Integer> lengths = new ArrayList<>();
-        for (int i = 0; i < allCycles.size() - 1; i++) {
+        // We iterate oldest-to-newest to get chronological start dates
+        for (int i = allCycles.size() - 2; i >= 0; i--) {
             CycleEntry current = allCycles.get(i);
             CycleEntry previous = allCycles.get(i + 1);
 
@@ -87,7 +96,9 @@ public class CycleStatsCalculator {
             long length = current.startDate - previous.startDate;
             if (length >= 15 && length <= 90) {
                 lengths.add((int) length);
-                stats.cycleLengths.add(0, (int) length); // chronological order
+                stats.cycleLengths.add((int) length); // now chronological since we iterate oldest-first
+                String dateLabel = LocalDate.ofEpochDay(previous.startDate).format(dateFmt);
+                stats.cycleStartDates.add(dateLabel);
             }
         }
 

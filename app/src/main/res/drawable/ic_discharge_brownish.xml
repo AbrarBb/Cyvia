@@ -1,0 +1,12 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Brownish droplet -->
+    <path
+        android:strokeColor="#8D6E63"
+        android:strokeWidth="1.5"
+        android:fillColor="#D7CCC8"
+        android:pathData="M12,2.69 C12,2.69 5,10.2 5,15 A7,7 0,0,0 19,15 C19,10.2 12,2.69 12,2.69 Z"/>
+</vector>

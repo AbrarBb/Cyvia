@@ -1,0 +1,37 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Mochi Upper Body (floating in water) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M28,60 C28,38 72,38 72,60 C72,68 68,76 50,76 C32,76 28,68 28,60 Z" />
+    <!-- Ears -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,50 L24,28 L46,40 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M32,46 L27,33 L41,39 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M68,50 L76,28 L54,40 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M66,46 L71,33 L58,39 Z" />
+    <!-- Water/Waves in front of Mochi -->
+    <path
+        android:fillColor="#29B6F6"
+        android:pathData="M10,65 Q25,55 40,65 Q55,75 70,65 Q85,55 90,65 L90,95 L10,95 Z" />
+    <!-- Light water ripples overlay -->
+    <path
+        android:fillColor="#81D4FA"
+        android:pathData="M20,78 Q35,72 50,78 Q65,84 80,78 L80,82 Q65,88 50,82 Q35,76 20,82 Z" />
+    <!-- Squinting happy eyes -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M42,54 Q45,52 48,54 M56,54 Q59,52 62,54" />
+</vector>

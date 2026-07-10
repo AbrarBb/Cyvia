@@ -16,6 +16,11 @@ import com.khatibstudio.cyvia.CyviaApplication;
 import com.khatibstudio.cyvia.MainActivity;
 import com.khatibstudio.cyvia.R;
 import com.khatibstudio.cyvia.ads.AdManager;
+import com.khatibstudio.cyvia.data.db.CyviaDatabase;
+import com.khatibstudio.cyvia.data.db.entity.CycleEntry;
+import com.khatibstudio.cyvia.data.model.CyclePrediction;
+import com.khatibstudio.cyvia.data.model.FlowIntensity;
+import com.khatibstudio.cyvia.data.repository.CycleRepository;
 import com.khatibstudio.cyvia.databinding.FragmentCalendarBinding;
 import com.khatibstudio.cyvia.domain.PredictionEngine;
 import com.khatibstudio.cyvia.ui.log.DailyLogBottomSheet;
@@ -24,6 +29,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Calendar screen fragment — month grid with colour-coded cycle days.
@@ -38,6 +47,7 @@ public class CalendarFragment extends Fragment {
     private AdManager adManager;
     private android.animation.ObjectAnimator mochiAnimator;
     private PredictionEngine.CalendarData currentCalData;
+    private CycleRepository cycleRepository;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -53,6 +63,7 @@ public class CalendarFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(CalendarViewModel.class);
         adManager = new AdManager(CyviaApplication.from(requireContext()).getSettingsRepository());
         adManager.preloadRewarded(requireContext());
+        cycleRepository = CyviaApplication.from(requireContext()).getCycleRepository();
 
         setupCalendarGrid();
         setupNavigation();
@@ -77,8 +88,14 @@ public class CalendarFragment extends Fragment {
             updateMonthTitle();
         });
         binding.btnNextMonth.setOnClickListener(v -> {
-            if (viewModel.getDisplayedMonth().isAfter(YearMonth.now())) {
-                adManager.showRewardedAd(requireActivity(), () -> {
+            YearMonth targetMonth = viewModel.getDisplayedMonth().plusMonths(1);
+            YearMonth maxFreeMonth = YearMonth.now().plusMonths(1);
+
+            com.khatibstudio.cyvia.data.repository.SettingsRepository settings =
+                    CyviaApplication.from(requireContext()).getSettingsRepository();
+
+            if (!settings.isAdsRemoved() && targetMonth.isAfter(maxFreeMonth)) {
+                adManager.showRewardedAd(requireActivity(), AdManager.REWARDED_AD_UNIT_ID, () -> {
                     viewModel.goToNextMonth();
                     updateMonthTitle();
                 });
@@ -103,7 +120,108 @@ public class CalendarFragment extends Fragment {
             currentCalData = data.calData;
             adapter.setData(data.month, data.calData, data.loggedDates, this::onDayTapped);
             updateMochiSupportCard(LocalDate.now());
+            updatePeriodConfirmBanner(data.calData, data.prediction);
+            updateSexLifePrediction(data.month, data.calData, data.prediction);
         });
+    }
+
+    // ─── Period Confirmation Banner ───────────────────────────────────────
+
+    /**
+     * Shows a "Period Ends — Yes / No" banner when the period is active today,
+     * or a "Has your period started?" banner when the predicted start date arrives.
+     * Yes = confirm and update cycle data. No = dismiss for today.
+     */
+    private void updatePeriodConfirmBanner(PredictionEngine.CalendarData calData, CyclePrediction prediction) {
+        if (binding == null || binding.cardPeriodConfirm == null) return;
+
+        LocalDate today = LocalDate.now();
+
+        // Check prefs: was banner dismissed for today?
+        String dismissedDate = requireContext()
+                .getSharedPreferences("cyvia_prefs", android.content.Context.MODE_PRIVATE)
+                .getString("period_confirm_dismissed_date", "");
+        if (today.toString().equals(dismissedDate)) {
+            binding.cardPeriodConfirm.setVisibility(View.GONE);
+            return;
+        }
+
+        boolean isPeriodDay = calData != null && calData.periodDays.contains(today);
+        boolean isPredictedStart = prediction != null && prediction.nextPeriodStart != null
+                && (today.equals(prediction.nextPeriodStart)
+                    || (today.isAfter(prediction.nextPeriodStart)
+                        && ChronoUnit.DAYS.between(prediction.nextPeriodStart, today) <= 3));
+
+        if (isPeriodDay) {
+            // Period is currently active — ask if it's ended
+            binding.tvPeriodConfirmLabel.setText("Period Ends");
+            binding.cardPeriodConfirm.setVisibility(View.VISIBLE);
+
+            binding.btnPeriodYes.setOnClickListener(v -> {
+                // Confirm period ended: end the ongoing cycle at yesterday
+                CyviaDatabase.databaseWriteExecutor.execute(() -> {
+                    java.util.List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
+                    if (cycles != null) {
+                        for (CycleEntry c : cycles) {
+                            if (c.isOngoing() && c.startDate <= today.toEpochDay()) {
+                                c.endDate = today.minusDays(1).toEpochDay();
+                                if (c.endDate < c.startDate) c.endDate = c.startDate;
+                                cycleRepository.updateCycle(c);
+                                break;
+                            }
+                        }
+                    }
+                });
+                binding.cardPeriodConfirm.setVisibility(View.GONE);
+                dismissBannerForToday();
+            });
+            binding.btnPeriodNo.setOnClickListener(v -> {
+                // Period still ongoing — do nothing, dismiss
+                binding.cardPeriodConfirm.setVisibility(View.GONE);
+                dismissBannerForToday();
+            });
+
+        } else if (isPredictedStart) {
+            // Predicted start has arrived — ask if period started
+            long daysLate = ChronoUnit.DAYS.between(prediction.nextPeriodStart, today);
+            String label = daysLate > 0 ? "Period " + daysLate + " day(s) late. Has it started?" : "Has your period started?";
+            binding.tvPeriodConfirmLabel.setText(label);
+            binding.cardPeriodConfirm.setVisibility(View.VISIBLE);
+
+            binding.btnPeriodYes.setOnClickListener(v -> {
+                // Confirm period started today
+                CyviaDatabase.databaseWriteExecutor.execute(() -> {
+                    java.util.List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
+                    // End any ongoing cycles
+                    if (cycles != null) {
+                        for (CycleEntry c : cycles) {
+                            if (c.isOngoing()) {
+                                c.endDate = c.startDate + 4;
+                                cycleRepository.updateCycle(c);
+                            }
+                        }
+                    }
+                    // Create new cycle starting today
+                    CycleEntry newCycle = new CycleEntry(today.toEpochDay(), FlowIntensity.MEDIUM);
+                    cycleRepository.insertCycle(newCycle);
+                });
+                binding.cardPeriodConfirm.setVisibility(View.GONE);
+                dismissBannerForToday();
+            });
+            binding.btnPeriodNo.setOnClickListener(v -> {
+                binding.cardPeriodConfirm.setVisibility(View.GONE);
+                dismissBannerForToday();
+            });
+
+        } else {
+            binding.cardPeriodConfirm.setVisibility(View.GONE);
+        }
+    }
+
+    private void dismissBannerForToday() {
+        requireContext()
+                .getSharedPreferences("cyvia_prefs", android.content.Context.MODE_PRIVATE)
+                .edit().putString("period_confirm_dismissed_date", LocalDate.now().toString()).apply();
     }
 
     // ─── Mochi Cheering & Support Hub ─────────────────────────────────────
@@ -215,6 +333,112 @@ public class CalendarFragment extends Fragment {
             DailyLogBottomSheet sheet = DailyLogBottomSheet.newInstance(date);
             sheet.show(getParentFragmentManager(), DailyLogBottomSheet.TAG);
         });
+    }
+
+    // ─── Sex Life Prediction Card ─────────────────────────────────────────
+
+    private void updateSexLifePrediction(YearMonth month, PredictionEngine.CalendarData calData, CyclePrediction prediction) {
+        if (binding == null || binding.cardSexLifePrediction == null) return;
+
+        com.khatibstudio.cyvia.data.repository.SettingsRepository settings =
+                com.khatibstudio.cyvia.CyviaApplication.from(requireContext()).getSettingsRepository();
+
+        if (settings.isMinorSafeMode() || !settings.isTrackIntimacyEnabled()) {
+            binding.cardSexLifePrediction.setVisibility(View.GONE);
+            return;
+        }
+
+        binding.cardSexLifePrediction.setVisibility(View.VISIBLE);
+
+        boolean isTtc = settings.getTrackingMode() == com.khatibstudio.cyvia.data.model.TrackingMode.TRYING_TO_CONCEIVE;
+
+        // Group days of the month
+        List<LocalDate> nopeDates = new ArrayList<>();
+        List<LocalDate> protectedDates = new ArrayList<>();
+        List<LocalDate> unprotectedDates = new ArrayList<>();
+
+        int daysInMonth = month.lengthOfMonth();
+        for (int d = 1; d <= daysInMonth; d++) {
+            LocalDate date = month.atDay(d);
+            boolean isPeriod = (calData != null && (calData.periodDays.contains(date) || calData.predictedDays.contains(date)));
+            boolean isHighFertility = (calData != null && (calData.fertileDays.contains(date) || calData.ovulationDays.contains(date)));
+
+            if (isPeriod) {
+                nopeDates.add(date);
+            } else if (isHighFertility) {
+                if (isTtc) {
+                    unprotectedDates.add(date);
+                } else {
+                    protectedDates.add(date);
+                }
+            } else {
+                unprotectedDates.add(date);
+            }
+        }
+
+        // Row 1: Nope (No sex during period)
+        if (!nopeDates.isEmpty()) {
+            binding.rowPredNope.setVisibility(View.VISIBLE);
+            binding.tvPredNopeDates.setText(formatRanges(nopeDates));
+        } else {
+            binding.rowPredNope.setVisibility(View.GONE);
+        }
+
+        // Row 2: Protected Sex
+        if (!protectedDates.isEmpty()) {
+            binding.rowPredProtected.setVisibility(View.VISIBLE);
+            if (isTtc) {
+                // Trying to conceive doesn't have "protected sex" periods
+                binding.rowPredProtected.setVisibility(View.GONE);
+            } else {
+                binding.tvPredProtectedTitle.setText("Protected Sex (High pregnancy chance)");
+                binding.tvPredProtectedDates.setText(formatRanges(protectedDates));
+            }
+        } else {
+            binding.rowPredProtected.setVisibility(View.GONE);
+        }
+
+        // Row 3: Unprotected Sex
+        if (!unprotectedDates.isEmpty()) {
+            binding.rowPredUnprotected.setVisibility(View.VISIBLE);
+            if (isTtc) {
+                binding.tvPredUnprotectedTitle.setText("Unprotected Sex (Good days to conceive)");
+            } else {
+                binding.tvPredUnprotectedTitle.setText("Unprotected Sex (Low pregnancy chance)");
+            }
+            binding.tvPredUnprotectedDates.setText(formatRanges(unprotectedDates));
+        } else {
+            binding.rowPredUnprotected.setVisibility(View.GONE);
+        }
+    }
+
+    private String formatRanges(List<LocalDate> dates) {
+        if (dates.isEmpty()) return "None";
+        Collections.sort(dates);
+        List<String> ranges = new ArrayList<>();
+        LocalDate start = dates.get(0);
+        LocalDate prev = start;
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d");
+        for (int i = 1; i < dates.size(); i++) {
+            LocalDate curr = dates.get(i);
+            if (ChronoUnit.DAYS.between(prev, curr) == 1) {
+                prev = curr;
+            } else {
+                if (start.equals(prev)) {
+                    ranges.add(start.format(fmt));
+                } else {
+                    ranges.add(start.format(fmt) + " - " + prev.format(fmt));
+                }
+                start = curr;
+                prev = curr;
+            }
+        }
+        if (start.equals(prev)) {
+            ranges.add(start.format(fmt));
+        } else {
+            ranges.add(start.format(fmt) + " - " + prev.format(fmt));
+        }
+        return String.join(", ", ranges);
     }
 
     // ─── AdMob banner ─────────────────────────────────────────────────────

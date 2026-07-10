@@ -4,6 +4,8 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -130,7 +132,9 @@ public class CyviaApplication extends Application {
     public void initAdMobIfNeeded(OnInitializationCompleteListener listener) {
         synchronized (this) {
             if (adMobInitialized) {
-                if (listener != null) listener.onInitializationComplete(null);
+                if (listener != null) {
+                    new Handler(Looper.getMainLooper()).post(() -> listener.onInitializationComplete(null));
+                }
                 return;
             }
             if (listener != null) {
@@ -151,8 +155,9 @@ public class CyviaApplication extends Application {
                         toNotify = new ArrayList<>(adMobListeners);
                         adMobListeners.clear();
                     }
+                    Handler mainHandler = new Handler(Looper.getMainLooper());
                     for (OnInitializationCompleteListener l : toNotify) {
-                        l.onInitializationComplete(status);
+                        mainHandler.post(() -> l.onInitializationComplete(status));
                     }
                 })
         );

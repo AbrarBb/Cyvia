@@ -1,0 +1,51 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Green wavy odor lines -->
+    <path
+        android:strokeColor="#81C784"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M15,35 Q18,25 15,15 M25,40 Q28,30 25,20" />
+    <!-- Tail -->
+    <path
+        android:fillColor="#8C52FF"
+        android:pathData="M70,70 Q90,65 85,45 Q82,35 75,40 Q70,45 73,55 Q75,65 65,70 Z" />
+    <!-- Mochi Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M25,50 C25,30 75,30 75,50 C75,70 70,85 50,85 C30,85 25,70 25,50 Z" />
+    <!-- Ears -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M28,40 L20,18 L42,30 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M28,36 L24,24 L37,31 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M72,40 L80,18 L58,30 Z" />
+    <path
+        android:fillColor="#FF66C4"
+        android:pathData="M72,36 L76,24 L63,31 Z" />
+    <!-- Displeased eyes (crossed or squeezy) -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M38,42 L46,50 M46,42 L38,50 M54,42 L62,50 M62,42 L54,50" />
+    <!-- Mochi holding its nose (arm raised to nose) -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="7"
+        android:strokeLineCap="round"
+        android:pathData="M50,70 Q46,60 48,54" />
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M50,70 Q46,60 48,54" />
+</vector>
