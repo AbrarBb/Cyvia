@@ -84,7 +84,7 @@ public class CycleStatsCalculator {
         }
 
         // Compute inter-cycle lengths from consecutive start dates
-        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         List<Integer> lengths = new ArrayList<>();
         // We iterate oldest-to-newest to get chronological start dates
         for (int i = allCycles.size() - 2; i >= 0; i--) {

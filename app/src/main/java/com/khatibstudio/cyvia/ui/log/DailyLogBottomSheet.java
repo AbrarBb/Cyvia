@@ -365,12 +365,30 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
             }
 
             // Restore flow from the log's linked cycle if it was saved before
-            if (log.mood == null && selectedFlow == null) {
-                // Only auto-restore flow if there's a saved cycle for this exact date
-                // (No silent auto-selection for new logs)
-            }
+            long targetDay = logDate.toEpochDay();
+            CyviaDatabase.databaseWriteExecutor.execute(() -> {
+                List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
+                FlowIntensity foundFlow = null;
+                if (cycles != null) {
+                    for (CycleEntry cycle : cycles) {
+                        long start = cycle.startDate;
+                        long end = cycle.isOngoing() ? LocalDate.now().toEpochDay() : cycle.endDate;
+                        if (targetDay >= start && targetDay <= end) {
+                            foundFlow = cycle.flowIntensity;
+                            break;
+                        }
+                    }
+                }
+                final FlowIntensity finalFlow = foundFlow;
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        if (binding == null) return;
+                        selectedFlow = finalFlow;
+                        refreshFlowSelector();
+                    });
+                }
+            });
 
-            refreshFlowSelector();
             refreshAllKawaiiRows();
         });
         // NOTE: Flow is NOT auto-populated from cycle history anymore.
@@ -428,7 +446,7 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
             if (tag.category != SymptomCategory.PHYSICAL) continue;
             boolean isSel = selectedSymptomIds.contains(tag.id);
             addKawaiiBadgeView(binding.layoutPhysicalSymptoms, tag.label,
-                    tag.iconKey, R.drawable.ic_mochi_smiling, isSel,
+                    tag.iconKey, R.drawable.ic_mochi_smiling, isSel, true,
                     v -> toggleSymptomSelection(tag.id));
         }
 
@@ -532,13 +550,17 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
     }
 
     private View addKawaiiBadgeView(ViewGroup parent, String label, String iconKey, int fallbackResId, boolean isSelected, View.OnClickListener onClick) {
+        return addKawaiiBadgeView(parent, label, iconKey, fallbackResId, isSelected, false, onClick);
+    }
+
+    private View addKawaiiBadgeView(ViewGroup parent, String label, String iconKey, int fallbackResId, boolean isSelected, boolean useSmartFallback, View.OnClickListener onClick) {
         View view = LayoutInflater.from(requireContext()).inflate(R.layout.item_kawaii_selector_badge, parent, false);
         MaterialCardView card = view.findViewById(R.id.card_kawaii_badge);
         ImageView iv = view.findViewById(R.id.iv_kawaii_icon);
         TextView tv = view.findViewById(R.id.tv_kawaii_label);
 
         tv.setText(label);
-        KawaiiIconUtil.loadIcon(requireContext(), iv, iconKey, label, fallbackResId);
+        KawaiiIconUtil.loadIcon(requireContext(), iv, iconKey, useSmartFallback ? label : null, fallbackResId);
 
         if (isSelected) {
             card.setStrokeColor(requireContext().getColor(R.color.cyvia_primary));

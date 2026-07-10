@@ -70,9 +70,17 @@
         android:strokeColor="#E0D6FF"
         android:strokeWidth="1.5"
         android:pathData="M36,75 Q40,82 46,78 C46,73 40,70 36,75 Z" />
+    <!-- Right Paw (Thumbs Up) -->
+    <!-- Thumb pointing up -->
     <path
         android:fillColor="#FFFFFF"
         android:strokeColor="#E0D6FF"
         android:strokeWidth="1.5"
-        android:pathData="M64,75 Q60,82 54,78 C54,73 60,70 64,75 Z" />
+        android:pathData="M64,72 Q68,60 71,61 Q73,63 70,72 Z" />
+    <!-- Tucked fingers fist -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#E0D6FF"
+        android:strokeWidth="1.5"
+        android:pathData="M60,75 Q64,75 67,77 Q66,80 62,80 Q59,80 60,75 Z" />
 </vector>

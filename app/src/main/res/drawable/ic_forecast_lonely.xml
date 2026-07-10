@@ -1,28 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="44dp"
-    android:height="44dp"
-    android:viewportWidth="44"
-    android:viewportHeight="44">
-    <!-- Circular Background -->
-    <path
-        android:fillColor="#FF5C8A"
-        android:pathData="M22,2C10.95,2 2,10.95 2,22s8.95,20 20,20 20,-8.95 20,-20S33.05,2 22,2z"/>
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M22,5C12.61,5 5,12.61 5,22s7.61,17 17,17 17,-7.61 17,-17S31.39,5 22,5z"
-        android:fillAlpha="0.15"/>
-    <!-- Lonely Face -->
-    <path
-        android:fillColor="#F8BBD0"
-        android:pathData="M22,12c-5.5,0 -10,4.5 -10,10c0,5.5 4.5,10 10,10c5.5,0 10,-4.5 10,-10C32,16.5 27.5,12 22,12z"/>
-    <!-- Sad round eyes -->
-    <path
-        android:fillColor="#880E4F"
-        android:pathData="M17,20a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0 M24,20a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0"/>
-    <!-- Wavy sad mouth -->
-    <path
-        android:strokeColor="#880E4F"
-        android:strokeWidth="1.5"
-        android:pathData="M19,25 Q22,23 25,25"/>
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Shadow -->
+    <path android:fillColor="#1A000000"
+        android:pathData="M25,85 C25,85 75,85 75,85 C80,85 85,88 85,91 C85,94 80,97 75,97 C75,97 25,97 25,97 C20,97 15,94 15,91 C15,88 20,85 25,85 Z" />
+    <!-- Tail -->
+    <path android:fillColor="#8C52FF"
+        android:pathData="M70,78 Q82,82 78,70 Q76,65 72,72 Q68,76 70,78 Z" />
+    <!-- Body (white Mochi) -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M25,52 C25,32 75,32 75,52 C75,72 70,85 50,85 C30,85 25,72 25,52 Z" />
+    <!-- Droopy Ears -->
+    <path android:fillColor="#FFFFFF" android:pathData="M26,42 L14,34 L38,36 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M26,40 L18,35 L34,37 Z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M74,42 L86,34 L62,36 Z" />
+    <path android:fillColor="#FF66C4" android:pathData="M74,40 L82,35 L66,37 Z" />
+    <!-- Sad Closed Eyes -->
+    <path android:strokeColor="#2E1E40" android:strokeWidth="3.5" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M35,53 Q40,57 45,53" />
+    <path android:strokeColor="#2E1E40" android:strokeWidth="3.5" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M55,53 Q60,57 65,53" />
+    <!-- Lonely tear drop -->
+    <path android:fillColor="#88C8F8"
+        android:pathData="M43,58 Q44,63 42,63 Q40,63 41,58 Z" />
+    <!-- Cheeks (faint) -->
+    <path android:fillColor="#FFD3EE" android:pathData="M31,58 A3,2 0,1,1 31,57.9 Z" />
+    <path android:fillColor="#FFD3EE" android:pathData="M69,58 A3,2 0,1,1 69,57.9 Z" />
+    <!-- Small downcast mouth -->
+    <path android:strokeColor="#2E1E40" android:strokeWidth="2.5" android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M48,64 Q50,61 52,64" />
+    <!-- Paws holding knees -->
+    <path android:fillColor="#FFFFFF" android:strokeColor="#E0D6FF" android:strokeWidth="1.5"
+        android:pathData="M38,76 Q42,82 48,78 C48,73 42,71 38,76 Z" />
+    <path android:fillColor="#FFFFFF" android:strokeColor="#E0D6FF" android:strokeWidth="1.5"
+        android:pathData="M62,76 Q58,82 52,78 C52,73 58,71 62,76 Z" />
+    <!-- Tiny gray cloud above -->
+    <path android:fillColor="#B0BEC5"
+        android:pathData="M42,20 C42,17 45,15 48,15 C50,15 52,16 53,17 C54,16 57,15 59,15 C62,15 64,17 64,20 C65,20 67,21 67,23 C67,25 65,27 63,27 L43,27 C41,27 39,25 39,23 C39,21 41,20 42,20 Z" />
+    <!-- Light rain drops -->
+    <path android:fillColor="#88C8F8"
+        android:pathData="M45,30 Q46,33 45.5,33 Q45,33 44.5,30 Z" />
+    <path android:fillColor="#88C8F8"
+        android:pathData="M52,32 Q53,35 52.5,35 Q52,35 51.5,32 Z" />
+    <path android:fillColor="#88C8F8"
+        android:pathData="M60,30 Q61,33 60.5,33 Q60,33 59.5,30 Z" />
 </vector>
