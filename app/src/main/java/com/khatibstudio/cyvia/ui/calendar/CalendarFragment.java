@@ -379,7 +379,7 @@ public class CalendarFragment extends Fragment {
         // Row 1: Nope (No sex during period)
         if (!nopeDates.isEmpty()) {
             binding.rowPredNope.setVisibility(View.VISIBLE);
-            binding.tvPredNopeTitle.setText("No Sex (During period days)");
+            binding.tvPredNopeTitle.setText("No Sex (Period days)");
             binding.tvPredNopeDates.setText(formatRanges(nopeDates));
         } else {
             binding.rowPredNope.setVisibility(View.GONE);
@@ -392,7 +392,7 @@ public class CalendarFragment extends Fragment {
                 // Trying to conceive doesn't have "protected sex" periods
                 binding.rowPredProtected.setVisibility(View.GONE);
             } else {
-                binding.tvPredProtectedTitle.setText("Protected Sex (Chance of getting pregnant is high)");
+                binding.tvPredProtectedTitle.setText("Protected Sex (High chance)");
                 binding.tvPredProtectedDates.setText(formatRanges(protectedDates));
             }
         } else {
@@ -403,9 +403,9 @@ public class CalendarFragment extends Fragment {
         if (!unprotectedDates.isEmpty()) {
             binding.rowPredUnprotected.setVisibility(View.VISIBLE);
             if (isTtc) {
-                binding.tvPredUnprotectedTitle.setText("Unprotected Sex (All other days)");
+                binding.tvPredUnprotectedTitle.setText("Unprotected Sex (Other days)");
             } else {
-                binding.tvPredUnprotectedTitle.setText("Unprotected Sex (Chances of getting pregnant is very low)");
+                binding.tvPredUnprotectedTitle.setText("Unprotected Sex (Low chance)");
             }
             binding.tvPredUnprotectedDates.setText(formatRanges(unprotectedDates));
         } else {
