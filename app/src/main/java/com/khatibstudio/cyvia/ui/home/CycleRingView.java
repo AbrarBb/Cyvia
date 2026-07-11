@@ -272,10 +272,20 @@ public class CycleRingView extends View {
             canvas.drawCircle(ovX, ovY, 2.2f * density, indicatorPaint);
         }
 
-        int colorPeriod = night ? Color.parseColor("#FF8A80") : Color.parseColor("#EF5350");
-        int colorFollicular = night ? Color.parseColor("#64B5F6") : Color.parseColor("#1E88E5");
-        int colorOvulation = night ? Color.parseColor("#4DD0E1") : Color.parseColor("#0097A7");
-        int colorLuteal = night ? Color.parseColor("#FFB74D") : Color.parseColor("#FB8C00");
+        // Ensure ring track and phase paints dynamically match the current theme palette
+        try {
+            trackPaint.setColor(ContextCompat.getColor(getContext(), R.color.cyvia_outline));
+            periodPaint.setColor(ContextCompat.getColor(getContext(), R.color.calendar_period));
+            fertilePaint.setColor(ContextCompat.getColor(getContext(), R.color.calendar_fertile));
+            follicularPaint.setColor(ContextCompat.getColor(getContext(), R.color.cyvia_primary));
+            lutealPaint.setColor(ContextCompat.getColor(getContext(), R.color.cyvia_peach));
+            ovulationMarkerPaint.setColor(ContextCompat.getColor(getContext(), R.color.calendar_fertile_text));
+        } catch (Exception ignored) {}
+
+        int colorPeriod = ContextCompat.getColor(getContext(), R.color.calendar_period_text);
+        int colorFollicular = ContextCompat.getColor(getContext(), R.color.cyvia_primary);
+        int colorOvulation = ContextCompat.getColor(getContext(), R.color.calendar_fertile_text);
+        int colorLuteal = ContextCompat.getColor(getContext(), R.color.cyvia_peach);
 
         // Draw separate static phase labels when current day dot is NOT inside that phase
         if (!isCurrentInPeriod) {

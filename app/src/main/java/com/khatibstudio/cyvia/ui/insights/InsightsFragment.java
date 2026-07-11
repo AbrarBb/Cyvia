@@ -128,6 +128,8 @@ public class InsightsFragment extends Fragment {
         chart.getAxisRight().setEnabled(false);
         chart.getAxisLeft().setGranularity(1f);
         chart.getAxisLeft().setAxisMinimum(0f);
+        chart.getAxisLeft().setTextColor(requireContext().getColor(R.color.cyvia_on_surface_variant));
+        chart.setNoDataTextColor(requireContext().getColor(R.color.cyvia_on_surface_variant));
         chart.setDrawGridBackground(false);
         chart.setExtraBottomOffset(10f);
         chart.setNoDataText("Log some data to see your chart");
@@ -146,6 +148,8 @@ public class InsightsFragment extends Fragment {
         chart.getAxisLeft().setDrawGridLines(true);
         chart.getAxisLeft().setGranularity(1f);
         chart.getAxisLeft().setAxisMinimum(0f);
+        chart.getAxisLeft().setTextColor(requireContext().getColor(R.color.cyvia_on_surface_variant));
+        chart.setNoDataTextColor(requireContext().getColor(R.color.cyvia_on_surface_variant));
         chart.setDrawGridBackground(false);
         chart.setNoDataText("Log some symptoms to see your chart");
         chart.setExtraLeftOffset(8f);
@@ -237,7 +241,7 @@ public class InsightsFragment extends Fragment {
         } else {
             BarDataSet dataSet = new BarDataSet(cycleEntries, "Cycle length (days)");
             dataSet.setColor(requireContext().getColor(R.color.cyvia_primary));
-            dataSet.setValueTextColor(Color.WHITE);
+            dataSet.setValueTextColor(requireContext().getColor(R.color.cyvia_on_surface));
             dataSet.setValueTextSize(11f);
             dataSet.setDrawValues(true);
 
@@ -252,6 +256,7 @@ public class InsightsFragment extends Fragment {
             });
             binding.chartCycleLength.getXAxis().setLabelRotationAngle(-45f);
             binding.chartCycleLength.getXAxis().setTextSize(9f);
+            binding.chartCycleLength.getXAxis().setTextColor(requireContext().getColor(R.color.cyvia_on_surface));
             binding.chartCycleLength.getXAxis().setLabelCount(Math.min(cLengths.size(), 8), false);
             binding.chartCycleLength.setExtraBottomOffset(20f);
             binding.chartCycleLength.setData(new BarData(dataSet));
@@ -272,7 +277,7 @@ public class InsightsFragment extends Fragment {
         } else {
             BarDataSet pDataSet = new BarDataSet(periodEntries, "Period duration (days)");
             pDataSet.setColor(requireContext().getColor(R.color.cyvia_secondary));
-            pDataSet.setValueTextColor(Color.WHITE);
+            pDataSet.setValueTextColor(requireContext().getColor(R.color.cyvia_on_surface));
             pDataSet.setValueTextSize(11f);
             pDataSet.setDrawValues(true);
 
@@ -287,6 +292,7 @@ public class InsightsFragment extends Fragment {
             });
             binding.chartPeriodLength.getXAxis().setLabelRotationAngle(-45f);
             binding.chartPeriodLength.getXAxis().setTextSize(9f);
+            binding.chartPeriodLength.getXAxis().setTextColor(requireContext().getColor(R.color.cyvia_on_surface));
             binding.chartPeriodLength.getXAxis().setLabelCount(Math.min(pLengths.size(), 8), false);
             binding.chartPeriodLength.setExtraBottomOffset(20f);
             binding.chartPeriodLength.setData(new BarData(pDataSet));
