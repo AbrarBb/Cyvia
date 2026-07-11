@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="@dimen/space_2">
+    android:padding="0dp">
 
     <!-- Circular background container for the day number -->
     <FrameLayout
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="@dimen/text_body_medium"
+            android:textSize="13.5sp"
             android:fontFamily="@font/inter"
             android:textColor="@color/cyvia_on_background" />
     </FrameLayout>
@@ -30,7 +30,8 @@
         android:layout_width="@dimen/calendar_dot_size"
         android:layout_height="@dimen/calendar_dot_size"
         android:background="@drawable/bg_calendar_log_dot"
-        android:layout_marginTop="@dimen/space_2"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
         android:visibility="invisible" />
 
 </LinearLayout>

@@ -36,9 +36,9 @@
     <dimen name="fab_elevation">6dp</dimen>
 
     <!-- Calendar -->
-    <dimen name="calendar_day_size">40dp</dimen>
-    <dimen name="calendar_day_margin">2dp</dimen>
-    <dimen name="calendar_dot_size">5dp</dimen>
+    <dimen name="calendar_day_size">33dp</dimen>
+    <dimen name="calendar_day_margin">1dp</dimen>
+    <dimen name="calendar_dot_size">4.5dp</dimen>
 
     <!-- Typography -->
     <dimen name="text_display">32sp</dimen>
