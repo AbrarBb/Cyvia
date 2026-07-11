@@ -155,6 +155,19 @@ public class AdManager {
             return;
         }
 
+        showInterstitialAd(activity, onDismissed);
+    }
+
+    /**
+     * Shows an interstitial immediately if ready and eligible (skips the 8-minute cooldown check).
+     * Ideal for deliberate user actions like theme switching to dark mode where an ad is expected.
+     */
+    public void showInterstitialAd(Activity activity, Runnable onDismissed) {
+        if (settings.isAdsRemoved()) {
+            if (onDismissed != null) onDismissed.run();
+            return;
+        }
+
         if (interstitialAd != null) {
             interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override

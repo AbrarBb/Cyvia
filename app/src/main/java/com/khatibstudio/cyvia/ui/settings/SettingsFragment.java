@@ -83,7 +83,7 @@ public class SettingsFragment extends Fragment {
         CyviaApplication app = CyviaApplication.from(requireContext());
         settings = app.getSettingsRepository();
         adManager = new AdManager(settings);
-        adManager.preloadRewarded(requireContext(), AdManager.THEME_REWARDED_AD_UNIT_ID);
+        adManager.preloadInterstitial(requireContext());
         cycleRepository = app.getCycleRepository();
         logRepository = app.getLogRepository();
         symptomRepository = app.getSymptomRepository();
@@ -240,15 +240,16 @@ public class SettingsFragment extends Fragment {
         binding.switchMinimalMode.setOnCheckedChangeListener((v, checked) ->
                 requireContext().getSharedPreferences("cyvia_settings", android.content.Context.MODE_PRIVATE).edit().putBoolean("minimal_mode", checked).apply());
 
-        // Theme toggle
+        // Theme toggle: default is light/system (no ad). Only show interstitial ad when switching explicitly to Dark Mode.
         binding.toggleTheme.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (!isChecked) return;
             String mode;
             if (checkedId == R.id.btn_theme_light) mode = SettingsRepository.THEME_LIGHT;
             else if (checkedId == R.id.btn_theme_dark) mode = SettingsRepository.THEME_DARK;
             else mode = SettingsRepository.THEME_SYSTEM;
-            if (!settings.isAdsRemoved() && !mode.equals(settings.getThemeMode())) {
-                adManager.showRewardedAd(requireActivity(), AdManager.THEME_REWARDED_AD_UNIT_ID, () -> {
+
+            if (!settings.isAdsRemoved() && mode.equals(SettingsRepository.THEME_DARK) && !mode.equals(settings.getThemeMode())) {
+                adManager.showInterstitialAd(requireActivity(), () -> {
                     settings.setThemeMode(mode);
                     applyTheme(mode);
                 });
