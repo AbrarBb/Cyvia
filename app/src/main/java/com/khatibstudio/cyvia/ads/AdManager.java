@@ -1,12 +1,25 @@
 package com.khatibstudio.cyvia.ads;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import androidx.core.content.ContextCompat;
+import com.khatibstudio.cyvia.R;
 
 import androidx.annotation.NonNull;
 import com.google.android.gms.ads.AdListener;
@@ -190,6 +203,121 @@ public class AdManager {
             preloadInterstitial(activity);
             if (onDismissed != null) onDismissed.run();
         }
+    }
+
+    /**
+     * Displays a clean center pop-up dialog containing an AdMob Medium Rectangle Ad (300x250).
+     * Used for non-intrusive ad prompts such as theme switching to dark mode.
+     */
+    public void showPopupAd(Activity activity, Runnable onDismissed) {
+        if (settings.isAdsRemoved()) {
+            if (onDismissed != null) onDismissed.run();
+            return;
+        }
+
+        activity.runOnUiThread(() -> {
+            if (activity.isDestroyed() || activity.isFinishing()) {
+                if (onDismissed != null) onDismissed.run();
+                return;
+            }
+
+            Dialog dialog = new Dialog(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            if (dialog.getWindow() != null) {
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+
+            // Create container for the pop-up ad dialog
+            LinearLayout root = new LinearLayout(activity);
+            root.setOrientation(LinearLayout.VERTICAL);
+            root.setGravity(Gravity.CENTER);
+            int pad = (int) (18 * activity.getResources().getDisplayMetrics().density);
+            root.setPadding(pad, pad, pad, pad);
+
+            GradientDrawable bg = new GradientDrawable();
+            bg.setColor(ContextCompat.getColor(activity, R.color.cyvia_surface));
+            bg.setCornerRadius(20f * activity.getResources().getDisplayMetrics().density);
+            root.setBackground(bg);
+
+            // Header text / close button row
+            RelativeLayout header = new RelativeLayout(activity);
+            TextView title = new TextView(activity);
+            title.setText("Sponsor Ad");
+            title.setTextColor(ContextCompat.getColor(activity, R.color.cyvia_on_surface));
+            title.setTextSize(15f);
+            title.setTypeface(null, Typeface.BOLD);
+
+            TextView btnClose = new TextView(activity);
+            btnClose.setText("✕");
+            btnClose.setTextColor(ContextCompat.getColor(activity, R.color.cyvia_on_surface_variant));
+            btnClose.setTextSize(18f);
+            int padClose = (int) (6 * activity.getResources().getDisplayMetrics().density);
+            btnClose.setPadding(padClose, 0, padClose, 0);
+
+            RelativeLayout.LayoutParams titleParams = new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            titleParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+            titleParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            header.addView(title, titleParams);
+
+            RelativeLayout.LayoutParams closeParams = new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            closeParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            closeParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            header.addView(btnClose, closeParams);
+
+            root.addView(header, new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            // Ad container
+            FrameLayout adContainer = new FrameLayout(activity);
+            int margin = (int) (14 * activity.getResources().getDisplayMetrics().density);
+            LinearLayout.LayoutParams adParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            adParams.setMargins(0, margin, 0, margin);
+            adParams.gravity = Gravity.CENTER;
+            root.addView(adContainer, adParams);
+
+            AdView adView = new AdView(activity);
+            adView.setAdUnitId(BANNER_AD_UNIT_ID);
+            adView.setAdSize(AdSize.MEDIUM_RECTANGLE); // 300x250 rectangle pop up ad
+            adContainer.addView(adView);
+            adView.loadAd(new AdRequest.Builder().build());
+
+            // Continue CTA button
+            TextView btnContinue = new TextView(activity);
+            btnContinue.setText("Apply Dark Mode");
+            btnContinue.setGravity(Gravity.CENTER);
+            btnContinue.setTextColor(ContextCompat.getColor(activity, R.color.cyvia_on_primary));
+            btnContinue.setTextSize(15f);
+            btnContinue.setTypeface(null, Typeface.BOLD);
+
+            GradientDrawable btnBg = new GradientDrawable();
+            btnBg.setColor(ContextCompat.getColor(activity, R.color.cyvia_primary));
+            btnBg.setCornerRadius(14f * activity.getResources().getDisplayMetrics().density);
+            int btnPadY = (int) (14 * activity.getResources().getDisplayMetrics().density);
+            btnContinue.setPadding(0, btnPadY, 0, btnPadY);
+            btnContinue.setBackground(btnBg);
+
+            root.addView(btnContinue, new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            dialog.setContentView(root);
+            dialog.setCancelable(false);
+
+            final boolean[] dismissed = {false};
+            Runnable dismissAction = () -> {
+                if (dismissed[0]) return;
+                dismissed[0] = true;
+                try { if (dialog.isShowing()) dialog.dismiss(); } catch (Exception ignored) {}
+                if (onDismissed != null) onDismissed.run();
+            };
+
+            btnClose.setOnClickListener(v -> dismissAction.run());
+            btnContinue.setOnClickListener(v -> dismissAction.run());
+
+            dialog.show();
+        });
     }
 
     // ─── State control ───────────────────────────────────────────────────

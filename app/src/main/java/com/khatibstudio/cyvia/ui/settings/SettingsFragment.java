@@ -249,7 +249,7 @@ public class SettingsFragment extends Fragment {
             else mode = SettingsRepository.THEME_SYSTEM;
 
             if (!settings.isAdsRemoved() && mode.equals(SettingsRepository.THEME_DARK) && !mode.equals(settings.getThemeMode())) {
-                adManager.showInterstitialAd(requireActivity(), () -> {
+                adManager.showPopupAd(requireActivity(), () -> {
                     settings.setThemeMode(mode);
                     applyTheme(mode);
                 });
