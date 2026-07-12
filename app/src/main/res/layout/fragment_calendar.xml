@@ -235,7 +235,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_phase_menstrual"
-                        app:tint="@color/cyvia_primary"
+                        app:tint="@color/period_red"
                         android:layout_marginEnd="8dp"
                         android:contentDescription="Period icon" />
 

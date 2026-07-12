@@ -57,6 +57,7 @@
     <color name="calendar_has_log_dot">#FFC1CC</color>
     <color name="calendar_other_month_text">#7A728A</color>
     <color name="calendar_selected_bg">#33B39CD0</color>
+    <color name="period_red">#FF8A80</color>
 
     <!-- Bottom Navigation (dark - muted slate) -->
     <color name="bottom_nav_background">#242424</color>

@@ -323,11 +323,15 @@ public class CalendarFragment extends Fragment {
             } else {
                 binding.togglePeriodStarts.check(R.id.btn_period_starts_no);
             }
+            updatePeriodToggleButtonsStyle(isPeriodDay);
 
             // Set up checked change listener to dynamically create/delete cycle logs
             binding.togglePeriodStarts.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
                 if (isChecked) {
-                    if (checkedId == R.id.btn_period_starts_yes) {
+                    boolean isYes = checkedId == R.id.btn_period_starts_yes;
+                    updatePeriodToggleButtonsStyle(isYes);
+
+                    if (isYes) {
                         CyviaDatabase.databaseWriteExecutor.execute(() -> {
                             // End any ongoing cycles first
                             java.util.List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
@@ -406,6 +410,44 @@ public class CalendarFragment extends Fragment {
                 }
             }
         });
+    }
+
+    /**
+     * Dynamically updates the backgrounds and text colors of the Period Starts Yes/No buttons.
+     * Yes: Checked = Period Red, Unchecked = Transparent Outline
+     * No: Checked = Selected Tonal container, Unchecked = Transparent Outline
+     */
+    private void updatePeriodToggleButtonsStyle(boolean isPeriod) {
+        if (getContext() == null) return;
+        int periodRed = requireContext().getColor(R.color.period_red);
+        int onPrimary = requireContext().getColor(R.color.cyvia_on_primary);
+        int transparent = requireContext().getColor(R.color.transparent);
+        int outline = requireContext().getColor(R.color.cyvia_outline);
+        int onSurfaceVariant = requireContext().getColor(R.color.cyvia_on_surface_variant);
+        int primaryContainer = requireContext().getColor(R.color.cyvia_primary_container);
+        int onPrimaryContainer = requireContext().getColor(R.color.cyvia_on_primary_container);
+
+        if (isPeriod) {
+            // Yes is checked (Red background, white text)
+            binding.btnPeriodStartsYes.setBackgroundTintList(android.content.res.ColorStateList.valueOf(periodRed));
+            binding.btnPeriodStartsYes.setTextColor(onPrimary);
+            binding.btnPeriodStartsYes.setStrokeColor(android.content.res.ColorStateList.valueOf(periodRed));
+
+            // No is unchecked (Outlined transparent background, neutral text)
+            binding.btnPeriodStartsNo.setBackgroundTintList(android.content.res.ColorStateList.valueOf(transparent));
+            binding.btnPeriodStartsNo.setTextColor(onSurfaceVariant);
+            binding.btnPeriodStartsNo.setStrokeColor(android.content.res.ColorStateList.valueOf(outline));
+        } else {
+            // Yes is unchecked (Outlined transparent background, neutral text)
+            binding.btnPeriodStartsYes.setBackgroundTintList(android.content.res.ColorStateList.valueOf(transparent));
+            binding.btnPeriodStartsYes.setTextColor(onSurfaceVariant);
+            binding.btnPeriodStartsYes.setStrokeColor(android.content.res.ColorStateList.valueOf(outline));
+
+            // No is checked (Default selected lavender background and text)
+            binding.btnPeriodStartsNo.setBackgroundTintList(android.content.res.ColorStateList.valueOf(primaryContainer));
+            binding.btnPeriodStartsNo.setTextColor(onPrimaryContainer);
+            binding.btnPeriodStartsNo.setStrokeColor(android.content.res.ColorStateList.valueOf(outline));
+        }
     }
 
     // ─── Sex Life Prediction Card ─────────────────────────────────────────
