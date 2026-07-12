@@ -28,8 +28,9 @@ import java.util.Set;
  *   2. Ovulation day               → bg_calendar_ovulation
  *   3. Fertile window              → bg_calendar_fertile
  *   4. Predicted period            → bg_calendar_predicted
- *   5. Today (no other state)      → bg_calendar_today (ring)
- *   6. Normal                      → no background
+ *   5. Selected date               → bg_calendar_selected
+ *   6. Today (no other state)      → bg_calendar_today (ring)
+ *   7. Normal                      → no background
  */
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.DayViewHolder> {
 
@@ -42,6 +43,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.DayVie
     private PredictionEngine.CalendarData calData;
     private Set<LocalDate> loggedDates;
     private OnDayClickListener listener;
+    private LocalDate selectedDate;
 
     public void setData(YearMonth month,
                         PredictionEngine.CalendarData data,
@@ -53,6 +55,22 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.DayVie
         this.listener = clickListener;
         this.days = buildDayGrid(month);
         notifyDataSetChanged();
+    }
+
+    /** Updates the selected date and redraws the affected cells. */
+    public void setSelectedDate(LocalDate date) {
+        LocalDate oldSelected = this.selectedDate;
+        this.selectedDate = date;
+
+        // Refresh old and new selected positions for efficient redraw
+        if (oldSelected != null) {
+            int oldPos = days.indexOf(oldSelected);
+            if (oldPos >= 0) notifyItemChanged(oldPos);
+        }
+        if (date != null) {
+            int newPos = days.indexOf(date);
+            if (newPos >= 0) notifyItemChanged(newPos);
+        }
     }
 
     /** Builds a 42-cell list starting from the Sunday before the 1st of the month. */
@@ -80,7 +98,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.DayVie
     @Override
     public void onBindViewHolder(@NonNull DayViewHolder holder, int position) {
         LocalDate date = days.get(position);
-        holder.bind(date, currentMonth, calData, loggedDates, listener);
+        holder.bind(date, currentMonth, calData, loggedDates, selectedDate, listener);
     }
 
     @Override
@@ -100,11 +118,13 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.DayVie
         void bind(LocalDate date, YearMonth currentMonth,
                   PredictionEngine.CalendarData calData,
                   Set<LocalDate> loggedDates,
+                  LocalDate selectedDate,
                   OnDayClickListener listener) {
 
             boolean isCurrentMonth = date.getMonth() == currentMonth.getMonth()
                     && date.getYear() == currentMonth.getYear();
             boolean isToday = date.equals(LocalDate.now());
+            boolean isSelected = date.equals(selectedDate);
 
             // Day number text
             binding.tvDayNumber.setText(String.valueOf(date.getDayOfMonth()));
@@ -139,10 +159,25 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.DayVie
 
             if (bgDrawable != 0) {
                 binding.frameDayCircle.setBackgroundResource(bgDrawable);
+            } else if (isSelected && isCurrentMonth) {
+                // Selected date gets a highlighted circle
+                binding.frameDayCircle.setBackgroundResource(R.drawable.bg_calendar_selected);
+                binding.tvDayNumber.setTextColor(
+                        itemView.getContext().getColor(R.color.cyvia_primary));
             } else if (isToday) {
                 binding.frameDayCircle.setBackgroundResource(R.drawable.bg_calendar_today);
             } else {
                 binding.frameDayCircle.setBackground(null);
+            }
+
+            // If selected AND has a phase bg, overlay the selection stroke
+            if (isSelected && isCurrentMonth && bgDrawable != 0) {
+                // Keep the phase background but add a visual emphasis via elevation/scale
+                binding.frameDayCircle.setScaleX(1.15f);
+                binding.frameDayCircle.setScaleY(1.15f);
+            } else {
+                binding.frameDayCircle.setScaleX(1.0f);
+                binding.frameDayCircle.setScaleY(1.0f);
             }
 
             // Log dot

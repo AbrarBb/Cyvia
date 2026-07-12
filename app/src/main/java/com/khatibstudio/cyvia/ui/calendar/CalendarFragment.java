@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.khatibstudio.cyvia.CyviaApplication;
 import com.khatibstudio.cyvia.MainActivity;
 import com.khatibstudio.cyvia.R;
@@ -277,6 +278,9 @@ public class CalendarFragment extends Fragment {
     // ─── Day tap ──────────────────────────────────────────────────────────
 
     private void onDayTapped(LocalDate date) {
+        // Highlight the selected date cell
+        adapter.setSelectedDate(date);
+
         // Show the detail panel
         binding.layoutDayDetail.setVisibility(View.VISIBLE);
         updateMochiSupportCard(date);
@@ -286,6 +290,7 @@ public class CalendarFragment extends Fragment {
 
         boolean isToday = date.equals(LocalDate.now());
         boolean isFuture = date.isAfter(LocalDate.now());
+        boolean isPeriodDay = currentCalData != null && currentCalData.periodDays.contains(date);
 
         if (isFuture) {
             binding.tvDaySummary.setText("Future prediction date");
@@ -297,6 +302,11 @@ public class CalendarFragment extends Fragment {
             binding.btnLogSelectedDay.setText("Log this day");
             binding.btnLogSelectedDay.setEnabled(true);
             binding.btnLogSelectedDay.setAlpha(1.0f);
+
+            // Show "Did your period start?" popup for past/today non-period dates
+            if (!isPeriodDay) {
+                showPeriodStartPopup(date);
+            }
         }
 
         binding.btnLogSelectedDay.setOnClickListener(v -> {
@@ -307,6 +317,43 @@ public class CalendarFragment extends Fragment {
             DailyLogBottomSheet sheet = DailyLogBottomSheet.newInstance(date);
             sheet.show(getParentFragmentManager(), DailyLogBottomSheet.TAG);
         });
+    }
+
+    /**
+     * Shows a confirmation dialog asking if the user's period started on the given date.
+     * If Yes — creates a new CycleEntry, ends any ongoing cycles, and refreshes calendar.
+     */
+    private void showPeriodStartPopup(LocalDate date) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMMM d");
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Period Started?")
+                .setMessage("Did your period start on " + date.format(fmt) + "?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    CyviaDatabase.databaseWriteExecutor.execute(() -> {
+                        // End any ongoing cycles first
+                        java.util.List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
+                        if (cycles != null) {
+                            for (CycleEntry c : cycles) {
+                                if (c.isOngoing()) {
+                                    // End the old cycle the day before the new period starts
+                                    long endEpoch = date.toEpochDay() - 1;
+                                    if (endEpoch >= c.startDate) {
+                                        c.endDate = endEpoch;
+                                    } else {
+                                        c.endDate = c.startDate;
+                                    }
+                                    cycleRepository.updateCycle(c);
+                                }
+                            }
+                        }
+                        // Create new cycle starting on the tapped date
+                        CycleEntry newCycle = new CycleEntry(date.toEpochDay(), FlowIntensity.MEDIUM);
+                        cycleRepository.insertCycle(newCycle);
+                    });
+                    // Refresh will happen automatically via LiveData observer
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     // ─── Sex Life Prediction Card ─────────────────────────────────────────

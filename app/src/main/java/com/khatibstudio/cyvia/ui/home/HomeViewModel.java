@@ -76,6 +76,22 @@ public class HomeViewModel extends AndroidViewModel {
         CycleEntry mostRecent = cycles.get(0);
         LocalDate startDate = LocalDate.ofEpochDay(mostRecent.startDate);
         int day = (int) ChronoUnit.DAYS.between(startDate, currentDate.getValue()) + 1;
+
+        // Clamp: if day exceeds the average cycle length, wrap it so the ring
+        // never gets stuck showing a stale phase after the cycle boundary.
+        int avgCycleLen = settings.getAvgCycleLength();
+        CyclePrediction pred = prediction.getValue();
+        if (pred != null && pred.averageCycleLength > 0) {
+            avgCycleLen = pred.averageCycleLength;
+        }
+        if (avgCycleLen <= 0) avgCycleLen = 28;
+
+        if (day > avgCycleLen) {
+            // Wrap using modulo so it cycles back to day 1
+            day = ((day - 1) % avgCycleLen) + 1;
+        }
+        if (day < 1) day = 1;
+
         cycleDay.setValue(day);
     }
 

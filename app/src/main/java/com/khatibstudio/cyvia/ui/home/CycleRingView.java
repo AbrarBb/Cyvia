@@ -200,6 +200,12 @@ public class CycleRingView extends View {
         float radius = ringRect.width() / 2f;
         float density = getResources().getDisplayMetrics().density;
 
+        // Safety clamp: ensure animated day never exceeds cycle length
+        if (animatedCurrentDay > cycleLength) {
+            animatedCurrentDay = ((animatedCurrentDay - 1f) % cycleLength) + 1f;
+        }
+        if (animatedCurrentDay < 1f) animatedCurrentDay = 1f;
+
         if (minimalMode) {
             // Minimal Mode: Draw simple background track + period arc only
             canvas.drawArc(ringRect, -90f, 360f, false, trackPaint);
