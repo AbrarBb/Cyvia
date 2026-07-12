@@ -223,6 +223,65 @@
                     android:textColor="@color/cyvia_on_surface_variant"
                     android:layout_marginBottom="@dimen/space_12" />
 
+                <!-- Period Starts Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_phase_menstrual"
+                        app:tint="@color/cyvia_primary"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="Period icon" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Period Starts"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/nunito"
+                        android:textStyle="bold"
+                        android:textColor="@color/cyvia_on_background" />
+
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/toggle_period_starts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        app:singleSelection="true"
+                        app:selectionRequired="false">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_period_starts_yes"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Yes"
+                            android:textSize="12sp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_period_starts_no"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="No"
+                            android:textSize="12sp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp" />
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+                </LinearLayout>
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_log_selected_day"
                     style="@style/Widget.Cyvia.Button.Outlined"

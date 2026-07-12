@@ -293,21 +293,69 @@ public class CalendarFragment extends Fragment {
         boolean isFuture = date.isAfter(LocalDate.now());
         boolean isPeriodDay = currentCalData != null && currentCalData.periodDays.contains(date);
 
+        // Clear listeners to avoid self-triggering during state restoration
+        binding.togglePeriodStarts.clearOnButtonCheckedListeners();
+
         if (isFuture) {
             binding.tvDaySummary.setText("Future prediction date");
             binding.btnLogSelectedDay.setText("Cannot log future dates");
             binding.btnLogSelectedDay.setEnabled(false);
             binding.btnLogSelectedDay.setAlpha(0.4f);
+
+            // Disable toggling for future dates
+            binding.togglePeriodStarts.setEnabled(false);
+            binding.btnPeriodStartsYes.setEnabled(false);
+            binding.btnPeriodStartsNo.setEnabled(false);
+            binding.togglePeriodStarts.check(View.NO_ID);
         } else {
             binding.tvDaySummary.setText(isToday ? "Tap below to log today" : "Tap below to log this day");
             binding.btnLogSelectedDay.setText("Log this day");
             binding.btnLogSelectedDay.setEnabled(true);
             binding.btnLogSelectedDay.setAlpha(1.0f);
 
-            // Show "Did your period start?" popup for past/today non-period dates
-            if (!isPeriodDay) {
-                showPeriodStartPopup(date);
+            // Enable toggling for past/present dates
+            binding.togglePeriodStarts.setEnabled(true);
+            binding.btnPeriodStartsYes.setEnabled(true);
+            binding.btnPeriodStartsNo.setEnabled(true);
+
+            if (isPeriodDay) {
+                binding.togglePeriodStarts.check(R.id.btn_period_starts_yes);
+            } else {
+                binding.togglePeriodStarts.check(R.id.btn_period_starts_no);
             }
+
+            // Set up checked change listener to dynamically create/delete cycle logs
+            binding.togglePeriodStarts.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+                if (isChecked) {
+                    if (checkedId == R.id.btn_period_starts_yes) {
+                        CyviaDatabase.databaseWriteExecutor.execute(() -> {
+                            // End any ongoing cycles first
+                            java.util.List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
+                            if (cycles != null) {
+                                for (CycleEntry c : cycles) {
+                                    if (c.isOngoing()) {
+                                        long endEpoch = date.toEpochDay() - 1;
+                                        if (endEpoch >= c.startDate) {
+                                            c.endDate = endEpoch;
+                                        } else {
+                                            c.endDate = c.startDate;
+                                        }
+                                        cycleRepository.updateCycle(c);
+                                    }
+                                }
+                            }
+                            // Create new cycle starting on this date
+                            CycleEntry newCycle = new CycleEntry(date.toEpochDay(), FlowIntensity.MEDIUM);
+                            cycleRepository.insertCycle(newCycle);
+                        });
+                        android.widget.Toast.makeText(requireContext(), "Period started on " + date.format(DateTimeFormatter.ofPattern("MMM d")), android.widget.Toast.LENGTH_SHORT).show();
+                    } else if (checkedId == R.id.btn_period_starts_no) {
+                        // User unselected or clicked No, clear/trim flow on this date
+                        removeFlowForDate(date);
+                        android.widget.Toast.makeText(requireContext(), "Period flow removed for " + date.format(DateTimeFormatter.ofPattern("MMM d")), android.widget.Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
 
         binding.btnLogSelectedDay.setOnClickListener(v -> {
@@ -321,53 +369,43 @@ public class CalendarFragment extends Fragment {
     }
 
     /**
-     * Shows a confirmation dialog asking if the user's period started on the given date.
-     * If Yes — creates a new CycleEntry, ends any ongoing cycles, and refreshes calendar.
+     * Helper to completely remove or trim period flow entries spanning the targeted date.
      */
-    private void showPeriodStartPopup(LocalDate date) {
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMMM d");
-        android.app.Dialog dialog = new android.app.Dialog(requireContext());
-        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
-
-        android.view.View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_period_confirm_cute, null);
-        dialog.setContentView(dialogView);
-
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-            android.view.WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-            params.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.85);
-            dialog.getWindow().setAttributes(params);
-        }
-
-        TextView tvMessage = dialogView.findViewById(R.id.tv_dialog_message);
-        tvMessage.setText("Did your period start on " + date.format(fmt) + "?");
-
-        dialogView.findViewById(R.id.btn_dialog_no).setOnClickListener(v -> dialog.dismiss());
-        dialogView.findViewById(R.id.btn_dialog_yes).setOnClickListener(v -> {
-            dialog.dismiss();
-            CyviaDatabase.databaseWriteExecutor.execute(() -> {
-                // End any ongoing cycles first
-                java.util.List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
-                if (cycles != null) {
-                    for (CycleEntry c : cycles) {
-                        if (c.isOngoing()) {
-                            long endEpoch = date.toEpochDay() - 1;
-                            if (endEpoch >= c.startDate) {
-                                c.endDate = endEpoch;
+    private void removeFlowForDate(LocalDate date) {
+        long targetDay = date.toEpochDay();
+        CyviaDatabase.databaseWriteExecutor.execute(() -> {
+            com.khatibstudio.cyvia.data.db.dao.CycleEntryDao dao = CyviaDatabase.getDatabase(requireContext()).cycleEntryDao();
+            List<CycleEntry> cycles = dao.getAllCyclesSync();
+            if (cycles != null) {
+                for (CycleEntry cycle : cycles) {
+                    long start = cycle.startDate;
+                    long end = cycle.isOngoing() ? LocalDate.now().toEpochDay() : cycle.endDate;
+                    if (targetDay >= start && targetDay <= end) {
+                        if (start == end || (cycle.isOngoing() && start == targetDay)) {
+                            dao.deleteCycleEntry(cycle);
+                        } else if (start == targetDay) {
+                            cycle.startDate = targetDay + 1;
+                            dao.updateCycleEntry(cycle);
+                        } else if (end == targetDay || (cycle.isOngoing() && targetDay == LocalDate.now().toEpochDay())) {
+                            cycle.endDate = targetDay - 1;
+                            if (cycle.endDate < start) {
+                                dao.deleteCycleEntry(cycle);
                             } else {
-                                c.endDate = c.startDate;
+                                dao.updateCycleEntry(cycle);
                             }
-                            cycleRepository.updateCycle(c);
+                        } else if (start < targetDay && targetDay < end) {
+                            cycle.endDate = targetDay - 1;
+                            if (cycle.endDate < start) {
+                                dao.deleteCycleEntry(cycle);
+                            } else {
+                                dao.updateCycleEntry(cycle);
+                            }
                         }
+                        break;
                     }
                 }
-                // Create new cycle starting on the tapped date
-                CycleEntry newCycle = new CycleEntry(date.toEpochDay(), FlowIntensity.MEDIUM);
-                cycleRepository.insertCycle(newCycle);
-            });
+            }
         });
-
-        dialog.show();
     }
 
     // ─── Sex Life Prediction Card ─────────────────────────────────────────
