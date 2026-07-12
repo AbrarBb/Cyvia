@@ -71,11 +71,17 @@ public class CalendarViewModel extends AndroidViewModel {
     }
 
     private void rebuildCalendarData() {
-        List<CycleEntry> cycles = allCycles.getValue();
-        final List<CycleEntry> cycleList = (cycles == null) ? new ArrayList<>() : cycles;
         final YearMonth targetMonth = displayedMonth;
 
         CyviaDatabase.databaseWriteExecutor.execute(() -> {
+            com.khatibstudio.cyvia.data.db.dao.CycleEntryDao dao = CyviaDatabase.getDatabase(getApplication()).cycleEntryDao();
+            sanitizeAndMergeCycles(dao);
+
+            List<CycleEntry> cycleList = dao.getAllCyclesSync();
+            if (cycleList == null) {
+                cycleList = new ArrayList<>();
+            }
+
             CyclePrediction prediction = predictionEngine.predict(cycleList);
             LocalDate monthStart = targetMonth.atDay(1);
             LocalDate monthEnd = targetMonth.atEndOfMonth();
@@ -92,6 +98,61 @@ public class CalendarViewModel extends AndroidViewModel {
             calendarData.postValue(new CalendarPageData(
                     targetMonth, calData, loggedDates, prediction));
         });
+    }
+
+    private void sanitizeAndMergeCycles(com.khatibstudio.cyvia.data.db.dao.CycleEntryDao dao) {
+        List<CycleEntry> allCycles = dao.getAllCyclesSync();
+        if (allCycles == null || allCycles.size() < 2) return;
+
+        // Sort cycles chronologically by startDate
+        allCycles.sort((c1, c2) -> Long.compare(c1.startDate, c2.startDate));
+
+        List<CycleEntry> toDelete = new ArrayList<>();
+        List<CycleEntry> toUpdate = new ArrayList<>();
+
+        CycleEntry current = allCycles.get(0);
+
+        for (int i = 1; i < allCycles.size(); i++) {
+            CycleEntry next = allCycles.get(i);
+
+            long currentStart = current.startDate;
+            long currentEnd = current.isOngoing() ? LocalDate.now().toEpochDay() : current.endDate;
+
+            long nextStart = next.startDate;
+            long nextEnd = next.isOngoing() ? LocalDate.now().toEpochDay() : next.endDate;
+
+            // Check if they overlap or are adjacent (distance <= 1 day)
+            if (nextStart <= currentEnd + 1) {
+                // Merge next into current
+                current.startDate = Math.min(currentStart, nextStart);
+                if (current.isOngoing() || next.isOngoing()) {
+                    current.endDate = -1L; // remains ongoing
+                } else {
+                    current.endDate = Math.max(currentEnd, nextEnd);
+                }
+
+                if (next.flowIntensity != null && (current.flowIntensity == null || next.flowIntensity.ordinal() > current.flowIntensity.ordinal())) {
+                    current.flowIntensity = next.flowIntensity;
+                }
+
+                toDelete.add(next);
+                if (!toUpdate.contains(current)) {
+                    toUpdate.add(current);
+                }
+            } else {
+                current = next;
+            }
+        }
+
+        if (toUpdate.isEmpty() && toDelete.isEmpty()) return;
+
+        // Apply changes to database
+        for (CycleEntry cycle : toUpdate) {
+            dao.updateCycleEntry(cycle);
+        }
+        for (CycleEntry cycle : toDelete) {
+            dao.deleteCycleEntry(cycle);
+        }
     }
 
     // ─── Calendar page data ───────────────────────────────────────────────
