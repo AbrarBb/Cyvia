@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="24dp"
+    android:background="@drawable/bg_dialog_rounded">
+
+    <!-- Cute Mochi Mascot -->
+    <ImageView
+        android:id="@+id/img_dialog_mascot"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_mochi_smiling"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Mochi Mascot" />
+
+    <!-- Cute Title -->
+    <TextView
+        android:id="@+id/tv_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Period Started?"
+        android:textSize="20sp"
+        android:fontFamily="@font/nunito"
+        android:textStyle="bold"
+        android:textColor="@color/cyvia_on_surface"
+        android:layout_marginBottom="8dp"
+        android:gravity="center" />
+
+    <!-- Dynamic Question Message -->
+    <TextView
+        android:id="@+id/tv_dialog_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Did your period start on July 13?"
+        android:textSize="14sp"
+        android:fontFamily="@font/inter"
+        android:textColor="@color/cyvia_on_surface_variant"
+        android:layout_marginBottom="24dp"
+        android:gravity="center" />
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- No Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_dialog_no"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="No"
+            android:textColor="@color/cyvia_on_surface_variant"
+            android:backgroundTint="@color/cyvia_surface_variant"
+            android:layout_marginEnd="8dp"
+            app:cornerRadius="20dp" />
+
+        <!-- Yes Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_dialog_yes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Yes"
+            android:textColor="@color/cyvia_on_primary"
+            android:backgroundTint="@color/cyvia_primary"
+            android:layout_marginStart="8dp"
+            app:cornerRadius="20dp" />
+    </LinearLayout>
+</LinearLayout>

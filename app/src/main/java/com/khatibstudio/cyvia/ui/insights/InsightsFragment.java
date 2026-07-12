@@ -31,6 +31,7 @@ import com.khatibstudio.cyvia.data.db.entity.CycleEntry;
 import com.khatibstudio.cyvia.data.db.entity.DailyLog;
 import com.khatibstudio.cyvia.data.db.entity.SymptomTag;
 import com.khatibstudio.cyvia.data.model.Mood;
+import com.khatibstudio.cyvia.data.model.SymptomCategory;
 import com.khatibstudio.cyvia.databinding.FragmentInsightsBinding;
 import com.khatibstudio.cyvia.domain.CycleStatsCalculator;
 
@@ -306,7 +307,9 @@ public class InsightsFragment extends Fragment {
     private void updateSymptomChart(List<DailyLog> logs, List<SymptomTag> tags) {
         Map<Integer, String> tagNames = new HashMap<>();
         for (SymptomTag tag : tags) {
-            tagNames.put(tag.id, tag.label);
+            if (tag.category == SymptomCategory.PHYSICAL) {
+                tagNames.put(tag.id, tag.label);
+            }
         }
 
         Map<Integer, Integer> counts = new HashMap<>();
@@ -361,12 +364,45 @@ public class InsightsFragment extends Fragment {
     // ─── Mood chart ───────────────────────────────────────────────────────
 
     private void updateMoodChart(List<DailyLog> logs) {
-        Map<Mood, Integer> moodCounts = new HashMap<>();
+        Map<String, Integer> moodCounts = new HashMap<>();
+
+        // 1. Count built-in moods
         for (DailyLog log : logs) {
             if (log.mood != null) {
-                moodCounts.put(log.mood, moodCounts.getOrDefault(log.mood, 0) + 1);
+                String moodName = log.mood.name();
+                String friendlyName = moodName.substring(0, 1) + moodName.substring(1).toLowerCase().replace('_', ' ');
+                if (log.mood == Mood.MOOD_SWING) friendlyName = "Mood Swing";
+                if (log.mood == Mood.FOOD_CRAVING) friendlyName = "Food Craving";
+                moodCounts.put(friendlyName, moodCounts.getOrDefault(friendlyName, 0) + 1);
             }
         }
+
+        // 2. Count custom moods (stored in symptomIds with category = MOOD)
+        List<SymptomTag> tags = viewModel.getAllSymptomTags().getValue();
+        Map<Integer, SymptomTag> moodTagMap = new HashMap<>();
+        if (tags != null) {
+            for (SymptomTag tag : tags) {
+                if (tag.category == SymptomCategory.MOOD) {
+                    moodTagMap.put(tag.id, tag);
+                }
+            }
+        }
+
+        for (DailyLog log : logs) {
+            if (log.symptomIds != null && !log.symptomIds.isEmpty()) {
+                String[] ids = log.symptomIds.split(",");
+                for (String sId : ids) {
+                    try {
+                        int id = Integer.parseInt(sId.trim());
+                        SymptomTag tag = moodTagMap.get(id);
+                        if (tag != null) {
+                            moodCounts.put(tag.label, moodCounts.getOrDefault(tag.label, 0) + 1);
+                        }
+                    } catch (NumberFormatException ignored) {}
+                }
+            }
+        }
+
         if (moodCounts.isEmpty()) {
             binding.chartMood.setNoDataText("Log your mood to see your chart");
             binding.chartMood.clear();
@@ -374,29 +410,25 @@ public class InsightsFragment extends Fragment {
         }
 
         List<PieEntry> entries = new ArrayList<>();
-        String[] moodNames = {"Normal", "Happy", "Sad", "Calm", "Anxious", "Energetic", "Sensitive", "Romantic", "Lonely", "Mood Swing", "Food Craving"};
-        Mood[] moods = {Mood.NORMAL, Mood.HAPPY, Mood.SAD, Mood.CALM, Mood.ANXIOUS,
-                Mood.ENERGETIC, Mood.SENSITIVE, Mood.ROMANTIC, Mood.LONELY, Mood.MOOD_SWING, Mood.FOOD_CRAVING};
+        List<Integer> usedColors = new ArrayList<>();
+
         int[] moodColors = {
                 requireContext().getColor(R.color.mood_calm),
                 requireContext().getColor(R.color.mood_happy),
                 requireContext().getColor(R.color.mood_sad),
-                requireContext().getColor(R.color.mood_calm),
                 requireContext().getColor(R.color.mood_anxious),
                 requireContext().getColor(R.color.mood_energetic),
-                requireContext().getColor(R.color.mood_sad),
-                requireContext().getColor(R.color.mood_happy),
-                requireContext().getColor(R.color.mood_sad),
                 requireContext().getColor(R.color.mood_irritable),
-                requireContext().getColor(R.color.mood_happy)
+                requireContext().getColor(R.color.cyvia_primary),
+                requireContext().getColor(R.color.cyvia_secondary),
+                requireContext().getColor(R.color.cyvia_tertiary)
         };
 
-        List<Integer> usedColors = new ArrayList<>();
-        for (int i = 0; i < moods.length; i++) {
-            if (moodCounts.containsKey(moods[i])) {
-                entries.add(new PieEntry(moodCounts.get(moods[i]), moodNames[i]));
-                usedColors.add(moodColors[i]);
-            }
+        int colorIdx = 0;
+        for (Map.Entry<String, Integer> entry : moodCounts.entrySet()) {
+            entries.add(new PieEntry(entry.getValue(), entry.getKey()));
+            usedColors.add(moodColors[colorIdx % moodColors.length]);
+            colorIdx++;
         }
 
         PieDataSet dataSet = new PieDataSet(entries, "Mood");

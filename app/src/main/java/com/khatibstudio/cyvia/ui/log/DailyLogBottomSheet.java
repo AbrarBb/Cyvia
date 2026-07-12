@@ -445,6 +445,15 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                     });
         }
 
+        // Also append custom moods to the mood selector row
+        for (SymptomTag tag : allTagsList) {
+            if (tag.category != SymptomCategory.MOOD) continue;
+            boolean isSel = selectedSymptomIds.contains(tag.id);
+            addKawaiiBadgeView(binding.layoutMoodSelector, tag.label,
+                    tag.iconKey, R.drawable.ic_mochi_smiling, isSel, true,
+                    v -> toggleSymptomSelection(tag.id));
+        }
+
         // ── Section 2: Physical Condition (13 curated Mochi symptoms) ────────
         for (SymptomTag tag : allTagsList) {
             if (tag.category != SymptomCategory.PHYSICAL) continue;

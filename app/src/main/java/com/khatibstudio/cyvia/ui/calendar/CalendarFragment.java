@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -325,35 +326,48 @@ public class CalendarFragment extends Fragment {
      */
     private void showPeriodStartPopup(LocalDate date) {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMMM d");
-        new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Period Started?")
-                .setMessage("Did your period start on " + date.format(fmt) + "?")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    CyviaDatabase.databaseWriteExecutor.execute(() -> {
-                        // End any ongoing cycles first
-                        java.util.List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
-                        if (cycles != null) {
-                            for (CycleEntry c : cycles) {
-                                if (c.isOngoing()) {
-                                    // End the old cycle the day before the new period starts
-                                    long endEpoch = date.toEpochDay() - 1;
-                                    if (endEpoch >= c.startDate) {
-                                        c.endDate = endEpoch;
-                                    } else {
-                                        c.endDate = c.startDate;
-                                    }
-                                    cycleRepository.updateCycle(c);
-                                }
+        android.app.Dialog dialog = new android.app.Dialog(requireContext());
+        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
+
+        android.view.View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_period_confirm_cute, null);
+        dialog.setContentView(dialogView);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+            android.view.WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+            params.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.85);
+            dialog.getWindow().setAttributes(params);
+        }
+
+        TextView tvMessage = dialogView.findViewById(R.id.tv_dialog_message);
+        tvMessage.setText("Did your period start on " + date.format(fmt) + "?");
+
+        dialogView.findViewById(R.id.btn_dialog_no).setOnClickListener(v -> dialog.dismiss());
+        dialogView.findViewById(R.id.btn_dialog_yes).setOnClickListener(v -> {
+            dialog.dismiss();
+            CyviaDatabase.databaseWriteExecutor.execute(() -> {
+                // End any ongoing cycles first
+                java.util.List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
+                if (cycles != null) {
+                    for (CycleEntry c : cycles) {
+                        if (c.isOngoing()) {
+                            long endEpoch = date.toEpochDay() - 1;
+                            if (endEpoch >= c.startDate) {
+                                c.endDate = endEpoch;
+                            } else {
+                                c.endDate = c.startDate;
                             }
+                            cycleRepository.updateCycle(c);
                         }
-                        // Create new cycle starting on the tapped date
-                        CycleEntry newCycle = new CycleEntry(date.toEpochDay(), FlowIntensity.MEDIUM);
-                        cycleRepository.insertCycle(newCycle);
-                    });
-                    // Refresh will happen automatically via LiveData observer
-                })
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
-                .show();
+                    }
+                }
+                // Create new cycle starting on the tapped date
+                CycleEntry newCycle = new CycleEntry(date.toEpochDay(), FlowIntensity.MEDIUM);
+                cycleRepository.insertCycle(newCycle);
+            });
+        });
+
+        dialog.show();
     }
 
     // ─── Sex Life Prediction Card ─────────────────────────────────────────
