@@ -132,9 +132,13 @@ public class PredictionEngine {
         // Confirmed period days from logged cycles
         for (CycleEntry cycle : allCycles) {
             LocalDate start = LocalDate.ofEpochDay(cycle.startDate);
-            LocalDate end = cycle.isOngoing()
-                    ? LocalDate.ofEpochDay(Math.min(LocalDate.now().toEpochDay(), cycle.startDate + 9))
-                    : LocalDate.ofEpochDay(cycle.endDate);
+            int avgPeriodLen = settings.getAvgPeriodLength();
+            if (avgPeriodLen <= 0) avgPeriodLen = 5;
+
+            long displayEndEpoch = cycle.isOngoing()
+                    ? Math.min(Math.max(LocalDate.now().toEpochDay(), cycle.startDate + avgPeriodLen - 1), cycle.startDate + 9)
+                    : cycle.endDate;
+            LocalDate end = LocalDate.ofEpochDay(displayEndEpoch);
 
             LocalDate day = start;
             while (!day.isAfter(end)) {
