@@ -102,45 +102,63 @@ public class CalendarViewModel extends AndroidViewModel {
 
     private void sanitizeAndMergeCycles(com.khatibstudio.cyvia.data.db.dao.CycleEntryDao dao) {
         List<CycleEntry> allCycles = dao.getAllCyclesSync();
-        if (allCycles == null || allCycles.size() < 2) return;
+        if (allCycles == null || allCycles.isEmpty()) return;
 
-        // Sort cycles chronologically by startDate
-        allCycles.sort((c1, c2) -> Long.compare(c1.startDate, c2.startDate));
+        int avgPeriodLen = settings.getAvgPeriodLength();
+        if (avgPeriodLen <= 0) avgPeriodLen = 5;
 
         List<CycleEntry> toDelete = new ArrayList<>();
         List<CycleEntry> toUpdate = new ArrayList<>();
 
-        CycleEntry current = allCycles.get(0);
+        // Trim abnormally long cycles (e.g., > 10 days duration) that likely arose from database errors
+        for (CycleEntry cycle : allCycles) {
+            if (!cycle.isOngoing()) {
+                long duration = cycle.endDate - cycle.startDate + 1;
+                if (duration > 10) {
+                    cycle.endDate = cycle.startDate + avgPeriodLen - 1;
+                    if (!toUpdate.contains(cycle)) {
+                        toUpdate.add(cycle);
+                    }
+                }
+            }
+        }
 
-        for (int i = 1; i < allCycles.size(); i++) {
-            CycleEntry next = allCycles.get(i);
+        // Sort cycles chronologically by startDate
+        allCycles.sort((c1, c2) -> Long.compare(c1.startDate, c2.startDate));
 
-            long currentStart = current.startDate;
-            long currentEnd = current.isOngoing() ? LocalDate.now().toEpochDay() : current.endDate;
+        if (allCycles.size() >= 2) {
+            CycleEntry current = allCycles.get(0);
 
-            long nextStart = next.startDate;
-            long nextEnd = next.isOngoing() ? LocalDate.now().toEpochDay() : next.endDate;
+            for (int i = 1; i < allCycles.size(); i++) {
+                CycleEntry next = allCycles.get(i);
 
-            // Check if they overlap or are adjacent (distance <= 1 day)
-            if (nextStart <= currentEnd + 1) {
-                // Merge next into current
-                current.startDate = Math.min(currentStart, nextStart);
-                if (current.isOngoing() || next.isOngoing()) {
-                    current.endDate = -1L; // remains ongoing
+                long currentStart = current.startDate;
+                long currentEnd = current.isOngoing() ? LocalDate.now().toEpochDay() : current.endDate;
+
+                long nextStart = next.startDate;
+                long nextEnd = next.isOngoing() ? LocalDate.now().toEpochDay() : next.endDate;
+
+                // Check if they overlap or are adjacent (distance <= 1 day)
+                if (nextStart <= currentEnd + 1) {
+                    // Merge next into current
+                    current.startDate = Math.min(currentStart, nextStart);
+                    if (current.isOngoing() || next.isOngoing()) {
+                        current.endDate = -1L; // remains ongoing
+                    } else {
+                        current.endDate = Math.max(currentEnd, nextEnd);
+                    }
+
+                    if (next.flowIntensity != null && (current.flowIntensity == null || next.flowIntensity.ordinal() > current.flowIntensity.ordinal())) {
+                        current.flowIntensity = next.flowIntensity;
+                    }
+
+                    toDelete.add(next);
+                    if (!toUpdate.contains(current)) {
+                        toUpdate.add(current);
+                    }
                 } else {
-                    current.endDate = Math.max(currentEnd, nextEnd);
+                    current = next;
                 }
-
-                if (next.flowIntensity != null && (current.flowIntensity == null || next.flowIntensity.ordinal() > current.flowIntensity.ordinal())) {
-                    current.flowIntensity = next.flowIntensity;
-                }
-
-                toDelete.add(next);
-                if (!toUpdate.contains(current)) {
-                    toUpdate.add(current);
-                }
-            } else {
-                current = next;
             }
         }
 
