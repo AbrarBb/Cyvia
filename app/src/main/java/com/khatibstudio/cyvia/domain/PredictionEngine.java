@@ -129,7 +129,12 @@ public class PredictionEngine {
         LocalDate gridStart = monthStart.minusMonths(1);
         LocalDate gridEnd = monthEnd.plusMonths(2);
 
-        // Confirmed period days from logged cycles
+        int avgCycleLen = prediction.averageCycleLength;
+        if (avgCycleLen <= 0) avgCycleLen = settings.getAvgCycleLength();
+        if (avgCycleLen <= 0) avgCycleLen = 28;
+        boolean showFertile = shouldShowFertile(settings.getTrackingMode());
+
+        // Confirmed period days, past ovulation, and fertile windows from logged cycles
         for (CycleEntry cycle : allCycles) {
             LocalDate start = LocalDate.ofEpochDay(cycle.startDate);
             int avgPeriodLen = settings.getAvgPeriodLength();
@@ -140,6 +145,7 @@ public class PredictionEngine {
                     : cycle.endDate;
             LocalDate end = LocalDate.ofEpochDay(displayEndEpoch);
 
+            // 1. Confirmed period days
             LocalDate day = start;
             while (!day.isAfter(end)) {
                 if (!day.isBefore(gridStart) && !day.isAfter(gridEnd)) {
@@ -147,16 +153,29 @@ public class PredictionEngine {
                 }
                 day = day.plusDays(1);
             }
+
+            // 2. Confirmed past fertile window and ovulation days
+            if (showFertile) {
+                LocalDate ov = start.plusDays(avgCycleLen - 14);
+                if (!ov.isBefore(gridStart) && !ov.isAfter(gridEnd)) {
+                    data.ovulationDays.add(ov);
+                }
+
+                LocalDate fStart = ov.minusDays(FERTILE_WINDOW_BEFORE);
+                LocalDate fEnd = ov.plusDays(FERTILE_WINDOW_AFTER);
+                LocalDate fDay = fStart;
+                while (!fDay.isAfter(fEnd)) {
+                    if (!data.periodDays.contains(fDay) && !fDay.isBefore(gridStart) && !fDay.isAfter(gridEnd)) {
+                        data.fertileDays.add(fDay);
+                    }
+                    fDay = fDay.plusDays(1);
+                }
+            }
         }
 
         if (prediction.hasData() && prediction.nextPeriodStart != null) {
             int avgPeriodLength = settings.getAvgPeriodLength();
             if (avgPeriodLength <= 0) avgPeriodLength = 5;
-            int avgCycleLen = prediction.averageCycleLength;
-            if (avgCycleLen <= 0) avgCycleLen = settings.getAvgCycleLength();
-            if (avgCycleLen <= 0) avgCycleLen = 28;
-
-            boolean showFertile = shouldShowFertile(settings.getTrackingMode());
             LocalDate curPeriodStart = prediction.nextPeriodStart;
 
             // Project forward up to 12 cycles (approx 1 year) so users can plan dates/vacations ahead
