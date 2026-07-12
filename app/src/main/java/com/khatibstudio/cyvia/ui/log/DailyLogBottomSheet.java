@@ -711,16 +711,14 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                     }
                 }
                 if (!handled) {
-                    // End any previous ongoing cycles first
+                    // Trim or end any cycles that overlap or start after the new period date
                     if (cycles != null) {
-                        for (CycleEntry oldCycle : cycles) {
-                            if (oldCycle.isOngoing()) {
-                                int avgPeriodLen = 5;
-                                if (getContext() != null) {
-                                    avgPeriodLen = CyviaApplication.from(requireContext()).getSettingsRepository().getAvgPeriodLength();
-                                }
-                                oldCycle.endDate = oldCycle.startDate + (avgPeriodLen - 1);
-                                cycleRepository.updateCycle(oldCycle);
+                        for (CycleEntry c : cycles) {
+                            if (c.startDate >= targetDay) {
+                                cycleRepository.deleteCycle(c);
+                            } else if (c.isOngoing() || c.endDate >= targetDay) {
+                                c.endDate = targetDay - 1;
+                                cycleRepository.updateCycle(c);
                             }
                         }
                     }
@@ -764,12 +762,17 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                             dao.updateCycleEntry(cycle);
                         }
                     } else if (start < targetDay && targetDay < end) {
+                        long originalEnd = cycle.endDate;
                         cycle.endDate = targetDay - 1;
                         if (cycle.endDate < start) {
                             dao.deleteCycleEntry(cycle);
                         } else {
                             dao.updateCycleEntry(cycle);
                         }
+                        
+                        CycleEntry secondPart = new CycleEntry(targetDay + 1, cycle.flowIntensity);
+                        secondPart.endDate = originalEnd;
+                        dao.insertCycleEntry(secondPart);
                     }
                     break;
                 }

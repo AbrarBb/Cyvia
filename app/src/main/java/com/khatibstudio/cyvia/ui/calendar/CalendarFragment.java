@@ -333,17 +333,14 @@ public class CalendarFragment extends Fragment {
 
                     if (isYes) {
                         CyviaDatabase.databaseWriteExecutor.execute(() -> {
-                            // End any ongoing cycles first
+                            // Trim or end any cycles that overlap or start after the new period date
                             java.util.List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
                             if (cycles != null) {
                                 for (CycleEntry c : cycles) {
-                                    if (c.isOngoing()) {
-                                        long endEpoch = date.toEpochDay() - 1;
-                                        if (endEpoch >= c.startDate) {
-                                            c.endDate = endEpoch;
-                                        } else {
-                                            c.endDate = c.startDate;
-                                        }
+                                    if (c.startDate >= date.toEpochDay()) {
+                                        cycleRepository.deleteCycle(c);
+                                    } else if (c.isOngoing() || c.endDate >= date.toEpochDay()) {
+                                        c.endDate = date.toEpochDay() - 1;
                                         cycleRepository.updateCycle(c);
                                     }
                                 }
@@ -398,12 +395,17 @@ public class CalendarFragment extends Fragment {
                                 dao.updateCycleEntry(cycle);
                             }
                         } else if (start < targetDay && targetDay < end) {
+                            long originalEnd = cycle.endDate;
                             cycle.endDate = targetDay - 1;
                             if (cycle.endDate < start) {
                                 dao.deleteCycleEntry(cycle);
                             } else {
                                 dao.updateCycleEntry(cycle);
                             }
+                            
+                            CycleEntry secondPart = new CycleEntry(targetDay + 1, cycle.flowIntensity);
+                            secondPart.endDate = originalEnd;
+                            dao.insertCycleEntry(secondPart);
                         }
                         break;
                     }
