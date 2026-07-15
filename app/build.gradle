@@ -14,10 +14,6 @@ android {
         versionName "1.1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // AdMob official Test App ID for development
-        manifestPlaceholders = [
-            admobAppId: "ca-app-pub-3940256099942544~3347511713"
-        ]
     }
 
     buildTypes {
@@ -25,11 +21,17 @@ android {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
             debuggable true
+            manifestPlaceholders = [
+                admobAppId: "ca-app-pub-3940256099942544~3347511713" // AdMob Test App ID
+            ]
         }
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [
+                admobAppId: "ca-app-pub-3807814510907688~1631749621" // Production App ID
+            ]
         }
     }
 

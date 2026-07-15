@@ -54,17 +54,33 @@ public class AdManager {
 
     private static final String TAG = "AdManager";
 
+    // ─── Production Ad Unit IDs ───────────────────────────────────────────
+    private static final String PROD_BANNER_AD_UNIT_ID =
+            "ca-app-pub-3807814510907688/4461927091";
+    private static final String PROD_INTERSTITIAL_AD_UNIT_ID =
+            "ca-app-pub-3807814510907688/9387749472";
+    private static final String PROD_REWARDED_AD_UNIT_ID =
+            "ca-app-pub-3807814510907688/1336803402";
+
     // ─── Test Ad Unit IDs ─────────────────────────────────────────────────
+    private static final String TEST_BANNER_AD_UNIT_ID =
+            "ca-app-pub-3940256099942544/6300978111";
+    private static final String TEST_INTERSTITIAL_AD_UNIT_ID =
+            "ca-app-pub-3940256099942544/1033173712";
+    private static final String TEST_REWARDED_AD_UNIT_ID =
+            "ca-app-pub-3940256099942544/5224354917";
+
+    // ─── Active Ad Unit IDs (Test for Debug, Production for Release) ──────
     public static final String BANNER_AD_UNIT_ID =
-            "ca-app-pub-3940256099942544/6300978111";       // Test Banner
+            BuildConfig.DEBUG ? TEST_BANNER_AD_UNIT_ID : PROD_BANNER_AD_UNIT_ID;
     public static final String INTERSTITIAL_AD_UNIT_ID =
-            "ca-app-pub-3940256099942544/1033173712";       // Test Interstitial
+            BuildConfig.DEBUG ? TEST_INTERSTITIAL_AD_UNIT_ID : PROD_INTERSTITIAL_AD_UNIT_ID;
     public static final String REWARDED_AD_UNIT_ID =
-            "ca-app-pub-3940256099942544/5224354917";       // Test Rewarded
+            BuildConfig.DEBUG ? TEST_REWARDED_AD_UNIT_ID : PROD_REWARDED_AD_UNIT_ID;
     public static final String REPORT_REWARDED_AD_UNIT_ID =
-            "ca-app-pub-3940256099942544/5224354917";       // Test Rewarded
+            BuildConfig.DEBUG ? TEST_REWARDED_AD_UNIT_ID : PROD_REWARDED_AD_UNIT_ID;
     public static final String THEME_REWARDED_AD_UNIT_ID =
-            "ca-app-pub-3940256099942544/5224354917";       // Test Rewarded
+            BuildConfig.DEBUG ? TEST_REWARDED_AD_UNIT_ID : PROD_REWARDED_AD_UNIT_ID;
 
     /** Minimum time between interstitial shows (8 minutes). */
     private static final long INTERSTITIAL_COOLDOWN_MS = TimeUnit.MINUTES.toMillis(8);
