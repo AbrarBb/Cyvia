@@ -186,7 +186,7 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        binding.imgMochiHome.setImageResource(targetDrawable);
+        binding.imgMochiHome.setImageResource(com.khatibstudio.cyvia.util.KawaiiIconUtil.getAvatarDrawableForPose(requireContext(), targetDrawable));
         applyMochiAnimation(animType);
     }
 
@@ -322,17 +322,33 @@ public class HomeFragment extends Fragment {
             binding.cardMochiBanner.setVisibility(minimalMode ? View.GONE : View.VISIBLE);
         }
 
-        if (daysUntil < 0) {
-            binding.tvStatusLabel.setText("Period Late");
-            long lateDays = Math.abs(daysUntil);
-            binding.tvStatusMain.setText(lateDays + (lateDays == 1 ? " Day Late" : " Days Late"));
-            binding.tvFertileDates.setVisibility(View.VISIBLE);
-            binding.tvFertileDates.setText("Tap Calendar or Quick Log to update your flow status");
-        } else if ("MENSTRUAL".equals(phase) || cycleDay <= avgPeriodLen) {
+        boolean isConfirmedPeriod = viewModel.isTodayConfirmedPeriod();
+
+        if (isConfirmedPeriod) {
+            // 1. Confirmed period — user has logged a cycle entry covering today
             binding.tvStatusLabel.setText("Period Phase");
             binding.tvStatusMain.setText("Day " + cycleDay + " of Flow");
             binding.tvFertileDates.setVisibility(View.VISIBLE);
             binding.tvFertileDates.setText(hideFertile ? "Rest & self-care today" : "Low fertility · Rest & care");
+        } else if (daysUntil == 0) {
+            // 2. Period expected today (not yet confirmed)
+            binding.tvStatusLabel.setText("Period Expected");
+            binding.tvStatusMain.setText("Period Expected Today");
+            binding.tvFertileDates.setVisibility(View.VISIBLE);
+            binding.tvFertileDates.setText("Open Calendar to confirm if your period has started");
+        } else if (daysUntil == 1 && cycleDay >= avgCycleLen) {
+            // 3. User said NO today, so expected date shifted to tomorrow
+            binding.tvStatusLabel.setText("Period Expected");
+            binding.tvStatusMain.setText("Period Expected Tomorrow");
+            binding.tvFertileDates.setVisibility(View.VISIBLE);
+            binding.tvFertileDates.setText("Cycle Day " + cycleDay + " · Rest & gentle care");
+        } else if (daysUntil < 0) {
+            // 4. Period is late
+            binding.tvStatusLabel.setText("Period Late");
+            long lateDays = Math.abs(daysUntil);
+            binding.tvStatusMain.setText(lateDays + (lateDays == 1 ? " Day Late" : " Days Late"));
+            binding.tvFertileDates.setVisibility(View.VISIBLE);
+            binding.tvFertileDates.setText("Cycle Day " + cycleDay + " · Tap Calendar to update");
         } else if ("OVULATORY".equals(phase) || (prediction.fertileWindowStart != null && !today.isBefore(prediction.fertileWindowStart) && !today.isAfter(prediction.fertileWindowEnd))) {
             binding.tvStatusLabel.setText("Ovulation Window");
             binding.tvStatusMain.setText("High Fertility");
@@ -354,12 +370,10 @@ public class HomeFragment extends Fragment {
         } else {
             // LUTEAL Phase
             binding.tvStatusLabel.setText("Luteal Phase");
-            if (daysUntil > 0) {
-                binding.tvStatusMain.setText("Period in " + daysUntil + (daysUntil == 1 ? " day" : " days"));
-            } else if (daysUntil == 0) {
-                binding.tvStatusMain.setText("Period Today");
+            if (daysUntil > 1) {
+                binding.tvStatusMain.setText("Period in " + daysUntil + " days");
             } else {
-                binding.tvStatusMain.setText("Day " + cycleDay);
+                binding.tvStatusMain.setText("Cycle Day " + cycleDay);
             }
             binding.tvFertileDates.setVisibility(View.VISIBLE);
             binding.tvFertileDates.setText(hideFertile ? "Self-care & PMS comfort" : "Low fertility · PMS comfort & care");
@@ -409,6 +423,10 @@ public class HomeFragment extends Fragment {
         switch (phase) {
             case "MENSTRUAL":
                 binding.tvPhaseName.setText(getString(R.string.home_phase_menstrual));
+                binding.imgPhaseIcon.setImageResource(R.drawable.ic_phase_menstrual);
+                break;
+            case "PREDICTED_MENSTRUAL":
+                binding.tvPhaseName.setText("Predicted Period");
                 binding.imgPhaseIcon.setImageResource(R.drawable.ic_phase_menstrual);
                 break;
             case "FOLLICULAR":

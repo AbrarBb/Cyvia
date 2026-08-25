@@ -23,6 +23,24 @@
     <color name="cyvia_tertiary_container">#6B3D48</color>
     <color name="cyvia_on_tertiary_container">#FFE3E8</color>
 
+    <!-- Premium Theme: Pink (Night) -->
+    <color name="cyvia_pink_primary">#F48FB1</color>
+    <color name="cyvia_pink_on_primary">#4A0024</color>
+    <color name="cyvia_pink_primary_container">#701438</color>
+    <color name="cyvia_pink_on_primary_container">#FFD8E4</color>
+
+    <!-- Premium Theme: Mint (Night) -->
+    <color name="cyvia_mint_primary">#80CBC4</color>
+    <color name="cyvia_mint_on_primary">#003833</color>
+    <color name="cyvia_mint_primary_container">#005049</color>
+    <color name="cyvia_mint_on_primary_container">#B2DFDB</color>
+
+    <!-- Premium Theme: Ocean (Night) -->
+    <color name="cyvia_ocean_primary">#90CAF9</color>
+    <color name="cyvia_ocean_on_primary">#00325B</color>
+    <color name="cyvia_ocean_primary_container">#00497D</color>
+    <color name="cyvia_ocean_on_primary_container">#BBDEFB</color>
+
     <!-- Backgrounds — Muted Slate Gray hierarchy -->
     <color name="cyvia_background">#2C2C2C</color>
     <color name="cyvia_on_background">#E4E4E4</color>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#FFF0F2"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <!-- Droopy Bunny Ears (Curling down) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#FFCDD2"
+        android:strokeWidth="1"
+        android:pathData="M15,10 C11,10 9,22 13,27 L17,25 C15,22 15,10 15,10 Z" />
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M15,12 C13,12 11,21 14,24 L16,23 C15,21 15,12 15,12 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#FFCDD2"
+        android:strokeWidth="1"
+        android:pathData="M33,10 C37,10 39,22 35,27 L31,25 C33,22 33,10 33,10 Z" />
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M33,12 C35,12 37,21 34,24 L32,23 C33,21 33,12 33,12 Z" />
+    <!-- Bunny Head -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#FFCDD2"
+        android:strokeWidth="1"
+        android:pathData="M12,28 C12,18 36,18 36,28 C36,38 12,38 12,28 Z" />
+    <!-- Pain Eyes > < -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:pathData="M17,26 L21,29 M17,29 L21,26 M27,26 L31,29 M27,29 L31,26" />
+    <!-- Tear -->
+    <path
+        android:fillColor="#64B5F6"
+        android:pathData="M15,30 C15,28 16.5,26 16.5,26 C16.5,26 18,28 18,30 C18,31 17.3,32 16.5,32 C15.7,32 15,31 15,30 Z" />
+    <!-- Cute Heart Heating Pad -->
+    <path
+        android:fillColor="#FF5252"
+        android:pathData="M24,37 C24,34 20,34 20,37 C20,40 24,43 24,43 C24,43 28,40 28,37 C28,34 24,34 24,37 Z" />
+</vector>

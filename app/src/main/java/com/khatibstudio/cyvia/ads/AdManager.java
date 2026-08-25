@@ -32,10 +32,14 @@ import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
 import com.khatibstudio.cyvia.BuildConfig;
 import com.khatibstudio.cyvia.CyviaApplication;
 import com.khatibstudio.cyvia.data.repository.SettingsRepository;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,19 +58,25 @@ public class AdManager {
 
     private static final String TAG = "AdManager";
 
-    // ─── Production Ad Unit IDs ───────────────────────────────────────────
+    // ─── Production Ad Unit IDs (Replace with your publisher IDs before production release) ───
     private static final String PROD_BANNER_AD_UNIT_ID =
-            "ca-app-pub-3807814510907688/4461927091";
+            "ca-app-pub-3940256099942544/6300978111";
     private static final String PROD_INTERSTITIAL_AD_UNIT_ID =
-            "ca-app-pub-3807814510907688/9387749472";
-    private static final String PROD_REWARDED_AD_UNIT_ID =
-            "ca-app-pub-3807814510907688/1336803402";
+            "ca-app-pub-3940256099942544/1033173712";
+    private static final String PROD_CALENDAR_REWARDED_AD_UNIT_ID =
+            "ca-app-pub-3940256099942544/5224354917";
+    private static final String PROD_PDF_REWARDED_AD_UNIT_ID =
+            "ca-app-pub-3940256099942544/5224354917";
+    private static final String PROD_THEME_REWARDED_AD_UNIT_ID =
+            "ca-app-pub-3940256099942544/5224354917";
 
     // ─── Test Ad Unit IDs ─────────────────────────────────────────────────
     private static final String TEST_BANNER_AD_UNIT_ID =
             "ca-app-pub-3940256099942544/6300978111";
     private static final String TEST_INTERSTITIAL_AD_UNIT_ID =
             "ca-app-pub-3940256099942544/1033173712";
+    private static final String TEST_REWARDED_INTERSTITIAL_AD_UNIT_ID =
+            "ca-app-pub-3940256099942544/5354046379";
     private static final String TEST_REWARDED_AD_UNIT_ID =
             "ca-app-pub-3940256099942544/5224354917";
 
@@ -76,21 +86,22 @@ public class AdManager {
     public static final String INTERSTITIAL_AD_UNIT_ID =
             BuildConfig.DEBUG ? TEST_INTERSTITIAL_AD_UNIT_ID : PROD_INTERSTITIAL_AD_UNIT_ID;
     public static final String REWARDED_AD_UNIT_ID =
-            BuildConfig.DEBUG ? TEST_REWARDED_AD_UNIT_ID : PROD_REWARDED_AD_UNIT_ID;
+            BuildConfig.DEBUG ? TEST_REWARDED_INTERSTITIAL_AD_UNIT_ID : PROD_CALENDAR_REWARDED_AD_UNIT_ID;
     public static final String REPORT_REWARDED_AD_UNIT_ID =
-            BuildConfig.DEBUG ? TEST_REWARDED_AD_UNIT_ID : PROD_REWARDED_AD_UNIT_ID;
+            BuildConfig.DEBUG ? TEST_REWARDED_INTERSTITIAL_AD_UNIT_ID : PROD_PDF_REWARDED_AD_UNIT_ID;
     public static final String THEME_REWARDED_AD_UNIT_ID =
-            BuildConfig.DEBUG ? TEST_REWARDED_AD_UNIT_ID : PROD_REWARDED_AD_UNIT_ID;
+            BuildConfig.DEBUG ? TEST_REWARDED_AD_UNIT_ID : PROD_THEME_REWARDED_AD_UNIT_ID;
 
     /** Minimum time between interstitial shows (8 minutes). */
     private static final long INTERSTITIAL_COOLDOWN_MS = TimeUnit.MINUTES.toMillis(8);
-    /** Minimum time between rewarded ad shows (10 minutes session cooldown). */
-    private static final long REWARDED_COOLDOWN_MS = TimeUnit.MINUTES.toMillis(10);
-    private static long lastRewardedAdShowTimeMs = 0;
+    /** Minimum time between calendar rewarded ad shows (2 minutes cooldown). */
+    private static final long CALENDAR_REWARDED_COOLDOWN_MS = TimeUnit.MINUTES.toMillis(2);
+    private static long lastCalendarRewardedAdShowTimeMs = 0;
 
     private final SettingsRepository settings;
     private static InterstitialAd interstitialAd;
-    private static RewardedAd rewardedAd;
+    private static final Map<String, RewardedInterstitialAd> rewardedInterstitialAds = new HashMap<>();
+    private static final Map<String, RewardedAd> standardRewardedAds = new HashMap<>();
     private boolean isLoggingInProgress = false;
 
     public AdManager(SettingsRepository settings) {
@@ -360,7 +371,8 @@ public class AdManager {
      */
     public void onAdsRemoved() {
         interstitialAd = null;
-        rewardedAd = null;
+        rewardedInterstitialAds.clear();
+        standardRewardedAds.clear();
     }
 
     // ─── Rewarded Ad ─────────────────────────────────────────────────────
@@ -371,25 +383,47 @@ public class AdManager {
 
     public void preloadRewarded(Context context, String adUnitId) {
         if (settings.isAdsRemoved()) return;
-        if (rewardedAd != null) return;
+
+        boolean isStandard = adUnitId.equals(THEME_REWARDED_AD_UNIT_ID);
+
+        if (isStandard && standardRewardedAds.containsKey(adUnitId)) return;
+        if (!isStandard && rewardedInterstitialAds.containsKey(adUnitId)) return;
 
         CyviaApplication.from(context).initAdMobIfNeeded(status -> {
             new Handler(Looper.getMainLooper()).post(() -> {
                 AdRequest adRequest = new AdRequest.Builder().build();
-                RewardedAd.load(context, adUnitId, adRequest,
-                        new RewardedAdLoadCallback() {
-                            @Override
-                            public void onAdLoaded(@NonNull RewardedAd ad) {
-                                rewardedAd = ad;
-                                Log.d(TAG, "Rewarded ad loaded (" + adUnitId + ")");
-                            }
 
-                            @Override
-                            public void onAdFailedToLoad(@NonNull LoadAdError error) {
-                                Log.w(TAG, "Rewarded ad failed to load (" + adUnitId + "): " + error.getMessage() + " [Code: " + error.getCode() + "]");
-                                rewardedAd = null;
-                            }
-                        });
+                if (isStandard) {
+                    RewardedAd.load(context, adUnitId, adRequest,
+                            new RewardedAdLoadCallback() {
+                                @Override
+                                public void onAdLoaded(@NonNull RewardedAd ad) {
+                                    standardRewardedAds.put(adUnitId, ad);
+                                    Log.d(TAG, "Standard Rewarded ad loaded (" + adUnitId + ")");
+                                }
+
+                                @Override
+                                public void onAdFailedToLoad(@NonNull LoadAdError error) {
+                                    Log.w(TAG, "Standard Rewarded ad failed to load (" + adUnitId + "): " + error.getMessage() + " [Code: " + error.getCode() + "]");
+                                    standardRewardedAds.remove(adUnitId);
+                                }
+                            });
+                } else {
+                    RewardedInterstitialAd.load(context, adUnitId, adRequest,
+                            new RewardedInterstitialAdLoadCallback() {
+                                @Override
+                                public void onAdLoaded(@NonNull RewardedInterstitialAd ad) {
+                                    rewardedInterstitialAds.put(adUnitId, ad);
+                                    Log.d(TAG, "Rewarded interstitial ad loaded (" + adUnitId + ")");
+                                }
+
+                                @Override
+                                public void onAdFailedToLoad(@NonNull LoadAdError error) {
+                                    Log.w(TAG, "Rewarded interstitial ad failed to load (" + adUnitId + "): " + error.getMessage() + " [Code: " + error.getCode() + "]");
+                                    rewardedInterstitialAds.remove(adUnitId);
+                                }
+                            });
+                }
             });
         });
     }
@@ -404,15 +438,21 @@ public class AdManager {
             return;
         }
 
-        long now = System.currentTimeMillis();
-        if (now - lastRewardedAdShowTimeMs < REWARDED_COOLDOWN_MS) {
-            Log.d(TAG, "Rewarded ad skipped due to 10-minute session cooldown.");
-            if (onRewardEarned != null) onRewardEarned.run();
-            return;
+        if (adUnitId.equals(REWARDED_AD_UNIT_ID)) {
+            long now = System.currentTimeMillis();
+            if (now - lastCalendarRewardedAdShowTimeMs < CALENDAR_REWARDED_COOLDOWN_MS) {
+                Log.d(TAG, "Calendar rewarded ad skipped due to 2-minute cooldown.");
+                if (onRewardEarned != null) onRewardEarned.run();
+                return;
+            }
         }
 
-        if (rewardedAd != null) {
-            displayLoadedRewardedAd(activity, adUnitId, onRewardEarned);
+        boolean isStandard = adUnitId.equals(THEME_REWARDED_AD_UNIT_ID);
+
+        if (isStandard && standardRewardedAds.containsKey(adUnitId)) {
+            displayLoadedStandardRewardedAd(activity, adUnitId, onRewardEarned);
+        } else if (!isStandard && rewardedInterstitialAds.containsKey(adUnitId)) {
+            displayLoadedRewardedInterstitialAd(activity, adUnitId, onRewardEarned);
         } else {
             android.app.ProgressDialog progressDialog = new android.app.ProgressDialog(activity);
             progressDialog.setMessage("Loading video ad to unlock...");
@@ -422,36 +462,59 @@ public class AdManager {
             CyviaApplication.from(activity).initAdMobIfNeeded(status -> {
                 new Handler(Looper.getMainLooper()).post(() -> {
                     AdRequest adRequest = new AdRequest.Builder().build();
-                    RewardedAd.load(activity, adUnitId, adRequest,
-                            new RewardedAdLoadCallback() {
-                                @Override
-                                public void onAdLoaded(@NonNull RewardedAd ad) {
-                                    if (progressDialog.isShowing()) progressDialog.dismiss();
-                                    rewardedAd = ad;
-                                    displayLoadedRewardedAd(activity, adUnitId, onRewardEarned);
-                                }
 
-                                @Override
-                                public void onAdFailedToLoad(@NonNull LoadAdError error) {
-                                    if (progressDialog.isShowing()) progressDialog.dismiss();
-                                    Log.w(TAG, "Rewarded ad failed to load (" + adUnitId + "): " + error.getMessage() + " [Code: " + error.getCode() + "]");
-                                    lastRewardedAdShowTimeMs = System.currentTimeMillis();
-                                    android.widget.Toast.makeText(activity, "Ad temporarily unavailable. Continuing...", android.widget.Toast.LENGTH_SHORT).show();
-                                    if (onRewardEarned != null) onRewardEarned.run();
-                                }
-                            });
+                    if (isStandard) {
+                        RewardedAd.load(activity, adUnitId, adRequest,
+                                new RewardedAdLoadCallback() {
+                                    @Override
+                                    public void onAdLoaded(@NonNull RewardedAd ad) {
+                                        if (progressDialog.isShowing()) progressDialog.dismiss();
+                                        standardRewardedAds.put(adUnitId, ad);
+                                        displayLoadedStandardRewardedAd(activity, adUnitId, onRewardEarned);
+                                    }
+
+                                    @Override
+                                    public void onAdFailedToLoad(@NonNull LoadAdError error) {
+                                        if (progressDialog.isShowing()) progressDialog.dismiss();
+                                        Log.w(TAG, "Rewarded ad failed to load (" + adUnitId + "): " + error.getMessage() + " [Code: " + error.getCode() + "]");
+                                        android.widget.Toast.makeText(activity, "Ad temporarily unavailable. Continuing...", android.widget.Toast.LENGTH_SHORT).show();
+                                        if (onRewardEarned != null) onRewardEarned.run();
+                                    }
+                                });
+                    } else {
+                        RewardedInterstitialAd.load(activity, adUnitId, adRequest,
+                                new RewardedInterstitialAdLoadCallback() {
+                                    @Override
+                                    public void onAdLoaded(@NonNull RewardedInterstitialAd ad) {
+                                        if (progressDialog.isShowing()) progressDialog.dismiss();
+                                        rewardedInterstitialAds.put(adUnitId, ad);
+                                        displayLoadedRewardedInterstitialAd(activity, adUnitId, onRewardEarned);
+                                    }
+
+                                    @Override
+                                    public void onAdFailedToLoad(@NonNull LoadAdError error) {
+                                        if (progressDialog.isShowing()) progressDialog.dismiss();
+                                        Log.w(TAG, "Rewarded interstitial ad failed to load (" + adUnitId + "): " + error.getMessage() + " [Code: " + error.getCode() + "]");
+                                        if (adUnitId.equals(REWARDED_AD_UNIT_ID)) lastCalendarRewardedAdShowTimeMs = System.currentTimeMillis();
+                                        android.widget.Toast.makeText(activity, "Ad temporarily unavailable. Continuing...", android.widget.Toast.LENGTH_SHORT).show();
+                                        if (onRewardEarned != null) onRewardEarned.run();
+                                    }
+                                });
+                    }
                 });
             });
         }
     }
 
-    private void displayLoadedRewardedAd(Activity activity, String adUnitId, Runnable onRewardEarned) {
-        if (rewardedAd == null) return;
+    private void displayLoadedRewardedInterstitialAd(Activity activity, String adUnitId, Runnable onRewardEarned) {
+        RewardedInterstitialAd ad = rewardedInterstitialAds.get(adUnitId);
+        if (ad == null) return;
+        
         final boolean[] rewardEarned = {false};
-        rewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+        ad.setFullScreenContentCallback(new FullScreenContentCallback() {
             @Override
             public void onAdDismissedFullScreenContent() {
-                rewardedAd = null;
+                rewardedInterstitialAds.remove(adUnitId);
                 preloadRewarded(activity, adUnitId);
                 if (rewardEarned[0]) {
                     if (onRewardEarned != null) onRewardEarned.run();
@@ -462,15 +525,46 @@ public class AdManager {
 
             @Override
             public void onAdFailedToShowFullScreenContent(@NonNull com.google.android.gms.ads.AdError adError) {
-                rewardedAd = null;
+                rewardedInterstitialAds.remove(adUnitId);
                 preloadRewarded(activity, adUnitId);
-                lastRewardedAdShowTimeMs = System.currentTimeMillis();
+                if (adUnitId.equals(REWARDED_AD_UNIT_ID)) lastCalendarRewardedAdShowTimeMs = System.currentTimeMillis();
                 if (onRewardEarned != null) onRewardEarned.run();
             }
         });
-        rewardedAd.show(activity, rewardItem -> {
+        
+        ad.show(activity, rewardItem -> {
             rewardEarned[0] = true;
-            lastRewardedAdShowTimeMs = System.currentTimeMillis();
+            if (adUnitId.equals(REWARDED_AD_UNIT_ID)) lastCalendarRewardedAdShowTimeMs = System.currentTimeMillis();
+        });
+    }
+
+    private void displayLoadedStandardRewardedAd(Activity activity, String adUnitId, Runnable onRewardEarned) {
+        RewardedAd ad = standardRewardedAds.get(adUnitId);
+        if (ad == null) return;
+
+        final boolean[] rewardEarned = {false};
+        ad.setFullScreenContentCallback(new FullScreenContentCallback() {
+            @Override
+            public void onAdDismissedFullScreenContent() {
+                standardRewardedAds.remove(adUnitId);
+                preloadRewarded(activity, adUnitId);
+                if (rewardEarned[0]) {
+                    if (onRewardEarned != null) onRewardEarned.run();
+                } else {
+                    android.widget.Toast.makeText(activity, "Please watch the full ad to earn your reward ✨", android.widget.Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onAdFailedToShowFullScreenContent(@NonNull com.google.android.gms.ads.AdError adError) {
+                standardRewardedAds.remove(adUnitId);
+                preloadRewarded(activity, adUnitId);
+                if (onRewardEarned != null) onRewardEarned.run();
+            }
+        });
+
+        ad.show(activity, rewardItem -> {
+            rewardEarned[0] = true;
         });
     }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#E0F2F1"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <!-- Bunny Ears Spinning slightly -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#B2DFDB"
+        android:strokeWidth="1"
+        android:pathData="M16,6 C13,6 13,20 16,23 L20,23 C20,20 20,6 16,6 Z" />
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M16,9 C14.5,9 14.5,18 16,20 L18,20 C18,18 18,9 16,9 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#B2DFDB"
+        android:strokeWidth="1"
+        android:pathData="M32,6 C35,6 35,20 32,23 L28,23 C28,20 28,6 32,6 Z" />
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M32,9 C33.5,9 33.5,18 32,20 L30,20 C30,18 30,9 32,9 Z" />
+    <!-- Bunny Head -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#B2DFDB"
+        android:strokeWidth="1"
+        android:pathData="M12,28 C12,18 36,18 36,28 C36,38 12,38 12,28 Z" />
+    <!-- Spiral Eyes @ @ -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M19,27 A2.5,2.5 0 1,0 17,29 A1.2,1.2 0 1,0 18,28 M29,27 A2.5,2.5 0 1,0 27,29 A1.2,1.2 0 1,0 28,28" />
+    <!-- Dizzy Stars -->
+    <path
+        android:fillColor="#FFCA28"
+        android:pathData="M10,12 L11,10 L13,9 L11,8 L10,6 L9,8 L7,9 L9,10 Z M38,10 L39,8 L41,7 L39,6 L38,4 L37,6 L35,7 L37,8 Z" />
+</vector>

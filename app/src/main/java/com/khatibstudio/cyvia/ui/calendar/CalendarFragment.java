@@ -23,6 +23,7 @@ import com.khatibstudio.cyvia.data.db.entity.CycleEntry;
 import com.khatibstudio.cyvia.data.model.CyclePrediction;
 import com.khatibstudio.cyvia.data.model.FlowIntensity;
 import com.khatibstudio.cyvia.data.repository.CycleRepository;
+import com.khatibstudio.cyvia.data.repository.SettingsRepository;
 import com.khatibstudio.cyvia.databinding.FragmentCalendarBinding;
 import com.khatibstudio.cyvia.domain.PredictionEngine;
 import com.khatibstudio.cyvia.ui.log.DailyLogBottomSheet;
@@ -39,7 +40,8 @@ import java.util.List;
 /**
  * Calendar screen fragment — month grid with colour-coded cycle days.
  *
- * Tapping a day shows a brief summary in the bottom panel and offers "Log this day."
+ * Tapping a day shows a brief summary in the bottom panel and offers "Log this
+ * day."
  */
 public class CalendarFragment extends Fragment {
 
@@ -50,10 +52,11 @@ public class CalendarFragment extends Fragment {
     private android.animation.ObjectAnimator mochiAnimator;
     private PredictionEngine.CalendarData currentCalData;
     private CycleRepository cycleRepository;
+    private SettingsRepository settingsRepository;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+            ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCalendarBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -62,8 +65,9 @@ public class CalendarFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        settingsRepository = CyviaApplication.from(requireContext()).getSettingsRepository();
         viewModel = new ViewModelProvider(this).get(CalendarViewModel.class);
-        adManager = new AdManager(CyviaApplication.from(requireContext()).getSettingsRepository());
+        adManager = new AdManager(settingsRepository);
         adManager.preloadRewarded(requireContext());
         cycleRepository = CyviaApplication.from(requireContext()).getCycleRepository();
 
@@ -93,8 +97,8 @@ public class CalendarFragment extends Fragment {
             YearMonth targetMonth = viewModel.getDisplayedMonth().plusMonths(1);
             YearMonth maxFreeMonth = YearMonth.now().plusMonths(1);
 
-            com.khatibstudio.cyvia.data.repository.SettingsRepository settings =
-                    CyviaApplication.from(requireContext()).getSettingsRepository();
+            com.khatibstudio.cyvia.data.repository.SettingsRepository settings = CyviaApplication.from(requireContext())
+                    .getSettingsRepository();
 
             if (!settings.isAdsRemoved() && targetMonth.isAfter(maxFreeMonth)) {
                 adManager.showRewardedAd(requireActivity(), AdManager.REWARDED_AD_UNIT_ID, () -> {
@@ -118,7 +122,8 @@ public class CalendarFragment extends Fragment {
 
     private void setupObservers() {
         viewModel.getCalendarData().observe(getViewLifecycleOwner(), data -> {
-            if (data == null) return;
+            if (data == null)
+                return;
             currentCalData = data.calData;
             adapter.setData(data.month, data.calData, data.loggedDates, this::onDayTapped);
             updateMochiSupportCard(LocalDate.now());
@@ -135,7 +140,8 @@ public class CalendarFragment extends Fragment {
      * Yes = confirm and update cycle data. No = dismiss for today.
      */
     private void updatePeriodConfirmBanner(PredictionEngine.CalendarData calData, CyclePrediction prediction) {
-        if (binding == null || binding.cardPeriodConfirm == null) return;
+        if (binding == null || binding.cardPeriodConfirm == null)
+            return;
 
         LocalDate today = LocalDate.now();
 
@@ -151,8 +157,8 @@ public class CalendarFragment extends Fragment {
         boolean isPeriodDay = calData != null && calData.periodDays.contains(today);
         boolean isPredictedStart = prediction != null && prediction.nextPeriodStart != null
                 && (today.equals(prediction.nextPeriodStart)
-                    || (today.isAfter(prediction.nextPeriodStart)
-                        && ChronoUnit.DAYS.between(prediction.nextPeriodStart, today) <= 3));
+                        || (today.isAfter(prediction.nextPeriodStart)
+                                && ChronoUnit.DAYS.between(prediction.nextPeriodStart, today) <= 3));
 
         if (isPeriodDay) {
             // Do not show the 'Period Ends' banner during active period days
@@ -160,12 +166,14 @@ public class CalendarFragment extends Fragment {
         } else if (isPredictedStart) {
             // Predicted start has arrived — ask if period started
             long daysLate = ChronoUnit.DAYS.between(prediction.nextPeriodStart, today);
-            String label = daysLate > 0 ? "Period " + daysLate + " day(s) late. Has it started?" : "Has your period started?";
+            String label = daysLate > 0 ? "Period " + daysLate + " day(s) late. Has it started?"
+                    : "Has your period started?";
             binding.tvPeriodConfirmLabel.setText(label);
             binding.cardPeriodConfirm.setVisibility(View.VISIBLE);
 
             binding.btnPeriodYes.setOnClickListener(v -> {
                 // Confirm period started today
+                settingsRepository.setLastPeriodDeniedEpoch(today.toEpochDay() - 1);
                 CyviaDatabase.databaseWriteExecutor.execute(() -> {
                     java.util.List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
                     // End any ongoing cycles
@@ -185,8 +193,11 @@ public class CalendarFragment extends Fragment {
                 dismissBannerForToday();
             });
             binding.btnPeriodNo.setOnClickListener(v -> {
+                // Period did not start today -> record denial so prediction advances to tomorrow
+                settingsRepository.setLastPeriodDeniedEpoch(today.toEpochDay());
                 binding.cardPeriodConfirm.setVisibility(View.GONE);
                 dismissBannerForToday();
+                viewModel.refresh();
             });
 
         } else {
@@ -203,7 +214,8 @@ public class CalendarFragment extends Fragment {
     // ─── Mochi Cheering & Support Hub ─────────────────────────────────────
 
     private void setupMochiSupportHub() {
-        if (mochiAnimator != null) mochiAnimator.cancel();
+        if (mochiAnimator != null)
+            mochiAnimator.cancel();
         mochiAnimator = android.animation.ObjectAnimator.ofFloat(binding.imgCalendarMochi, "translationY", -10f, 10f);
         mochiAnimator.setDuration(1300);
         mochiAnimator.setRepeatMode(android.animation.ValueAnimator.REVERSE);
@@ -225,40 +237,50 @@ public class CalendarFragment extends Fragment {
     }
 
     private void updateMochiSupportCard(LocalDate date) {
-        if (binding == null) return;
+        if (binding == null)
+            return;
         int hour = LocalTime.now().getHour();
 
         if (currentCalData != null && currentCalData.periodDays.contains(date)) {
-            binding.imgCalendarMochi.setImageResource(R.drawable.ic_mochi_hugging);
+            binding.imgCalendarMochi.setImageResource(com.khatibstudio.cyvia.util.KawaiiIconUtil.getAvatarDrawableForPose(requireContext(), R.drawable.ic_mochi_hugging));
             binding.tvMochiSupportTitle.setText("Mochi's Warm Cuddles ~ 🌸");
-            binding.tvMochiSupportMessage.setText("Period phase care: Keep warm, hydrate with soothing herbal tea, and let Mochi send you comforting energy today ~");
-        } else if (currentCalData != null && ((currentCalData.ovulationDays != null && currentCalData.ovulationDays.contains(date)) || date.equals(currentCalData.ovulationDay))) {
-            binding.imgCalendarMochi.setImageResource(R.drawable.ic_mochi_celebrating);
+            binding.tvMochiSupportMessage.setText(
+                    "Period phase care: Keep warm, hydrate with soothing herbal tea, and let Mochi send you comforting energy today ~");
+        } else if (currentCalData != null
+                && ((currentCalData.ovulationDays != null && currentCalData.ovulationDays.contains(date))
+                        || date.equals(currentCalData.ovulationDay))) {
+            binding.imgCalendarMochi.setImageResource(com.khatibstudio.cyvia.util.KawaiiIconUtil.getAvatarDrawableForPose(requireContext(), R.drawable.ic_mochi_celebrating));
             binding.tvMochiSupportTitle.setText("Peak Vitality & Glow! 🎉");
-            binding.tvMochiSupportMessage.setText("Estimated Ovulation Day! Your natural vitality and glow are shining bright. Embrace confidence and joy today!");
+            binding.tvMochiSupportMessage.setText(
+                    "Estimated Ovulation Day! Your natural vitality and glow are shining bright. Embrace confidence and joy today!");
         } else if (currentCalData != null && currentCalData.fertileDays.contains(date)) {
-            binding.imgCalendarMochi.setImageResource(R.drawable.ic_mochi_smiling);
+            binding.imgCalendarMochi.setImageResource(com.khatibstudio.cyvia.util.KawaiiIconUtil.getAvatarDrawableForPose(requireContext(), R.drawable.ic_mochi_smiling));
             binding.tvMochiSupportTitle.setText("High Energy Cheer ✨");
-            binding.tvMochiSupportMessage.setText("Fertile window detected! A great time for outdoor creativity, social connections, and radiant positivity.");
+            binding.tvMochiSupportMessage.setText(
+                    "Fertile window detected! A great time for outdoor creativity, social connections, and radiant positivity.");
         } else {
             if (hour < 12) {
-                binding.imgCalendarMochi.setImageResource(R.drawable.ic_mochi_waving);
+                binding.imgCalendarMochi.setImageResource(com.khatibstudio.cyvia.util.KawaiiIconUtil.getAvatarDrawableForPose(requireContext(), R.drawable.ic_mochi_waving));
                 binding.tvMochiSupportTitle.setText("Rise & Shine Cheer! ☀️");
-                binding.tvMochiSupportMessage.setText("Good morning! Mochi is stretching out to send you wonderful morning energy. Sip some water and smile today ~");
+                binding.tvMochiSupportMessage.setText(
+                        "Good morning! Mochi is stretching out to send you wonderful morning energy. Sip some water and smile today ~");
             } else if (hour < 18) {
-                binding.imgCalendarMochi.setImageResource(R.drawable.ic_mochi_celebrating);
+                binding.imgCalendarMochi.setImageResource(com.khatibstudio.cyvia.util.KawaiiIconUtil.getAvatarDrawableForPose(requireContext(), R.drawable.ic_mochi_celebrating));
                 binding.tvMochiSupportTitle.setText("Afternoon Power Boost! 🚀");
-                binding.tvMochiSupportMessage.setText("You are doing amazing today! Relax your shoulders, take a deep breath, and keep up your wonderful momentum!");
+                binding.tvMochiSupportMessage.setText(
+                        "You are doing amazing today! Relax your shoulders, take a deep breath, and keep up your wonderful momentum!");
             } else {
-                binding.imgCalendarMochi.setImageResource(R.drawable.ic_mochi_sleeping);
+                binding.imgCalendarMochi.setImageResource(com.khatibstudio.cyvia.util.KawaiiIconUtil.getAvatarDrawableForPose(requireContext(), R.drawable.ic_mochi_sleeping));
                 binding.tvMochiSupportTitle.setText("Cozy Evening Rest 🌙");
-                binding.tvMochiSupportMessage.setText("Time to wind down your day. Snuggle up comfortably—Mochi is watching over your peaceful relaxation tonight ~");
+                binding.tvMochiSupportMessage.setText(
+                        "Time to wind down your day. Snuggle up comfortably—Mochi is watching over your peaceful relaxation tonight ~");
             }
         }
     }
 
     private void cycleSupportMessage() {
-        if (binding == null) return;
+        if (binding == null)
+            return;
         String[] titles = {
                 "Mochi Believes in You! 💖",
                 "Self-Care Check-in ✨",
@@ -332,6 +354,12 @@ public class CalendarFragment extends Fragment {
                     updatePeriodToggleButtonsStyle(isYes);
 
                     if (isYes) {
+                        // User confirmed period started on this date
+                        long deniedEpoch = settingsRepository.getLastPeriodDeniedEpoch();
+                        if (deniedEpoch >= date.toEpochDay()) {
+                            settingsRepository.setLastPeriodDeniedEpoch(date.toEpochDay() - 1);
+                        }
+
                         CyviaDatabase.databaseWriteExecutor.execute(() -> {
                             // Trim or end any cycles that overlap or start after the new period date
                             java.util.List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
@@ -348,12 +376,21 @@ public class CalendarFragment extends Fragment {
                             // Create new cycle starting on this date
                             CycleEntry newCycle = new CycleEntry(date.toEpochDay(), FlowIntensity.MEDIUM);
                             cycleRepository.insertCycle(newCycle);
+
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(() -> viewModel.refresh());
+                            }
                         });
-                        android.widget.Toast.makeText(requireContext(), "Period started on " + date.format(DateTimeFormatter.ofPattern("MMM d")), android.widget.Toast.LENGTH_SHORT).show();
+                        android.widget.Toast.makeText(requireContext(),
+                                "Period started on " + date.format(DateTimeFormatter.ofPattern("MMM d")),
+                                android.widget.Toast.LENGTH_SHORT).show();
                     } else if (checkedId == R.id.btn_period_starts_no) {
-                        // User unselected or clicked No, clear/trim flow on this date
+                        // User explicitly clicked No -> record denial so prediction advances past this date
+                        settingsRepository.setLastPeriodDeniedEpoch(date.toEpochDay());
                         removeFlowForDate(date);
-                        android.widget.Toast.makeText(requireContext(), "Period flow removed for " + date.format(DateTimeFormatter.ofPattern("MMM d")), android.widget.Toast.LENGTH_SHORT).show();
+                        android.widget.Toast.makeText(requireContext(),
+                                "Period flow removed for " + date.format(DateTimeFormatter.ofPattern("MMM d")),
+                                android.widget.Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -361,7 +398,8 @@ public class CalendarFragment extends Fragment {
 
         binding.btnLogSelectedDay.setOnClickListener(v -> {
             if (date.isAfter(LocalDate.now())) {
-                android.widget.Toast.makeText(requireContext(), "Cannot log symptoms for future dates", android.widget.Toast.LENGTH_SHORT).show();
+                android.widget.Toast.makeText(requireContext(), "Cannot log symptoms for future dates",
+                        android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
             DailyLogBottomSheet sheet = DailyLogBottomSheet.newInstance(date);
@@ -370,57 +408,49 @@ public class CalendarFragment extends Fragment {
     }
 
     /**
-     * Helper to completely remove or trim period flow entries spanning the targeted date.
+     * Helper to completely remove or trim period flow entries spanning the targeted
+     * date.
      */
     private void removeFlowForDate(LocalDate date) {
         long targetDay = date.toEpochDay();
         CyviaDatabase.databaseWriteExecutor.execute(() -> {
-            com.khatibstudio.cyvia.data.db.dao.CycleEntryDao dao = CyviaDatabase.getDatabase(requireContext()).cycleEntryDao();
+            com.khatibstudio.cyvia.data.db.dao.CycleEntryDao dao = CyviaDatabase.getDatabase(requireContext())
+                    .cycleEntryDao();
             List<CycleEntry> cycles = dao.getAllCyclesSync();
             if (cycles != null) {
                 for (CycleEntry cycle : cycles) {
                     long start = cycle.startDate;
                     long end = cycle.isOngoing() ? LocalDate.now().toEpochDay() : cycle.endDate;
-                    if (targetDay >= start && targetDay <= end) {
-                        if (start == end || (cycle.isOngoing() && start == targetDay)) {
+                    
+                    if (start >= targetDay) {
+                        // Entire cycle started on or after targetDay -> delete it completely
+                        dao.deleteCycleEntry(cycle);
+                    } else if (targetDay <= end) {
+                        // Day is inside a past or ongoing cycle -> truncate cycle end to before targetDay
+                        cycle.endDate = targetDay - 1;
+                        if (cycle.endDate < start) {
                             dao.deleteCycleEntry(cycle);
-                        } else if (start == targetDay) {
-                            cycle.startDate = targetDay + 1;
+                        } else {
                             dao.updateCycleEntry(cycle);
-                        } else if (end == targetDay || (cycle.isOngoing() && targetDay == LocalDate.now().toEpochDay())) {
-                            cycle.endDate = targetDay - 1;
-                            if (cycle.endDate < start) {
-                                dao.deleteCycleEntry(cycle);
-                            } else {
-                                dao.updateCycleEntry(cycle);
-                            }
-                        } else if (start < targetDay && targetDay < end) {
-                            long originalEnd = cycle.endDate;
-                            cycle.endDate = targetDay - 1;
-                            if (cycle.endDate < start) {
-                                dao.deleteCycleEntry(cycle);
-                            } else {
-                                dao.updateCycleEntry(cycle);
-                            }
-                            
-                            CycleEntry secondPart = new CycleEntry(targetDay + 1, cycle.flowIntensity);
-                            secondPart.endDate = originalEnd;
-                            dao.insertCycleEntry(secondPart);
                         }
-                        break;
                     }
                 }
+            }
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> viewModel.refresh());
             }
         });
     }
 
     /**
-     * Dynamically updates the backgrounds and text colors of the Period Starts Yes/No buttons.
+     * Dynamically updates the backgrounds and text colors of the Period Starts
+     * Yes/No buttons.
      * Yes: Checked = Period Red, Unchecked = Transparent Outline
      * No: Checked = Selected Tonal container, Unchecked = Transparent Outline
      */
     private void updatePeriodToggleButtonsStyle(boolean isPeriod) {
-        if (getContext() == null) return;
+        if (getContext() == null)
+            return;
         int periodRed = requireContext().getColor(R.color.period_red);
         int onPrimary = requireContext().getColor(R.color.cyvia_on_primary);
         int transparent = requireContext().getColor(R.color.transparent);
@@ -446,7 +476,8 @@ public class CalendarFragment extends Fragment {
             binding.btnPeriodStartsYes.setStrokeColor(android.content.res.ColorStateList.valueOf(outline));
 
             // No is checked (Default selected lavender background and text)
-            binding.btnPeriodStartsNo.setBackgroundTintList(android.content.res.ColorStateList.valueOf(primaryContainer));
+            binding.btnPeriodStartsNo
+                    .setBackgroundTintList(android.content.res.ColorStateList.valueOf(primaryContainer));
             binding.btnPeriodStartsNo.setTextColor(onPrimaryContainer);
             binding.btnPeriodStartsNo.setStrokeColor(android.content.res.ColorStateList.valueOf(outline));
         }
@@ -454,11 +485,13 @@ public class CalendarFragment extends Fragment {
 
     // ─── Sex Life Prediction Card ─────────────────────────────────────────
 
-    private void updateSexLifePrediction(YearMonth month, PredictionEngine.CalendarData calData, CyclePrediction prediction) {
-        if (binding == null || binding.cardSexLifePrediction == null) return;
+    private void updateSexLifePrediction(YearMonth month, PredictionEngine.CalendarData calData,
+            CyclePrediction prediction) {
+        if (binding == null || binding.cardSexLifePrediction == null)
+            return;
 
-        com.khatibstudio.cyvia.data.repository.SettingsRepository settings =
-                com.khatibstudio.cyvia.CyviaApplication.from(requireContext()).getSettingsRepository();
+        com.khatibstudio.cyvia.data.repository.SettingsRepository settings = com.khatibstudio.cyvia.CyviaApplication
+                .from(requireContext()).getSettingsRepository();
 
         if (settings.isMinorSafeMode() || !settings.isTrackIntimacyEnabled()) {
             binding.cardSexLifePrediction.setVisibility(View.GONE);
@@ -477,8 +510,10 @@ public class CalendarFragment extends Fragment {
         int daysInMonth = month.lengthOfMonth();
         for (int d = 1; d <= daysInMonth; d++) {
             LocalDate date = month.atDay(d);
-            boolean isPeriod = (calData != null && (calData.periodDays.contains(date) || calData.predictedDays.contains(date)));
-            boolean isHighFertility = (calData != null && (calData.fertileDays.contains(date) || calData.ovulationDays.contains(date)));
+            boolean isPeriod = (calData != null
+                    && (calData.periodDays.contains(date) || calData.predictedDays.contains(date)));
+            boolean isHighFertility = (calData != null
+                    && (calData.fertileDays.contains(date) || calData.ovulationDays.contains(date)));
 
             if (isPeriod) {
                 nopeDates.add(date);
@@ -531,7 +566,8 @@ public class CalendarFragment extends Fragment {
     }
 
     private String formatRanges(List<LocalDate> dates) {
-        if (dates.isEmpty()) return "None";
+        if (dates.isEmpty())
+            return "None";
         Collections.sort(dates);
         List<String> ranges = new ArrayList<>();
         LocalDate start = dates.get(0);

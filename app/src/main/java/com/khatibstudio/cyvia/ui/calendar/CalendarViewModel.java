@@ -56,9 +56,13 @@ public class CalendarViewModel extends AndroidViewModel {
         calendarData.addSource(allLogs, logs -> rebuildCalendarData());
     }
 
-    public YearMonth getDisplayedMonth() { return displayedMonth; }
+    public YearMonth getDisplayedMonth() {
+        return displayedMonth;
+    }
 
-    public LiveData<CalendarPageData> getCalendarData() { return calendarData; }
+    public LiveData<CalendarPageData> getCalendarData() {
+        return calendarData;
+    }
 
     public void goToPreviousMonth() {
         displayedMonth = displayedMonth.minusMonths(1);
@@ -70,11 +74,16 @@ public class CalendarViewModel extends AndroidViewModel {
         rebuildCalendarData();
     }
 
+    public void refresh() {
+        rebuildCalendarData();
+    }
+
     private void rebuildCalendarData() {
         final YearMonth targetMonth = displayedMonth;
 
         CyviaDatabase.databaseWriteExecutor.execute(() -> {
-            com.khatibstudio.cyvia.data.db.dao.CycleEntryDao dao = CyviaDatabase.getDatabase(getApplication()).cycleEntryDao();
+            com.khatibstudio.cyvia.data.db.dao.CycleEntryDao dao = CyviaDatabase.getDatabase(getApplication())
+                    .cycleEntryDao();
             sanitizeAndMergeCycles(dao);
 
             List<CycleEntry> cycleList = dao.getAllCyclesSync();
@@ -86,8 +95,8 @@ public class CalendarViewModel extends AndroidViewModel {
             LocalDate monthStart = targetMonth.atDay(1);
             LocalDate monthEnd = targetMonth.atEndOfMonth();
 
-            PredictionEngine.CalendarData calData =
-                    predictionEngine.buildCalendarData(prediction, cycleList, monthStart, monthEnd);
+            PredictionEngine.CalendarData calData = predictionEngine.buildCalendarData(prediction, cycleList,
+                    monthStart, monthEnd);
 
             List<Long> loggedEpochDays = logRepository.getLoggedDates();
             Set<LocalDate> loggedDates = new HashSet<>();
@@ -102,23 +111,34 @@ public class CalendarViewModel extends AndroidViewModel {
 
     private void sanitizeAndMergeCycles(com.khatibstudio.cyvia.data.db.dao.CycleEntryDao dao) {
         List<CycleEntry> allCycles = dao.getAllCyclesSync();
-        if (allCycles == null || allCycles.isEmpty()) return;
+        if (allCycles == null || allCycles.isEmpty())
+            return;
 
         int avgPeriodLen = settings.getAvgPeriodLength();
-        if (avgPeriodLen <= 0) avgPeriodLen = 5;
+        int targetPeriodLen = Math.min(avgPeriodLen > 0 ? avgPeriodLen : 7, 7);
 
         List<CycleEntry> toDelete = new ArrayList<>();
         List<CycleEntry> toUpdate = new ArrayList<>();
 
-        // Trim abnormally long cycles (e.g., > 10 days duration) that likely arose from database errors
+        // Trim abnormally long or unclosed ongoing cycles so they never exceed targetPeriodLen (max 7 days)
         for (CycleEntry cycle : allCycles) {
-            if (!cycle.isOngoing()) {
-                long duration = cycle.endDate - cycle.startDate + 1;
-                if (duration > 10) {
-                    cycle.endDate = cycle.startDate + avgPeriodLen - 1;
+            long duration = cycle.isOngoing()
+                    ? (LocalDate.now().toEpochDay() - cycle.startDate + 1)
+                    : (cycle.endDate - cycle.startDate + 1);
+
+            if (cycle.isOngoing()) {
+                long daysSinceStart = LocalDate.now().toEpochDay() - cycle.startDate;
+                // Only auto-close an ongoing cycle if it started in the past (at least targetPeriodLen days ago)
+                if (daysSinceStart >= targetPeriodLen) {
+                    cycle.endDate = cycle.startDate + targetPeriodLen - 1;
                     if (!toUpdate.contains(cycle)) {
                         toUpdate.add(cycle);
                     }
+                }
+            } else if (duration > targetPeriodLen) {
+                cycle.endDate = cycle.startDate + targetPeriodLen - 1;
+                if (!toUpdate.contains(cycle)) {
+                    toUpdate.add(cycle);
                 }
             }
         }
@@ -148,7 +168,8 @@ public class CalendarViewModel extends AndroidViewModel {
                         current.endDate = Math.max(currentEnd, nextEnd);
                     }
 
-                    if (next.flowIntensity != null && (current.flowIntensity == null || next.flowIntensity.ordinal() > current.flowIntensity.ordinal())) {
+                    if (next.flowIntensity != null && (current.flowIntensity == null
+                            || next.flowIntensity.ordinal() > current.flowIntensity.ordinal())) {
                         current.flowIntensity = next.flowIntensity;
                     }
 
@@ -162,7 +183,8 @@ public class CalendarViewModel extends AndroidViewModel {
             }
         }
 
-        if (toUpdate.isEmpty() && toDelete.isEmpty()) return;
+        if (toUpdate.isEmpty() && toDelete.isEmpty())
+            return;
 
         // Apply changes to database
         for (CycleEntry cycle : toUpdate) {
@@ -182,7 +204,7 @@ public class CalendarViewModel extends AndroidViewModel {
         public final CyclePrediction prediction;
 
         public CalendarPageData(YearMonth month, PredictionEngine.CalendarData calData,
-                                Set<LocalDate> loggedDates, CyclePrediction prediction) {
+                Set<LocalDate> loggedDates, CyclePrediction prediction) {
             this.month = month;
             this.calData = calData;
             this.loggedDates = loggedDates;

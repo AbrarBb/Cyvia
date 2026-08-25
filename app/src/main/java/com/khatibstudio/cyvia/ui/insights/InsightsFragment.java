@@ -44,8 +44,17 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.khatibstudio.cyvia.util.KawaiiIconUtil;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.print.PageRange;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintDocumentInfo;
+import androidx.core.content.FileProvider;
+import java.io.File;
 
 /**
  * Insights screen — shows cycle stats, MPAndroidChart charts.
@@ -247,10 +256,15 @@ public class InsightsFragment extends Fragment {
             dataSet.setDrawValues(true);
 
             // X-axis: show actual start date (yyyy/MM/dd) for each bar
+            binding.chartCycleLength.getXAxis().setAxisMinimum(-0.5f);
+            binding.chartCycleLength.getXAxis().setAxisMaximum(cLengths.size() - 0.5f);
+            binding.chartCycleLength.getXAxis().setGranularity(1f);
+            binding.chartCycleLength.getXAxis().setGranularityEnabled(true);
+            binding.chartCycleLength.getXAxis().setLabelCount(cLengths.size(), true);
             binding.chartCycleLength.getXAxis().setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
                 @Override
                 public String getFormattedValue(float value) {
-                    int idx = Math.round(value);
+                    int idx = (int) Math.floor(value + 0.5f);
                     if (idx >= 0 && idx < cDates.size()) return cDates.get(idx);
                     return "";
                 }
@@ -258,7 +272,6 @@ public class InsightsFragment extends Fragment {
             binding.chartCycleLength.getXAxis().setLabelRotationAngle(-45f);
             binding.chartCycleLength.getXAxis().setTextSize(9f);
             binding.chartCycleLength.getXAxis().setTextColor(requireContext().getColor(R.color.cyvia_on_surface));
-            binding.chartCycleLength.getXAxis().setLabelCount(Math.min(cLengths.size(), 8), false);
             binding.chartCycleLength.setExtraBottomOffset(20f);
             binding.chartCycleLength.setData(new BarData(dataSet));
             binding.chartCycleLength.animateY(500);
@@ -283,10 +296,15 @@ public class InsightsFragment extends Fragment {
             pDataSet.setDrawValues(true);
 
             // X-axis: show actual start date for each bar
+            binding.chartPeriodLength.getXAxis().setAxisMinimum(-0.5f);
+            binding.chartPeriodLength.getXAxis().setAxisMaximum(pLengths.size() - 0.5f);
+            binding.chartPeriodLength.getXAxis().setGranularity(1f);
+            binding.chartPeriodLength.getXAxis().setGranularityEnabled(true);
+            binding.chartPeriodLength.getXAxis().setLabelCount(pLengths.size(), true);
             binding.chartPeriodLength.getXAxis().setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
                 @Override
                 public String getFormattedValue(float value) {
-                    int idx = Math.round(value);
+                    int idx = (int) Math.floor(value + 0.5f);
                     if (idx >= 0 && idx < pDates.size()) return pDates.get(idx);
                     return "";
                 }
@@ -294,7 +312,6 @@ public class InsightsFragment extends Fragment {
             binding.chartPeriodLength.getXAxis().setLabelRotationAngle(-45f);
             binding.chartPeriodLength.getXAxis().setTextSize(9f);
             binding.chartPeriodLength.getXAxis().setTextColor(requireContext().getColor(R.color.cyvia_on_surface));
-            binding.chartPeriodLength.getXAxis().setLabelCount(Math.min(pLengths.size(), 8), false);
             binding.chartPeriodLength.setExtraBottomOffset(20f);
             binding.chartPeriodLength.setData(new BarData(pDataSet));
             binding.chartPeriodLength.animateY(500);
@@ -602,13 +619,14 @@ public class InsightsFragment extends Fragment {
 
     private void generateAndShareDoctorReport() {
         if (getContext() == null) return;
-        android.widget.Toast.makeText(getContext(), "Generating Doctor Report...", android.widget.Toast.LENGTH_SHORT).show();
+        android.widget.Toast.makeText(getContext(), "Generating Cycle & Wellness Summary PDF...", android.widget.Toast.LENGTH_SHORT).show();
 
         com.khatibstudio.cyvia.CyviaApplication app = com.khatibstudio.cyvia.CyviaApplication.from(requireContext());
         com.khatibstudio.cyvia.data.db.CyviaDatabase.databaseWriteExecutor.execute(() -> {
             List<CycleEntry> cycles = app.getCycleRepository().getAllCyclesSync();
             List<DailyLog> logs = app.getLogRepository().getAllLogsSync();
             List<SymptomTag> tags = app.getSymptomRepository().getAllSymptomTagsSync();
+            boolean minorSafe = app.getSettingsRepository().isMinorSafeMode();
 
             Map<Integer, String> tagMap = new HashMap<>();
             if (tags != null) {
@@ -618,24 +636,26 @@ public class InsightsFragment extends Fragment {
             CycleStatsCalculator.CycleStats stats = CycleStatsCalculator.compute(cycles, false);
 
             StringBuilder html = new StringBuilder();
-            html.append("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Cyvia Medical Report</title>");
+            html.append("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Cyvia Cycle & Wellness Summary</title>");
             html.append("<style>");
-            html.append("body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; line-height: 1.5; padding: 30px; max-width: 800px; margin: 0 auto; } ");
-            html.append("h1 { color: #EF5350; border-bottom: 2px solid #EF5350; padding-bottom: 10px; margin-bottom: 5px; } ");
-            html.append(".subtitle { color: #666; font-size: 14px; margin-bottom: 25px; } ");
-            html.append("h2 { color: #1E88E5; margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 5px; font-size: 18px; } ");
-            html.append(".grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 25px; } ");
-            html.append(".card { background: #f8f9fa; padding: 12px 15px; border-radius: 6px; border-left: 4px solid #EF5350; } ");
-            html.append(".label { font-size: 11px; text-transform: uppercase; color: #777; font-weight: bold; } ");
-            html.append(".val { font-size: 18px; font-weight: bold; color: #222; margin-top: 3px; } ");
-            html.append("table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13.5px; } ");
-            html.append("th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #eee; } ");
-            html.append("th { background-color: #f1f3f5; color: #495057; font-weight: 600; } ");
-            html.append("tr:nth-child(even) { background-color: #fafafa; } ");
-            html.append(".badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11.5px; font-weight: bold; } ");
+            html.append("body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #2E1E40; line-height: 1.5; padding: 25px; max-width: 820px; margin: 0 auto; background: #fff; } ");
+            html.append("h1 { color: #D81B60; border-bottom: 2px solid #F48FB1; padding-bottom: 8px; margin-bottom: 4px; font-size: 22px; } ");
+            html.append(".subtitle { color: #666; font-size: 13px; margin-bottom: 20px; } ");
+            html.append("h2 { color: #7B1FA2; margin-top: 24px; border-bottom: 1px solid #E1BEE7; padding-bottom: 4px; font-size: 16px; } ");
+            html.append(".grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; } ");
+            html.append(".card { background: #FCF8FA; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #EC407A; } ");
+            html.append(".label { font-size: 10.5px; text-transform: uppercase; color: #888; font-weight: bold; } ");
+            html.append(".val { font-size: 16px; font-weight: bold; color: #2E1E40; margin-top: 2px; } ");
+            html.append("table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 12.5px; } ");
+            html.append("th, td { padding: 7px 9px; text-align: left; border-bottom: 1px solid #eee; } ");
+            html.append("th { background-color: #F8F0F5; color: #4A3E56; font-weight: 600; font-size: 12px; } ");
+            html.append("tr:nth-child(even) { background-color: #FDFAFC; } ");
+            html.append(".badge { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: bold; } ");
             html.append(".HEAVY { background: #ffe3e3; color: #c92a2a; } .MEDIUM { background: #fff0f6; color: #a61e4d; } ");
             html.append(".LIGHT { background: #e3fafc; color: #0b7285; } .SPOTTING { background: #f1f3f5; color: #495057; } ");
-            html.append(".footer { margin-top: 40px; font-size: 11.5px; color: #888; text-align: center; border-top: 1px solid #eee; padding-top: 15px; } ");
+            html.append(".PILL { background: #f3e8ff; color: #6b21a8; } .ACTIVITY { background: #e0f2fe; color: #0369a1; } ");
+            html.append(".DISCHARGE { background: #fef3c7; color: #92400e; } .INTIMACY { background: #ffe4e6; color: #be123c; } ");
+            html.append(".footer { margin-top: 35px; font-size: 11px; color: #888; text-align: center; border-top: 1px solid #eee; padding-top: 12px; } ");
             html.append("</style></head><body>");
 
             DateTimeFormatter dFmt = DateTimeFormatter.ofPattern("MMM d, yyyy");
@@ -647,10 +667,11 @@ public class InsightsFragment extends Fragment {
                 startStr = LocalDate.ofEpochDay(logs.get(logs.size() - 1).date).format(dFmt);
             }
 
-            html.append("<h1>Cyvia Patient Menstrual Health Report</h1>");
-            html.append("<div class='subtitle'>Generated on ").append(todayStr).append(" • Horizon: ").append(startStr).append(" to ").append(todayStr).append("</div>");
+            html.append("<h1>Cyvia Cycle & Wellness Summary</h1>");
+            html.append("<div class='subtitle'>Generated on ").append(todayStr).append(" • Timeline: ").append(startStr).append(" to ").append(todayStr).append("</div>");
 
-            html.append("<h2>1. Clinical Cycle Overview</h2>");
+            // 1. Cycle Overview
+            html.append("<h2>1. Cycle & Rhythm Overview</h2>");
             html.append("<div class='grid'>");
             html.append("<div class='card'><div class='label'>Total Cycles Logged</div><div class='val'>").append(stats.totalCycles).append("</div></div>");
             html.append("<div class='card'><div class='label'>Average Cycle Length</div><div class='val'>").append(stats.totalCycles > 0 ? String.format("%.1f days", stats.averageCycleLength) : "N/A").append("</div></div>");
@@ -660,7 +681,8 @@ public class InsightsFragment extends Fragment {
             html.append("<div class='card'><div class='label'>Avg Bleed Duration</div><div class='val'>").append(stats.averagePeriodLength > 0 ? String.format("%.1f days", stats.averagePeriodLength) : "N/A").append("</div></div>");
             html.append("</div>");
 
-            html.append("<h2>2. Menstrual Cycle History (Beginning to Ending)</h2>");
+            // 2. Cycle History & Flow
+            html.append("<h2>2. Cycle History & Flow Intensity</h2>");
             html.append("<table><thead><tr><th>#</th><th>Start Date</th><th>End Date</th><th>Duration</th><th>Flow Intensity</th></tr></thead><tbody>");
             if (cycles != null && !cycles.isEmpty()) {
                 for (int i = 0; i < cycles.size(); i++) {
@@ -680,15 +702,37 @@ public class InsightsFragment extends Fragment {
             }
             html.append("</tbody></table>");
 
-            // Symptom frequencies
+            // Aggregations
             Map<String, Integer> symCounts = new HashMap<>();
             Map<String, Integer> moodCounts = new HashMap<>();
-            List<DailyLog> clinicalLogs = new ArrayList<>();
+            Map<String, Integer> dischargeCounts = new HashMap<>();
+            Map<String, Integer> activityCounts = new HashMap<>();
+            Map<String, Integer> intimacyCounts = new HashMap<>();
+            int pillDays = 0;
 
             if (logs != null) {
                 for (DailyLog l : logs) {
                     if (l.mood != null) {
                         moodCounts.put(l.mood.name(), moodCounts.getOrDefault(l.mood.name(), 0) + 1);
+                    }
+                    if (Boolean.TRUE.equals(l.pillsTaken)) {
+                        pillDays++;
+                    }
+                    if (l.dischargeType != null && !l.dischargeType.trim().isEmpty()) {
+                        String clean = l.dischargeType.replace("_", " ");
+                        dischargeCounts.put(clean, dischargeCounts.getOrDefault(clean, 0) + 1);
+                    }
+                    if (l.exerciseType != null && !l.exerciseType.trim().isEmpty()) {
+                        String clean = l.exerciseType.replace("_", " ");
+                        activityCounts.put(clean, activityCounts.getOrDefault(clean, 0) + 1);
+                    }
+                    if (!minorSafe) {
+                        if (l.sexType != null && !l.sexType.trim().isEmpty()) {
+                            String clean = l.sexType.replace("_", " ");
+                            intimacyCounts.put(clean, intimacyCounts.getOrDefault(clean, 0) + 1);
+                        } else if (Boolean.TRUE.equals(l.intimacy)) {
+                            intimacyCounts.put("Intimacy Logged", intimacyCounts.getOrDefault("Intimacy Logged", 0) + 1);
+                        }
                     }
                     if (l.symptomIds != null && !l.symptomIds.isEmpty()) {
                         for (String sId : l.symptomIds.split(",")) {
@@ -699,39 +743,112 @@ public class InsightsFragment extends Fragment {
                             } catch (Exception ignored) {}
                         }
                     }
-                    if ((l.notes != null && !l.notes.trim().isEmpty()) || l.temperature != null) {
-                        clinicalLogs.add(l);
-                    }
                 }
             }
 
-            html.append("<h2>3. Symptom & Mood Distribution</h2>");
-            html.append("<table><thead><tr><th>Symptom / Mood</th><th>Reported Occurrences</th></tr></thead><tbody>");
+            // 3. Symptoms & Mood Distribution
+            html.append("<h2>3. Symptoms & Mood Distribution</h2>");
+            html.append("<table><thead><tr><th>Category</th><th>Description</th><th>Occurrences</th></tr></thead><tbody>");
             boolean hasSyms = false;
             for (Map.Entry<String, Integer> e : symCounts.entrySet()) {
-                html.append("<tr><td><b>").append(e.getKey()).append("</b> (Symptom)</td><td>").append(e.getValue()).append(" times</td></tr>");
+                html.append("<tr><td>Physical Symptom</td><td><b>").append(e.getKey()).append("</b></td><td>").append(e.getValue()).append(" days</td></tr>");
                 hasSyms = true;
             }
             for (Map.Entry<String, Integer> e : moodCounts.entrySet()) {
-                html.append("<tr><td><b>").append(e.getKey()).append("</b> (Mood)</td><td>").append(e.getValue()).append(" times</td></tr>");
+                html.append("<tr><td>Emotional Mood</td><td><b>").append(e.getKey()).append("</b></td><td>").append(e.getValue()).append(" days</td></tr>");
                 hasSyms = true;
             }
-            if (!hasSyms) html.append("<tr><td colspan='2'>No symptoms or moods logged yet.</td></tr>");
+            if (!hasSyms) html.append("<tr><td colspan='3'>No symptoms or moods logged yet.</td></tr>");
             html.append("</tbody></table>");
 
-            if (!clinicalLogs.isEmpty()) {
-                html.append("<h2>4. Clinical Temperature & Notes Log</h2>");
-                html.append("<table><thead><tr><th>Date</th><th>BBT (°C)</th><th>Patient Notes</th></tr></thead><tbody>");
-                for (DailyLog cl : clinicalLogs) {
-                    String dt = LocalDate.ofEpochDay(cl.date).format(dFmt);
-                    String temp = cl.temperature != null ? String.format("%.2f °C", cl.temperature) : "—";
-                    String nt = cl.notes != null ? cl.notes : "—";
-                    html.append("<tr><td>").append(dt).append("</td><td>").append(temp).append("</td><td>").append(nt).append("</td></tr>");
+            // 4. Lifestyle, Medicine & Wellness Summary
+            html.append("<h2>4. Lifestyle, Medicine & Wellness Tracking</h2>");
+            html.append("<table><thead><tr><th>Area</th><th>Logged Details</th><th>Frequency</th></tr></thead><tbody>");
+            boolean hasLifestyle = false;
+            if (pillDays > 0) {
+                html.append("<tr><td>Medicine</td><td><span class='badge PILL'>Take Pill</span></td><td>").append(pillDays).append(" days recorded</td></tr>");
+                hasLifestyle = true;
+            }
+            for (Map.Entry<String, Integer> e : dischargeCounts.entrySet()) {
+                html.append("<tr><td>Vaginal Discharge</td><td><span class='badge DISCHARGE'>").append(e.getKey()).append("</span></td><td>").append(e.getValue()).append(" days</td></tr>");
+                hasLifestyle = true;
+            }
+            for (Map.Entry<String, Integer> e : activityCounts.entrySet()) {
+                html.append("<tr><td>Physical Activity</td><td><span class='badge ACTIVITY'>").append(e.getKey()).append("</span></td><td>").append(e.getValue()).append(" days</td></tr>");
+                hasLifestyle = true;
+            }
+            if (!minorSafe) {
+                for (Map.Entry<String, Integer> e : intimacyCounts.entrySet()) {
+                    html.append("<tr><td>Intimacy & Sex</td><td><span class='badge INTIMACY'>").append(e.getKey()).append("</span></td><td>").append(e.getValue()).append(" days</td></tr>");
+                    hasLifestyle = true;
+                }
+            }
+            if (!hasLifestyle) {
+                html.append("<tr><td colspan='3'>No lifestyle, medicine, or intimacy entries recorded yet.</td></tr>");
+            }
+            html.append("</tbody></table>");
+
+            // 5. Comprehensive Daily Logs
+            if (logs != null && !logs.isEmpty()) {
+                html.append("<h2>5. Daily Health & Symptom Log</h2>");
+                html.append("<table><thead><tr><th>Date</th><th>Mood</th><th>Physical Symptoms</th><th>Medicine</th><th>Discharge</th><th>Activity</th>");
+                if (!minorSafe) html.append("<th>Intimacy</th>");
+                html.append("<th>Notes / BBT</th></tr></thead><tbody>");
+
+                List<DailyLog> sortedLogs = new ArrayList<>(logs);
+                sortedLogs.sort((l1, l2) -> Long.compare(l2.date, l1.date));
+
+                for (DailyLog l : sortedLogs) {
+                    String dt = LocalDate.ofEpochDay(l.date).format(dFmt);
+                    String md = l.mood != null ? l.mood.name() : "—";
+                    
+                    StringBuilder symStr = new StringBuilder();
+                    if (l.symptomIds != null && !l.symptomIds.isEmpty()) {
+                        for (String sId : l.symptomIds.split(",")) {
+                            try {
+                                int id = Integer.parseInt(sId.trim());
+                                String name = tagMap.get(id);
+                                if (name != null) {
+                                    if (symStr.length() > 0) symStr.append(", ");
+                                    symStr.append(name);
+                                }
+                            } catch (Exception ignored) {}
+                        }
+                    }
+                    if (symStr.length() == 0) symStr.append("—");
+
+                    String pill = Boolean.TRUE.equals(l.pillsTaken) ? "Pill taken" : "—";
+                    String disch = l.dischargeType != null ? l.dischargeType.replace("_", " ") : "—";
+                    String act = l.exerciseType != null ? l.exerciseType.replace("_", " ") : "—";
+                    String intim = l.sexType != null ? l.sexType.replace("_", " ") : (Boolean.TRUE.equals(l.intimacy) ? "Yes" : "—");
+
+                    StringBuilder notesBbt = new StringBuilder();
+                    if (l.temperature != null) notesBbt.append(String.format("%.2f °C", l.temperature));
+                    if (l.weight != null) {
+                        if (notesBbt.length() > 0) notesBbt.append(" • ");
+                        notesBbt.append(l.weight).append(" ").append(l.weightUnit != null ? l.weightUnit : "kg");
+                    }
+                    if (l.notes != null && !l.notes.trim().isEmpty()) {
+                        if (notesBbt.length() > 0) notesBbt.append(" • ");
+                        notesBbt.append(l.notes.trim());
+                    }
+                    if (notesBbt.length() == 0) notesBbt.append("—");
+
+                    html.append("<tr>");
+                    html.append("<td>").append(dt).append("</td>");
+                    html.append("<td>").append(md).append("</td>");
+                    html.append("<td>").append(symStr).append("</td>");
+                    html.append("<td>").append(pill).append("</td>");
+                    html.append("<td>").append(disch).append("</td>");
+                    html.append("<td>").append(act).append("</td>");
+                    if (!minorSafe) html.append("<td>").append(intim).append("</td>");
+                    html.append("<td>").append(notesBbt).append("</td>");
+                    html.append("</tr>");
                 }
                 html.append("</tbody></table>");
             }
 
-            html.append("<div class='footer'>Confidential Medical Report • Generated by Cyvia Private Period Tracker</div>");
+            html.append("<div class='footer'>Personal Wellness Summary • Generated privately & offline with Cyvia</div>");
             html.append("</body></html>");
 
             if (getActivity() != null) {
@@ -743,15 +860,19 @@ public class InsightsFragment extends Fragment {
                         webView.setWebViewClient(new android.webkit.WebViewClient() {
                             @Override
                             public void onPageFinished(android.webkit.WebView view, String url) {
-                                android.print.PrintDocumentAdapter printAdapter = view.createPrintDocumentAdapter("Cyvia_Medical_Report");
-                                if (printManager != null) {
-                                    printManager.print("Cyvia Medical Doctor Report", printAdapter, new android.print.PrintAttributes.Builder().build());
+                                try {
+                                    android.print.PrintDocumentAdapter printAdapter = view.createPrintDocumentAdapter("Cyvia_Cycle_Summary");
+                                    if (printManager != null) {
+                                        printManager.print("Cyvia Cycle & Wellness Summary", printAdapter, new android.print.PrintAttributes.Builder().build());
+                                    }
+                                } catch (Exception e) {
+                                    android.widget.Toast.makeText(requireContext(), "Error exporting summary: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
-                        android.widget.Toast.makeText(requireContext(), "Report ready! Select 'Save as PDF' or Print.", android.widget.Toast.LENGTH_LONG).show();
+                        android.widget.Toast.makeText(requireContext(), "Summary ready! Select 'Save as PDF' or Print.", android.widget.Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
-                        android.widget.Toast.makeText(requireContext(), "Error opening PDF generator: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
+                        android.widget.Toast.makeText(requireContext(), "Error generating PDF: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
                     }
                 });
             }

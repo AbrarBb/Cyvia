@@ -11,14 +11,22 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 
 import com.khatibstudio.cyvia.CyviaApplication;
 import com.khatibstudio.cyvia.R;
+import com.khatibstudio.cyvia.data.repository.SettingsRepository;
+
+import java.util.concurrent.Executor;
 
 public class PinLockActivity extends AppCompatActivity {
 
@@ -35,8 +43,14 @@ public class PinLockActivity extends AppCompatActivity {
     private boolean isChangingOldVerified = false;
 
     private TextView tvTitle, tvPrompt, tvError;
+    private ImageView imgLockIcon;
+    private View btnFingerprint;
     private View[] dotViews;
     private SharedPreferences prefs;
+    private SettingsRepository settingsRepository;
+
+    private BiometricPrompt biometricPrompt;
+    private BiometricPrompt.PromptInfo promptInfo;
 
     public static void startUnlock(Context context) {
         Intent intent = new Intent(context, PinLockActivity.class);
@@ -57,11 +71,14 @@ public class PinLockActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pin_lock);
 
         prefs = getSharedPreferences("cyvia_settings", Context.MODE_PRIVATE);
+        settingsRepository = new SettingsRepository(this);
         mode = getIntent().getIntExtra(EXTRA_MODE, MODE_UNLOCK);
 
         tvTitle = findViewById(R.id.tv_pin_title);
         tvPrompt = findViewById(R.id.tv_pin_prompt);
         tvError = findViewById(R.id.tv_pin_error);
+        imgLockIcon = findViewById(R.id.img_lock_icon);
+        btnFingerprint = findViewById(R.id.btn_fingerprint);
 
         dotViews = new View[]{
                 findViewById(R.id.dot_view_1),
@@ -72,6 +89,11 @@ public class PinLockActivity extends AppCompatActivity {
 
         setupModeUI();
         setupNumPad();
+        setupAvatarIcon();
+        
+        if (mode == MODE_UNLOCK) {
+            setupBiometrics();
+        }
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -141,9 +163,11 @@ public class PinLockActivity extends AppCompatActivity {
         int length = currentPin.length();
         for (int i = 0; i < dotViews.length; i++) {
             if (i < length) {
-                dotViews[i].setBackgroundTintList(android.content.res.ColorStateList.valueOf(getColor(R.color.cyvia_primary)));
+                dotViews[i].setBackgroundResource(R.drawable.bg_circle_dot_filled);
+                dotViews[i].setBackgroundTintList(null);
             } else {
-                dotViews[i].setBackgroundTintList(android.content.res.ColorStateList.valueOf(getColor(R.color.cyvia_outline_variant)));
+                dotViews[i].setBackgroundResource(R.drawable.bg_circle_dot_empty);
+                dotViews[i].setBackgroundTintList(null);
             }
         }
     }
@@ -227,5 +251,68 @@ public class PinLockActivity extends AppCompatActivity {
             currentPin.setLength(0);
             updateDots();
         }, 500);
+    }
+    
+    private void setupAvatarIcon() {
+        String pack = settingsRepository.getAvatarPack();
+        if ("KITTY".equals(pack)) {
+            imgLockIcon.setImageResource(R.drawable.ic_kitty_mood_normal);
+            imgLockIcon.setImageTintList(null); // Remove tint so full colors show
+        } else if ("BUNNY".equals(pack)) {
+            imgLockIcon.setImageResource(R.drawable.ic_bunny_mood_normal);
+            imgLockIcon.setImageTintList(null);
+        } else {
+            // Default Mochi
+            imgLockIcon.setImageResource(R.drawable.ic_mochi_smiling);
+            imgLockIcon.setImageTintList(null);
+        }
+    }
+    
+    private void setupBiometrics() {
+        BiometricManager biometricManager = BiometricManager.from(this);
+        if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) != BiometricManager.BIOMETRIC_SUCCESS) {
+            return; // Biometrics not available or enrolled
+        }
+        
+        btnFingerprint.setVisibility(View.VISIBLE);
+        btnFingerprint.setOnClickListener(v -> showBiometricPrompt());
+
+        Executor executor = ContextCompat.getMainExecutor(this);
+        biometricPrompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                // Just fall back to PIN
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                CyviaApplication.onAppUnlocked();
+                finish();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                showError("Fingerprint not recognized");
+            }
+        });
+
+        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Unlock Cyvia")
+                .setSubtitle("Confirm your fingerprint or face to continue")
+                .setNegativeButtonText("Use PIN")
+                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK)
+                .build();
+                
+        // Auto show on first load
+        showBiometricPrompt();
+    }
+    
+    private void showBiometricPrompt() {
+        if (biometricPrompt != null && promptInfo != null) {
+            biometricPrompt.authenticate(promptInfo);
+        }
     }
 }

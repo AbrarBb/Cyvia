@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#E8F5E9"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <!-- Bunny Ears -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#C8E6C9"
+        android:strokeWidth="1"
+        android:pathData="M16,6 C13,6 13,20 16,23 L20,23 C20,20 20,6 16,6 Z" />
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M16,9 C14.5,9 14.5,18 16,20 L18,20 C18,18 18,9 16,9 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#C8E6C9"
+        android:strokeWidth="1"
+        android:pathData="M32,6 C35,6 35,20 32,23 L28,23 C28,20 28,6 32,6 Z" />
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M32,9 C33.5,9 33.5,18 32,20 L30,20 C30,18 30,9 32,9 Z" />
+    <!-- Bunny Head -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#C8E6C9"
+        android:strokeWidth="1"
+        android:pathData="M12,28 C12,18 36,18 36,28 C36,38 12,38 12,28 Z" />
+    <!-- Sick Pale Green Cheeks -->
+    <path
+        android:fillColor="#A5D6A7"
+        android:pathData="M13,31 A3,2 0 1,1 13,30.9 Z M35,31 A3,2 0 1,1 35,30.9 Z" />
+    <!-- Dizzy X Eyes -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:pathData="M16,25 L20,29 M20,25 L16,29 M28,25 L32,29 M32,25 L28,29" />
+    <!-- Wavy Queasy Mouth -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M20,33 Q22,35 24,33 Q26,31 28,33" />
+</vector>

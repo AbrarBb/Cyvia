@@ -46,6 +46,45 @@
 
     <style name="Theme.Cyvia" parent="Base.Theme.Cyvia" />
 
+    <style name="Theme.Cyvia.Pink" parent="Theme.Cyvia">
+        <item name="colorPrimary">#EC4899</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#FCE7F3</item>
+        <item name="colorOnPrimaryContainer">#831843</item>
+        <item name="colorSecondary">#F472B6</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorSecondaryContainer">#FDF2F8</item>
+        <item name="colorOnSecondaryContainer">#9D174D</item>
+        <item name="colorSurfaceVariant">#FDF2F8</item>
+        <item name="colorOutline">#FBCFE8</item>
+    </style>
+
+    <style name="Theme.Cyvia.Mint" parent="Theme.Cyvia">
+        <item name="colorPrimary">#0D9488</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#CCFBF1</item>
+        <item name="colorOnPrimaryContainer">#115E59</item>
+        <item name="colorSecondary">#14B8A6</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorSecondaryContainer">#F0FDFA</item>
+        <item name="colorOnSecondaryContainer">#0F766E</item>
+        <item name="colorSurfaceVariant">#F0FDFA</item>
+        <item name="colorOutline">#99F6E4</item>
+    </style>
+
+    <style name="Theme.Cyvia.Ocean" parent="Theme.Cyvia">
+        <item name="colorPrimary">#0284C7</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#E0F2FE</item>
+        <item name="colorOnPrimaryContainer">#075985</item>
+        <item name="colorSecondary">#38BDF8</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorSecondaryContainer">#F0F9FF</item>
+        <item name="colorOnSecondaryContainer">#0369A1</item>
+        <item name="colorSurfaceVariant">#F0F9FF</item>
+        <item name="colorOutline">#BAE6FD</item>
+    </style>
+
     <!-- Splash screen theme — plain lavender background before content loads -->
     <style name="Theme.Cyvia.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/cyvia_primary_container</item>
@@ -123,15 +162,14 @@
     </style>
 
     <style name="PinNumButtonStyle">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">72dp</item>
+        <item name="android:layout_height">72dp</item>
+        <item name="android:layout_marginHorizontal">12dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/nunito</item>
-        <item name="android:textSize">26sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/cyvia_on_surface</item>
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:background">@drawable/bg_pin_num_ripple</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
     </style>

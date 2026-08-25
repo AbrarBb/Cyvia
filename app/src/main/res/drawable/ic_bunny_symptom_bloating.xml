@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#F3E5F5"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <!-- Bunny Ears -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#E1BEE7"
+        android:strokeWidth="1"
+        android:pathData="M16,6 C13,6 13,19 16,22 L20,22 C20,19 20,6 16,6 Z" />
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M16,9 C14.5,9 14.5,17 16,19 L18,19 C18,17 18,9 16,9 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#E1BEE7"
+        android:strokeWidth="1"
+        android:pathData="M32,6 C35,6 35,19 32,22 L28,22 C28,19 28,6 32,6 Z" />
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M32,9 C33.5,9 33.5,17 32,19 L30,19 C30,17 30,9 32,9 Z" />
+    <!-- Round Chubby Bunny Body/Head -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#E1BEE7"
+        android:strokeWidth="1"
+        android:pathData="M9,27 C9,17 39,17 39,27 C39,41 9,41 9,27 Z" />
+    <!-- Closed Content Eyes - - -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:pathData="M16,26 L21,26 M27,26 L32,26" />
+    <!-- Big Puffy Cheeks -->
+    <path
+        android:fillColor="#FF8DA1"
+        android:pathData="M11,29 A4,3 0 1,1 11,28.9 Z M37,29 A4,3 0 1,1 37,28.9 Z" />
+    <!-- Round Bloated Tummy -->
+    <path
+        android:fillColor="#EDE7F6"
+        android:strokeColor="#BA68C8"
+        android:strokeWidth="1.2"
+        android:pathData="M16,34 C16,32 32,32 32,34 C32,42 16,42 16,34 Z" />
+</vector>

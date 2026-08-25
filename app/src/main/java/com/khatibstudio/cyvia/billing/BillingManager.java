@@ -13,6 +13,7 @@ import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.PendingPurchasesParams;
 import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesResponseListener;
@@ -65,7 +66,10 @@ public class BillingManager implements PurchasesUpdatedListener {
         this.settings = settings;
 
         billingClient = BillingClient.newBuilder(this.context)
-                .enablePendingPurchases()
+                .enablePendingPurchases(
+                        PendingPurchasesParams.newBuilder()
+                                .enableOneTimeProducts()
+                                .build())
                 .setListener(this)
                 .build();
     }
@@ -194,8 +198,9 @@ public class BillingManager implements PurchasesUpdatedListener {
                 ))
                 .build();
 
-        billingClient.queryProductDetailsAsync(params, (billingResult, productDetailsList) -> {
+        billingClient.queryProductDetailsAsync(params, (billingResult, queryResult) -> {
             if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                List<ProductDetails> productDetailsList = queryResult.getProductDetailsList();
                 for (ProductDetails details : productDetailsList) {
                     if (details.getProductId().equals(PRODUCT_ID_REMOVE_ADS)) {
                         removeAdsProductDetails = details;

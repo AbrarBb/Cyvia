@@ -32,6 +32,9 @@ public class SettingsRepository {
     private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
     private static final String KEY_USER_NAME = "user_name";
     private static final String KEY_LAST_INTERSTITIAL_TIME = "last_interstitial_time";
+    private static final String KEY_AVATAR_PACK = "avatar_pack";
+    private static final String KEY_UNLOCKED_THEMES = "unlocked_themes";
+    private static final String KEY_LAST_PERIOD_DENIED_EPOCH = "last_period_denied_epoch";
 
     // ─── Theme mode constants ─────────────────────────────────────────────
     public static final String THEME_LIGHT = "LIGHT";
@@ -40,6 +43,12 @@ public class SettingsRepository {
 
     private final SharedPreferences prefs;
     private final SharedPreferences extraPrefs;
+
+    /** No-arg constructor for unit testing */
+    protected SettingsRepository() {
+        this.prefs = null;
+        this.extraPrefs = null;
+    }
 
     public SettingsRepository(Context context) {
         prefs = context.getApplicationContext()
@@ -76,6 +85,16 @@ public class SettingsRepository {
         prefs.edit().putInt(KEY_AVG_PERIOD_LENGTH, days).apply();
     }
 
+    public long getLastPeriodDeniedEpoch() {
+        return prefs != null ? prefs.getLong(KEY_LAST_PERIOD_DENIED_EPOCH, 0L) : 0L;
+    }
+
+    public void setLastPeriodDeniedEpoch(long epochDay) {
+        if (prefs != null) {
+            prefs.edit().putLong(KEY_LAST_PERIOD_DENIED_EPOCH, epochDay).apply();
+        }
+    }
+
     // ─── Tracking mode ───────────────────────────────────────────────────
 
     public TrackingMode getTrackingMode() {
@@ -102,7 +121,7 @@ public class SettingsRepository {
     }
 
     public boolean isTrackIntimacyEnabled() {
-        return prefs.getBoolean(KEY_TRACK_INTIMACY, false);
+        return prefs.getBoolean(KEY_TRACK_INTIMACY, true);
     }
 
     public boolean hasTrackIntimacyPreference() {
@@ -129,6 +148,28 @@ public class SettingsRepository {
 
     public void setAccentColor(String color) {
         prefs.edit().putString(KEY_ACCENT_COLOR, color).apply();
+    }
+
+    public String getAvatarPack() {
+        return prefs.getString(KEY_AVATAR_PACK, "DEFAULT");
+    }
+
+    public void setAvatarPack(String pack) {
+        prefs.edit().putString(KEY_AVATAR_PACK, pack).apply();
+    }
+
+    // ─── Theme Unlocks ───────────────────────────────────────────────────
+
+    public boolean isThemeUnlocked(String themeId) {
+        if ("LAVENDER".equals(themeId) || "DEFAULT".equals(themeId)) return true;
+        java.util.Set<String> unlocked = prefs.getStringSet(KEY_UNLOCKED_THEMES, new java.util.HashSet<>());
+        return unlocked.contains(themeId);
+    }
+
+    public void unlockTheme(String themeId) {
+        java.util.Set<String> unlocked = new java.util.HashSet<>(prefs.getStringSet(KEY_UNLOCKED_THEMES, new java.util.HashSet<>()));
+        unlocked.add(themeId);
+        prefs.edit().putStringSet(KEY_UNLOCKED_THEMES, unlocked).apply();
     }
 
     // ─── Notifications ───────────────────────────────────────────────────

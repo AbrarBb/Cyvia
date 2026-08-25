@@ -41,4 +41,10 @@
         android:label="FAQ"
         tools:layout="@layout/fragment_faq" />
 
+    <fragment
+        android:id="@+id/nav_premium"
+        android:name="com.khatibstudio.cyvia.ui.settings.PremiumFragment"
+        android:label="Premium Customizations"
+        tools:layout="@layout/fragment_premium" />
+
 </navigation>

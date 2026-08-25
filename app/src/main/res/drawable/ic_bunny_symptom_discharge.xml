@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#F0F8FF"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <!-- Bunny Ears -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#DCE8FF"
+        android:strokeWidth="1"
+        android:pathData="M16,6 C13,6 13,20 16,23 L20,23 C20,20 20,6 16,6 Z" />
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M16,9 C14.5,9 14.5,18 16,20 L18,20 C18,18 18,9 16,9 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#DCE8FF"
+        android:strokeWidth="1"
+        android:pathData="M32,6 C35,6 35,20 32,23 L28,23 C28,20 28,6 32,6 Z" />
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M32,9 C33.5,9 33.5,18 32,20 L30,20 C30,18 30,9 32,9 Z" />
+    <!-- Bunny Head -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#DCE8FF"
+        android:strokeWidth="1"
+        android:pathData="M12,28 C12,18 36,18 36,28 C36,38 12,38 12,28 Z" />
+    <!-- Blue Ribbon on Ear -->
+    <path
+        android:fillColor="#81D4FA"
+        android:pathData="M18,17 A2,2 0 1,1 18,16.9 Z" />
+    <!-- Dot Eyes -->
+    <path
+        android:fillColor="#2E1E40"
+        android:pathData="M18,27 A2,2 0 1,1 18,26.9 Z M30,27 A2,2 0 1,1 30,26.9 Z" />
+    <!-- Soft Droplet Cloud Icon -->
+    <path
+        android:fillColor="#E1F5FE"
+        android:strokeColor="#4FC3F7"
+        android:strokeWidth="1"
+        android:pathData="M36,34 C36,30 40,26 40,26 C40,26 44,30 44,34 C44,36.2 42.2,38 40,38 C37.8,38 36,36.2 36,34 Z" />
+</vector>

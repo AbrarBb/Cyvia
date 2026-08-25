@@ -17,11 +17,29 @@
     <color name="cyvia_secondary_container">#F3E8FF</color>
     <color name="cyvia_on_secondary_container">#7C3AED</color>
 
-    <!-- Tertiary — Blush Pink -->
-    <color name="cyvia_tertiary">#F9A8D4</color>
-    <color name="cyvia_on_tertiary">#831843</color>
-    <color name="cyvia_tertiary_container">#FCE7F3</color>
-    <color name="cyvia_on_tertiary_container">#9D174D</color>
+    <!-- Tertiary — Accent 2 (Soft Pink) -->
+    <color name="cyvia_tertiary">#FFC1CC</color>
+    <color name="cyvia_on_tertiary">#4A232A</color>
+    <color name="cyvia_tertiary_container">#FFE3E8</color>
+    <color name="cyvia_on_tertiary_container">#6B3D48</color>
+
+    <!-- Premium Theme: Pink -->
+    <color name="cyvia_pink_primary">#F48FB1</color>
+    <color name="cyvia_pink_on_primary">#4A0024</color>
+    <color name="cyvia_pink_primary_container">#FFD8E4</color>
+    <color name="cyvia_pink_on_primary_container">#31111D</color>
+
+    <!-- Premium Theme: Mint -->
+    <color name="cyvia_mint_primary">#4DB6AC</color>
+    <color name="cyvia_mint_on_primary">#003833</color>
+    <color name="cyvia_mint_primary_container">#B2DFDB</color>
+    <color name="cyvia_mint_on_primary_container">#00201D</color>
+
+    <!-- Premium Theme: Ocean -->
+    <color name="cyvia_ocean_primary">#64B5F6</color>
+    <color name="cyvia_ocean_on_primary">#00325B</color>
+    <color name="cyvia_ocean_primary_container">#BBDEFB</color>
+    <color name="cyvia_ocean_on_primary_container">#001D36</color>
 
     <!-- Backgrounds -->
     <color name="cyvia_background">#FFFDFB</color>

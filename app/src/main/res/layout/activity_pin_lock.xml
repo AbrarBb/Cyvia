@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:background="@drawable/bg_lock_screen_gradient">
 
     <!-- Header Section -->
     <LinearLayout
@@ -27,8 +27,9 @@
             app:cardElevation="0dp"
             android:backgroundTint="@color/cyvia_primary_container">
             <ImageView
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:id="@+id/img_lock_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_lock"
                 app:tint="@color/cyvia_primary" />
@@ -71,35 +72,31 @@
 
         <View
             android:id="@+id/dot_view_1"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginHorizontal="12dp"
-            android:background="@drawable/bg_circle_dot"
-            android:backgroundTint="@color/cyvia_outline_variant" />
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/bg_circle_dot_empty" />
 
         <View
             android:id="@+id/dot_view_2"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginHorizontal="12dp"
-            android:background="@drawable/bg_circle_dot"
-            android:backgroundTint="@color/cyvia_outline_variant" />
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/bg_circle_dot_empty" />
 
         <View
             android:id="@+id/dot_view_3"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginHorizontal="12dp"
-            android:background="@drawable/bg_circle_dot"
-            android:backgroundTint="@color/cyvia_outline_variant" />
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/bg_circle_dot_empty" />
 
         <View
             android:id="@+id/dot_view_4"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginHorizontal="12dp"
-            android:background="@drawable/bg_circle_dot"
-            android:backgroundTint="@color/cyvia_outline_variant" />
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/bg_circle_dot_empty" />
     </LinearLayout>
 
     <TextView
@@ -200,29 +197,39 @@
             android:layout_marginTop="12dp"
             android:orientation="horizontal"
             android:gravity="center">
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+            <LinearLayout
+                android:id="@+id/btn_fingerprint"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginHorizontal="12dp"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="invisible">
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_fingerprint"
+                    app:tint="@color/cyvia_on_surface" />
+            </LinearLayout>
             <TextView
                 android:id="@+id/btn_num_0"
                 style="@style/PinNumButtonStyle"
                 android:text="0" />
-            <LinearLayout
+            <TextView
                 android:id="@+id/btn_backspace"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginHorizontal="12dp"
                 android:gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:focusable="true">
-                <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:src="@drawable/ic_chevron_left"
-                    app:tint="@color/cyvia_on_surface" />
-            </LinearLayout>
+                android:focusable="true"
+                android:text="Delete"
+                android:fontFamily="sans-serif"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface" />
         </LinearLayout>
     </LinearLayout>
 

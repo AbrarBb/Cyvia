@@ -18,6 +18,7 @@ import java.io.InputStream;
 
 /**
  * Helper class for handling Kawaii character icons and custom uploaded images.
+ * Supports dynamic switching between character themes: MOCHI, KITTY, and BUNNY.
  */
 public class KawaiiIconUtil {
 
@@ -72,11 +73,48 @@ public class KawaiiIconUtil {
     }
 
     /**
-     * Returns the Mochi-pose drawable resource ID for a built-in Mood.
-     * Every value maps to a Mochi character — no other characters used.
+     * Returns the pose drawable resource ID for a built-in Mood.
+     * Uses the selected Avatar Pack (MOCHI, KITTY, BUNNY).
      */
-    public static int getMoodIconRes(Mood mood) {
-        if (mood == null) return R.drawable.ic_mochi_smiling;
+    public static int getMoodIconRes(Context context, Mood mood) {
+        String pack = new com.khatibstudio.cyvia.data.repository.SettingsRepository(context).getAvatarPack();
+        
+        if (mood == null) return getAvatarDrawableForPose(context, R.drawable.ic_mochi_smiling);
+
+        if ("KITTY".equals(pack)) {
+            switch (mood) {
+                case NORMAL:      return R.drawable.ic_kitty_mood_normal;
+                case HAPPY:       return R.drawable.ic_kitty_mood_happy;
+                case SAD:         return R.drawable.ic_kitty_mood_sad;
+                case CALM:        return R.drawable.ic_kitty_mood_calm;
+                case ANXIOUS:     return R.drawable.ic_kitty_mood_anxious;
+                case ENERGETIC:   return R.drawable.ic_kitty_mood_energetic;
+                case SENSITIVE:   return R.drawable.ic_kitty_mood_sensitive;
+                case ROMANTIC:    return R.drawable.ic_kitty_mood_romantic;
+                case LONELY:      return R.drawable.ic_kitty_mood_lonely;
+                case MOOD_SWING:  return R.drawable.ic_kitty_mood_irritable;
+                case FOOD_CRAVING:return R.drawable.ic_kitty_mood_craving;
+                default:          return R.drawable.ic_kitty_mood_normal;
+            }
+        }
+
+        if ("BUNNY".equals(pack)) {
+            switch (mood) {
+                case NORMAL:      return R.drawable.ic_bunny_mood_normal;
+                case HAPPY:       return R.drawable.ic_bunny_mood_happy;
+                case SAD:         return R.drawable.ic_bunny_mood_sad;
+                case CALM:        return R.drawable.ic_bunny_mood_calm;
+                case ANXIOUS:     return R.drawable.ic_bunny_mood_anxious;
+                case ENERGETIC:   return R.drawable.ic_bunny_mood_energetic;
+                case SENSITIVE:   return R.drawable.ic_bunny_mood_sensitive;
+                case ROMANTIC:    return R.drawable.ic_bunny_mood_romantic;
+                case LONELY:      return R.drawable.ic_bunny_mood_lonely;
+                case MOOD_SWING:  return R.drawable.ic_bunny_mood_irritable;
+                case FOOD_CRAVING:return R.drawable.ic_bunny_mood_craving;
+                default:          return R.drawable.ic_bunny_mood_normal;
+            }
+        }
+
         switch (mood) {
             case NORMAL:      return R.drawable.ic_mochi_smiling;
             case HAPPY:       return R.drawable.ic_mochi_mood_happy;
@@ -94,6 +132,91 @@ public class KawaiiIconUtil {
     }
 
     /**
+     * Map any Mochi pose/drawable resource to the corresponding character in the active Avatar Pack (MOCHI, KITTY, BUNNY).
+     */
+    public static int getAvatarDrawableForPose(Context context, int defaultMochiRes) {
+        if (context == null) return defaultMochiRes;
+        String pack = new com.khatibstudio.cyvia.data.repository.SettingsRepository(context).getAvatarPack();
+        if ("DEFAULT".equals(pack) || "MOCHI".equals(pack) || TextUtils.isEmpty(pack)) {
+            return defaultMochiRes;
+        }
+
+        if ("KITTY".equals(pack)) {
+            if (defaultMochiRes == R.drawable.ic_mochi_sleeping) return R.drawable.ic_kitty_mood_calm;
+            if (defaultMochiRes == R.drawable.ic_mochi_drinking_tea) return R.drawable.ic_kitty_mood_craving;
+            if (defaultMochiRes == R.drawable.ic_mochi_sparkles) return R.drawable.ic_kitty_mood_happy;
+            if (defaultMochiRes == R.drawable.ic_mochi_heart_eyes) return R.drawable.ic_kitty_mood_romantic;
+            if (defaultMochiRes == R.drawable.ic_mochi_cozy) return R.drawable.ic_kitty_mood_calm;
+            if (defaultMochiRes == R.drawable.ic_mochi_stretching) return R.drawable.ic_kitty_mood_energetic;
+            if (defaultMochiRes == R.drawable.ic_mochi_reading) return R.drawable.ic_kitty_mood_sensitive;
+            if (defaultMochiRes == R.drawable.ic_mochi_worried || defaultMochiRes == R.drawable.ic_mochi_sick) return R.drawable.ic_kitty_mood_anxious;
+            return R.drawable.ic_kitty_mood_normal;
+        }
+
+        if ("BUNNY".equals(pack)) {
+            if (defaultMochiRes == R.drawable.ic_mochi_sleeping) return R.drawable.ic_bunny_mood_calm;
+            if (defaultMochiRes == R.drawable.ic_mochi_drinking_tea) return R.drawable.ic_bunny_mood_craving;
+            if (defaultMochiRes == R.drawable.ic_mochi_sparkles) return R.drawable.ic_bunny_mood_energetic;
+            if (defaultMochiRes == R.drawable.ic_mochi_heart_eyes) return R.drawable.ic_bunny_mood_romantic;
+            if (defaultMochiRes == R.drawable.ic_mochi_cozy) return R.drawable.ic_bunny_mood_calm;
+            if (defaultMochiRes == R.drawable.ic_mochi_stretching) return R.drawable.ic_bunny_mood_energetic;
+            if (defaultMochiRes == R.drawable.ic_mochi_reading) return R.drawable.ic_bunny_mood_sensitive;
+            if (defaultMochiRes == R.drawable.ic_mochi_worried || defaultMochiRes == R.drawable.ic_mochi_sick) return R.drawable.ic_bunny_mood_anxious;
+            return R.drawable.ic_bunny_mood_normal;
+        }
+
+        return defaultMochiRes;
+    }
+
+    /**
+     * Resolves the icon for a physical condition or symptom according to the active avatar pack (MOCHI, KITTY, BUNNY).
+     */
+    public static int getSymptomIconRes(Context context, String iconKey, String label, int defaultFallback) {
+        if (context == null) return defaultFallback;
+        String pack = new com.khatibstudio.cyvia.data.repository.SettingsRepository(context).getAvatarPack();
+
+        String lowerLabel = label != null ? label.trim().toLowerCase() : "";
+        String cleanedKey = iconKey != null ? iconKey.trim() : "";
+
+        if ("KITTY".equals(pack)) {
+            if (lowerLabel.contains("fine") || lowerLabel.contains("well") || "ic_mochi_smiling".equals(cleanedKey)) return R.drawable.ic_kitty_symptom_fine;
+            if (lowerLabel.contains("discharge") || ("ic_mochi_worried".equals(cleanedKey) && lowerLabel.contains("white"))) return R.drawable.ic_kitty_symptom_discharge;
+            if (lowerLabel.contains("cramp")) return R.drawable.ic_kitty_symptom_cramps;
+            if (lowerLabel.contains("acne") || lowerLabel.contains("breakout") || "ic_forecast_acne".equals(cleanedKey)) return R.drawable.ic_kitty_symptom_acne;
+            if (lowerLabel.contains("bloat")) return R.drawable.ic_kitty_symptom_bloating;
+            if (lowerLabel.contains("headache")) return R.drawable.ic_kitty_symptom_headache;
+            if (lowerLabel.contains("back")) return R.drawable.ic_kitty_symptom_back_pain;
+            if (lowerLabel.contains("shoulder")) return R.drawable.ic_kitty_symptom_shoulder_pain;
+            if (lowerLabel.contains("dizz")) return R.drawable.ic_kitty_symptom_dizziness;
+            if (lowerLabel.contains("breast") || lowerLabel.contains("tender")) return R.drawable.ic_kitty_symptom_breast_pain;
+            if (lowerLabel.contains("nausea")) return R.drawable.ic_kitty_symptom_nausea;
+            if (lowerLabel.contains("fatigue") || lowerLabel.contains("tired")) return R.drawable.ic_kitty_symptom_fatigue;
+            if (lowerLabel.contains("fever") || lowerLabel.contains("temp")) return R.drawable.ic_kitty_symptom_fever;
+            return R.drawable.ic_kitty_mood_normal;
+        }
+
+        if ("BUNNY".equals(pack)) {
+            if (lowerLabel.contains("fine") || lowerLabel.contains("well") || "ic_mochi_smiling".equals(cleanedKey)) return R.drawable.ic_bunny_symptom_fine;
+            if (lowerLabel.contains("discharge") || ("ic_mochi_worried".equals(cleanedKey) && lowerLabel.contains("white"))) return R.drawable.ic_bunny_symptom_discharge;
+            if (lowerLabel.contains("cramp")) return R.drawable.ic_bunny_symptom_cramps;
+            if (lowerLabel.contains("acne") || lowerLabel.contains("breakout") || "ic_forecast_acne".equals(cleanedKey)) return R.drawable.ic_bunny_symptom_acne;
+            if (lowerLabel.contains("bloat")) return R.drawable.ic_bunny_symptom_bloating;
+            if (lowerLabel.contains("headache")) return R.drawable.ic_bunny_symptom_headache;
+            if (lowerLabel.contains("back")) return R.drawable.ic_bunny_symptom_back_pain;
+            if (lowerLabel.contains("shoulder")) return R.drawable.ic_bunny_symptom_shoulder_pain;
+            if (lowerLabel.contains("dizz")) return R.drawable.ic_bunny_symptom_dizziness;
+            if (lowerLabel.contains("breast") || lowerLabel.contains("tender")) return R.drawable.ic_bunny_symptom_breast_pain;
+            if (lowerLabel.contains("nausea")) return R.drawable.ic_bunny_symptom_nausea;
+            if (lowerLabel.contains("fatigue") || lowerLabel.contains("tired")) return R.drawable.ic_bunny_symptom_fatigue;
+            if (lowerLabel.contains("fever") || lowerLabel.contains("temp")) return R.drawable.ic_bunny_symptom_fever;
+            return R.drawable.ic_bunny_mood_normal;
+        }
+
+        // MOCHI / Default fallback
+        return getSmartFallbackResId(label, defaultFallback);
+    }
+
+    /**
      * Loads an iconKey (resource name or file/content URI) into an ImageView.
      */
     public static void loadIcon(Context context, ImageView iv, String iconKey, int fallbackResId) {
@@ -103,15 +226,13 @@ public class KawaiiIconUtil {
     public static void loadIcon(Context context, ImageView iv, String iconKey, String label, int fallbackResId) {
         if (iv == null || context == null) return;
 
-        iconKey = cleanIconKey(iconKey);
-        int finalFallback = getSmartFallbackResId(label, fallbackResId);
-
+        // 1. If no iconKey is provided, use the explicitly passed fallback drawable directly
         if (TextUtils.isEmpty(iconKey)) {
-            iv.setImageResource(finalFallback);
+            iv.setImageResource(fallbackResId != 0 ? fallbackResId : R.drawable.ic_mochi_smiling);
             return;
         }
 
-        // Check if it is a content URI or file path from user upload
+        // 2. Check if it is a content URI or file path from user upload
         if (iconKey.startsWith("content://") || iconKey.startsWith("file://") || iconKey.startsWith("/")) {
             try {
                 Uri uri = iconKey.startsWith("/") ? Uri.parse("file://" + iconKey) : Uri.parse(iconKey);
@@ -130,12 +251,23 @@ public class KawaiiIconUtil {
             }
         }
 
-        // Try resource lookup by name
+        // 3. For preset/symptom iconKeys, resolve themed icon for Kitty and Bunny
+        String pack = new com.khatibstudio.cyvia.data.repository.SettingsRepository(context).getAvatarPack();
+        if ("KITTY".equals(pack) || "BUNNY".equals(pack)) {
+            int themedRes = getSymptomIconRes(context, iconKey, label, fallbackResId);
+            iv.setImageResource(themedRes != 0 ? themedRes : fallbackResId);
+            return;
+        }
+
+        // 4. Default Mochi resolution
+        iconKey = cleanIconKey(iconKey);
+        int finalFallback = getSmartFallbackResId(label, fallbackResId);
+
         int resId = context.getResources().getIdentifier(iconKey, "drawable", context.getPackageName());
         if (resId != 0) {
             iv.setImageResource(resId);
         } else {
-            iv.setImageResource(finalFallback);
+            iv.setImageResource(finalFallback != 0 ? finalFallback : R.drawable.ic_mochi_smiling);
         }
     }
 

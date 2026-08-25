@@ -53,7 +53,8 @@ import java.util.Set;
 
 /**
  * Bottom sheet dialog for logging daily symptoms, mood, flow, notes, etc.
- * Features Kawaii character icon grid selectors and custom image upload support.
+ * Features Kawaii character icon grid selectors and custom image upload
+ * support.
  */
 public class DailyLogBottomSheet extends BottomSheetDialogFragment {
 
@@ -83,16 +84,18 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
     private ImageView tempUploadPreviewIv = null;
     private View tempUploadLayout = null;
 
-    private final ActivityResultLauncher<String> imagePickerLauncher =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+    private final ActivityResultLauncher<String> imagePickerLauncher = registerForActivityResult(
+            new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null && getContext() != null) {
                     try {
                         InputStream is = getContext().getContentResolver().openInputStream(uri);
                         Bitmap bmp = BitmapFactory.decodeStream(is);
-                        if (is != null) is.close();
+                        if (is != null)
+                            is.close();
 
                         if (bmp != null) {
-                            File file = new File(requireContext().getFilesDir(), "kawaii_" + System.currentTimeMillis() + ".png");
+                            File file = new File(requireContext().getFilesDir(),
+                                    "kawaii_" + System.currentTimeMillis() + ".png");
                             FileOutputStream fos = new FileOutputStream(file);
                             bmp.compress(Bitmap.CompressFormat.PNG, 90, fos);
                             fos.close();
@@ -146,8 +149,8 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         binding = BottomSheetDailyLogBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -197,7 +200,8 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void updateDateHeader() {
-        if (binding == null) return;
+        if (binding == null)
+            return;
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d");
         String dateStr;
         if (logDate.equals(LocalDate.now())) {
@@ -214,7 +218,8 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void changeLogDate(LocalDate newDate) {
-        if (newDate.isAfter(LocalDate.now())) return;
+        if (newDate.isAfter(LocalDate.now()))
+            return;
         logDate = newDate;
         updateDateHeader();
 
@@ -249,8 +254,7 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                 },
                 logDate.getYear(),
                 logDate.getMonthValue() - 1,
-                logDate.getDayOfMonth()
-        );
+                logDate.getDayOfMonth());
         dpd.getDatePicker().setMaxDate(System.currentTimeMillis());
         dpd.show();
     }
@@ -264,7 +268,8 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
      * Tap to select, tap again to deselect. No auto-selection on open.
      */
     private void refreshFlowSelector() {
-        if (binding == null) return;
+        if (binding == null)
+            return;
         binding.layoutFlowSelector.removeAllViews();
 
         // Option 0: No Flow / Normal Day (no blood icon)
@@ -275,15 +280,17 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         Object noneTag = binding.layoutFlowSelector.getTag();
         boolean noneExplicit = Boolean.TRUE.equals(noneTag);
 
-        addKawaiiBadgeView(binding.layoutFlowSelector, "No Flow", null, R.drawable.ic_mochi_smiling, noneExplicit, v -> {
-            if (Boolean.TRUE.equals(binding.layoutFlowSelector.getTag())) {
-                binding.layoutFlowSelector.setTag(null); // deselect
-            } else {
-                selectedFlow = null;
-                binding.layoutFlowSelector.setTag(Boolean.TRUE);
-            }
-            refreshFlowSelector();
-        });
+        int noFlowIcon = KawaiiIconUtil.getAvatarDrawableForPose(requireContext(), R.drawable.ic_mochi_smiling);
+        addKawaiiBadgeView(binding.layoutFlowSelector, "No Flow", null, noFlowIcon, noneExplicit,
+                v -> {
+                    if (Boolean.TRUE.equals(binding.layoutFlowSelector.getTag())) {
+                        binding.layoutFlowSelector.setTag(null); // deselect
+                    } else {
+                        selectedFlow = null;
+                        binding.layoutFlowSelector.setTag(Boolean.TRUE);
+                    }
+                    refreshFlowSelector();
+                });
 
         // Options 1-5: Blood flow intensities
         FlowIntensity[] intensities = FlowIntensity.values();
@@ -291,12 +298,30 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
             String label;
             int iconRes;
             switch (intensity) {
-                case SPOTTING:    label = "Spotting";   iconRes = R.drawable.ic_flow_spotting;    break;
-                case LIGHT:       label = "Light";      iconRes = R.drawable.ic_flow_light;       break;
-                case MEDIUM:      label = "Medium";     iconRes = R.drawable.ic_flow_medium;      break;
-                case HEAVY:       label = "Heavy";      iconRes = R.drawable.ic_flow_heavy;       break;
-                case VERY_HEAVY:  label = "Very Heavy"; iconRes = R.drawable.ic_flow_very_heavy;  break;
-                default:          label = "Spotting";   iconRes = R.drawable.ic_flow_spotting;    break;
+                case SPOTTING:
+                    label = "Spotting";
+                    iconRes = R.drawable.ic_flow_spotting;
+                    break;
+                case LIGHT:
+                    label = "Light";
+                    iconRes = R.drawable.ic_flow_light;
+                    break;
+                case MEDIUM:
+                    label = "Medium";
+                    iconRes = R.drawable.ic_flow_medium;
+                    break;
+                case HEAVY:
+                    label = "Heavy";
+                    iconRes = R.drawable.ic_flow_heavy;
+                    break;
+                case VERY_HEAVY:
+                    label = "Very Heavy";
+                    iconRes = R.drawable.ic_flow_very_heavy;
+                    break;
+                default:
+                    label = "Spotting";
+                    iconRes = R.drawable.ic_flow_spotting;
+                    break;
             }
             boolean isSel = (selectedFlow == intensity);
             addKawaiiBadgeView(binding.layoutFlowSelector, label, null, iconRes, isSel, v -> {
@@ -315,7 +340,8 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         logRepository.getLogForDate(logDate).observe(getViewLifecycleOwner(), log -> {
             existingLog = log;
             if (log == null) {
-                if (binding != null) binding.btnDeleteLog.setVisibility(View.GONE);
+                if (binding != null)
+                    binding.btnDeleteLog.setVisibility(View.GONE);
                 return;
             }
             if (binding != null) {
@@ -338,7 +364,8 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
             }
 
             // Restore previously saved values (all sections remain null if not saved)
-            if (log.notes != null) binding.etNotes.setText(log.notes);
+            if (log.notes != null)
+                binding.etNotes.setText(log.notes);
             if (log.temperature != null) {
                 binding.etTemperature.setText(String.valueOf(log.temperature));
             }
@@ -363,8 +390,10 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
 
             if (!TextUtils.isEmpty(log.symptomIds)) {
                 for (String idStr : log.symptomIds.split(",")) {
-                    try { selectedSymptomIds.add(Integer.parseInt(idStr.trim())); }
-                    catch (NumberFormatException ignored) {}
+                    try {
+                        selectedSymptomIds.add(Integer.parseInt(idStr.trim()));
+                    } catch (NumberFormatException ignored) {
+                    }
                 }
             }
 
@@ -386,7 +415,8 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                 final FlowIntensity finalFlow = foundFlow;
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        if (binding == null) return;
+                        if (binding == null)
+                            return;
                         selectedFlow = finalFlow;
                         refreshFlowSelector();
                     });
@@ -419,7 +449,8 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
      * All sections are fully independent — nothing is auto-selected.
      */
     private void refreshAllKawaiiRows() {
-        if (binding == null) return;
+        if (binding == null)
+            return;
         binding.layoutMoodSelector.removeAllViews();
         binding.layoutPhysicalSymptoms.removeAllViews();
         if (binding.layoutMedicineSelector != null) {
@@ -428,18 +459,18 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
 
         // ── Section 1: How are you feeling? (11 Mochi moods) ───────────────
         String[] moodLabels = {
-            "Normal", "Happy", "Sad", "Calm", "Anxious",
-            "Energetic", "Sensitive", "Romantic", "Lonely", "Mood Swing", "Food Craving"
+                "Normal", "Happy", "Sad", "Calm", "Anxious",
+                "Energetic", "Sensitive", "Romantic", "Lonely", "Mood Swing", "Food Craving"
         };
         Mood[] moodValues = {
-            Mood.NORMAL, Mood.HAPPY, Mood.SAD, Mood.CALM, Mood.ANXIOUS,
-            Mood.ENERGETIC, Mood.SENSITIVE, Mood.ROMANTIC, Mood.LONELY, Mood.MOOD_SWING, Mood.FOOD_CRAVING
+                Mood.NORMAL, Mood.HAPPY, Mood.SAD, Mood.CALM, Mood.ANXIOUS,
+                Mood.ENERGETIC, Mood.SENSITIVE, Mood.ROMANTIC, Mood.LONELY, Mood.MOOD_SWING, Mood.FOOD_CRAVING
         };
         for (int i = 0; i < moodValues.length; i++) {
             final Mood m = moodValues[i];
             boolean isSel = (selectedMood == m);
             addKawaiiBadgeView(binding.layoutMoodSelector, moodLabels[i], null,
-                    KawaiiIconUtil.getMoodIconRes(m), isSel, v -> {
+                    KawaiiIconUtil.getMoodIconRes(requireContext(), m), isSel, v -> {
                         selectedMood = (selectedMood == m) ? null : m;
                         refreshAllKawaiiRows();
                     });
@@ -447,16 +478,23 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
 
         // Also append custom moods to the mood selector row
         for (SymptomTag tag : allTagsList) {
-            if (tag.category != SymptomCategory.MOOD) continue;
+            if (tag.category != SymptomCategory.MOOD || !tag.isCustom)
+                continue;
             boolean isSel = selectedSymptomIds.contains(tag.id);
             addKawaiiBadgeView(binding.layoutMoodSelector, tag.label,
                     tag.iconKey, R.drawable.ic_mochi_smiling, isSel, true,
                     v -> toggleSymptomSelection(tag.id));
         }
 
-        // ── Section 2: Physical Condition (13 curated Mochi symptoms) ────────
+        // ── Section 2: Physical Condition (13 curated symptoms + custom) ─────
+        List<SymptomTag> physicalSymptoms = new ArrayList<>(CyviaDatabase.buildDefaultSymptoms());
         for (SymptomTag tag : allTagsList) {
-            if (tag.category != SymptomCategory.PHYSICAL) continue;
+            if (tag.category == SymptomCategory.PHYSICAL && tag.isCustom) {
+                physicalSymptoms.add(tag);
+            }
+        }
+
+        for (SymptomTag tag : physicalSymptoms) {
             boolean isSel = selectedSymptomIds.contains(tag.id);
             addKawaiiBadgeView(binding.layoutPhysicalSymptoms, tag.label,
                     tag.iconKey, R.drawable.ic_mochi_smiling, isSel, true,
@@ -477,18 +515,18 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         if (binding.layoutDischargeSelector != null) {
             binding.layoutDischargeSelector.removeAllViews();
             String[] dischargeLabels = {
-                "Excessive White", "Smelly", "Creamy Texture", "Watery Texture", "Brownish", "Yellowish"
+                    "Excessive White", "Smelly", "Creamy Texture", "Watery Texture", "Brownish", "Yellowish"
             };
             String[] dischargeKeys = {
-                "EXCESSIVE_WHITE", "SMELLY", "CREAMY", "WATERY", "BROWNISH", "YELLOWISH"
+                    "EXCESSIVE_WHITE", "SMELLY", "CREAMY", "WATERY", "BROWNISH", "YELLOWISH"
             };
             int[] dischargeIcons = {
-                R.drawable.ic_discharge_excessive_white,
-                R.drawable.ic_discharge_smelly,
-                R.drawable.ic_discharge_creamy,
-                R.drawable.ic_discharge_watery,
-                R.drawable.ic_discharge_brownish,
-                R.drawable.ic_discharge_yellowish
+                    R.drawable.ic_discharge_excessive_white,
+                    R.drawable.ic_discharge_smelly,
+                    R.drawable.ic_discharge_creamy,
+                    R.drawable.ic_discharge_watery,
+                    R.drawable.ic_discharge_brownish,
+                    R.drawable.ic_discharge_yellowish
             };
             for (int i = 0; i < dischargeKeys.length; i++) {
                 final String dk = dischargeKeys[i];
@@ -505,19 +543,19 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         if (binding.layoutActivitySelector != null) {
             binding.layoutActivitySelector.removeAllViews();
             String[] activityLabels = {
-                "No Exercise", "Running", "Cycling", "Gym", "Aerobics & Dance", "Swimming", "Yoga"
+                    "No Exercise", "Running", "Cycling", "Gym", "Aerobics & Dance", "Swimming", "Yoga"
             };
             String[] activityKeys = {
-                "NO_EXERCISE", "RUNNING", "CYCLING", "GYM", "AEROBIC_DANCE", "SWIMMING", "YOGA"
+                    "NO_EXERCISE", "RUNNING", "CYCLING", "GYM", "AEROBIC_DANCE", "SWIMMING", "YOGA"
             };
             int[] activityIcons = {
-                R.drawable.ic_activity_no_exercise,
-                R.drawable.ic_activity_running,
-                R.drawable.ic_activity_cycling,
-                R.drawable.ic_activity_gym,
-                R.drawable.ic_activity_dance,
-                R.drawable.ic_activity_swimming,
-                R.drawable.ic_activity_yoga
+                    R.drawable.ic_activity_no_exercise,
+                    R.drawable.ic_activity_running,
+                    R.drawable.ic_activity_cycling,
+                    R.drawable.ic_activity_gym,
+                    R.drawable.ic_activity_dance,
+                    R.drawable.ic_activity_swimming,
+                    R.drawable.ic_activity_yoga
             };
             for (int i = 0; i < activityKeys.length; i++) {
                 final String ak = activityKeys[i];
@@ -534,15 +572,15 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         if (binding.layoutSexSelector != null && binding.layoutSexSection.getVisibility() == View.VISIBLE) {
             binding.layoutSexSelector.removeAllViews();
             String[] sexLabels = {
-                "Nope", "Protected", "Unprotected"
+                    "Nope", "Protected", "Unprotected"
             };
             String[] sexKeys = {
-                "NOPE", "PROTECTED", "UNPROTECTED"
+                    "NOPE", "PROTECTED", "UNPROTECTED"
             };
             int[] sexIcons = {
-                R.drawable.ic_sex_nope,
-                R.drawable.ic_sex_protected,
-                R.drawable.ic_sex_unprotected
+                    R.drawable.ic_sex_nope,
+                    R.drawable.ic_sex_protected,
+                    R.drawable.ic_sex_unprotected
             };
             for (int i = 0; i < sexKeys.length; i++) {
                 final String sk = sexKeys[i];
@@ -557,16 +595,20 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void toggleSymptomSelection(int tagId) {
-        if (selectedSymptomIds.contains(tagId)) selectedSymptomIds.remove(tagId);
-        else selectedSymptomIds.add(tagId);
+        if (selectedSymptomIds.contains(tagId))
+            selectedSymptomIds.remove(tagId);
+        else
+            selectedSymptomIds.add(tagId);
         refreshAllKawaiiRows();
     }
 
-    private View addKawaiiBadgeView(ViewGroup parent, String label, String iconKey, int fallbackResId, boolean isSelected, View.OnClickListener onClick) {
+    private View addKawaiiBadgeView(ViewGroup parent, String label, String iconKey, int fallbackResId,
+            boolean isSelected, View.OnClickListener onClick) {
         return addKawaiiBadgeView(parent, label, iconKey, fallbackResId, isSelected, false, onClick);
     }
 
-    private View addKawaiiBadgeView(ViewGroup parent, String label, String iconKey, int fallbackResId, boolean isSelected, boolean useSmartFallback, View.OnClickListener onClick) {
+    private View addKawaiiBadgeView(ViewGroup parent, String label, String iconKey, int fallbackResId,
+            boolean isSelected, boolean useSmartFallback, View.OnClickListener onClick) {
         View view = LayoutInflater.from(requireContext()).inflate(R.layout.item_kawaii_selector_badge, parent, false);
         MaterialCardView card = view.findViewById(R.id.card_kawaii_badge);
         ImageView iv = view.findViewById(R.id.iv_kawaii_icon);
@@ -614,15 +656,18 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
             boolean sel = key.equals(tempCustomIconKey);
             View badge = addKawaiiBadgeView(layoutPresets, "", key, R.drawable.ic_kawaii_melody, sel, v -> {
                 tempCustomIconKey = key;
-                if (tempUploadLayout != null) tempUploadLayout.setVisibility(View.GONE);
+                if (tempUploadLayout != null)
+                    tempUploadLayout.setVisibility(View.GONE);
                 for (int i = 0; i < layoutPresets.getChildCount(); i++) {
                     View child = layoutPresets.getChildAt(i);
                     MaterialCardView c = child.findViewById(R.id.card_kawaii_badge);
                     if (c != null) {
                         boolean isThis = child == v;
-                        c.setStrokeColor(requireContext().getColor(isThis ? R.color.cyvia_primary : R.color.cyvia_outline));
+                        c.setStrokeColor(
+                                requireContext().getColor(isThis ? R.color.cyvia_primary : R.color.cyvia_outline));
                         c.setStrokeWidth((int) ((isThis ? 2.5f : 1.2f) * getResources().getDisplayMetrics().density));
-                        c.setCardBackgroundColor(requireContext().getColor(isThis ? R.color.cyvia_primary_container : R.color.cyvia_surface));
+                        c.setCardBackgroundColor(requireContext()
+                                .getColor(isThis ? R.color.cyvia_primary_container : R.color.cyvia_surface));
                     }
                 }
             });
@@ -653,15 +698,18 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         log.pillsTaken = pillsTaken;
 
         List<String> ids = new ArrayList<>();
-        for (int id : selectedSymptomIds) ids.add(String.valueOf(id));
+        for (int id : selectedSymptomIds)
+            ids.add(String.valueOf(id));
         log.symptomIds = TextUtils.join(",", ids);
 
         String notesText = binding.etNotes.getText() != null
-                ? binding.etNotes.getText().toString().trim() : "";
+                ? binding.etNotes.getText().toString().trim()
+                : "";
         log.notes = notesText.isEmpty() ? null : notesText;
 
         String tempText = binding.etTemperature.getText() != null
-                ? binding.etTemperature.getText().toString().trim() : "";
+                ? binding.etTemperature.getText().toString().trim()
+                : "";
         try {
             log.temperature = tempText.isEmpty() ? null : Float.parseFloat(tempText);
         } catch (NumberFormatException e) {
@@ -669,7 +717,8 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         }
 
         String weightText = binding.etWeight.getText() != null
-                ? binding.etWeight.getText().toString().trim() : "";
+                ? binding.etWeight.getText().toString().trim()
+                : "";
         try {
             log.weight = weightText.isEmpty() ? null : Float.parseFloat(weightText);
         } catch (NumberFormatException e) {
@@ -687,6 +736,9 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
         long targetDay = logDate.toEpochDay();
         CyviaDatabase.databaseWriteExecutor.execute(() -> {
             if (flowToSave != null) {
+                if (settings != null && settings.getLastPeriodDeniedEpoch() >= targetDay) {
+                    settings.setLastPeriodDeniedEpoch(targetDay - 1);
+                }
                 List<CycleEntry> cycles = cycleRepository.getAllCyclesSync();
                 boolean handled = false;
                 if (cycles != null) {
@@ -730,6 +782,9 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
                 }
             } else {
                 // User logged no flow -> completely remove or trim any cycle entry spanning this day
+                if (settings != null) {
+                    settings.setLastPeriodDeniedEpoch(targetDay);
+                }
                 removeFlowForDate(targetDay);
             }
         });
@@ -741,40 +796,26 @@ public class DailyLogBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void removeFlowForDate(long targetDay) {
-        if (getContext() == null) return;
-        com.khatibstudio.cyvia.data.db.dao.CycleEntryDao dao = CyviaDatabase.getDatabase(requireContext()).cycleEntryDao();
+        if (getContext() == null)
+            return;
+        com.khatibstudio.cyvia.data.db.dao.CycleEntryDao dao = CyviaDatabase.getDatabase(requireContext())
+                .cycleEntryDao();
         List<CycleEntry> cycles = dao.getAllCyclesSync();
         if (cycles != null) {
             for (CycleEntry cycle : cycles) {
                 long start = cycle.startDate;
                 long end = cycle.isOngoing() ? LocalDate.now().toEpochDay() : cycle.endDate;
-                if (targetDay >= start && targetDay <= end) {
-                    if (start == end || (cycle.isOngoing() && start == targetDay)) {
+                if (start >= targetDay) {
+                    // Entire cycle started on or after targetDay -> delete it completely
+                    dao.deleteCycleEntry(cycle);
+                } else if (targetDay <= end) {
+                    // Day is inside a past or ongoing cycle -> truncate cycle end to before targetDay
+                    cycle.endDate = targetDay - 1;
+                    if (cycle.endDate < start) {
                         dao.deleteCycleEntry(cycle);
-                    } else if (start == targetDay) {
-                        cycle.startDate = targetDay + 1;
+                    } else {
                         dao.updateCycleEntry(cycle);
-                    } else if (end == targetDay || (cycle.isOngoing() && targetDay == LocalDate.now().toEpochDay())) {
-                        cycle.endDate = targetDay - 1;
-                        if (cycle.endDate < start) {
-                            dao.deleteCycleEntry(cycle);
-                        } else {
-                            dao.updateCycleEntry(cycle);
-                        }
-                    } else if (start < targetDay && targetDay < end) {
-                        long originalEnd = cycle.endDate;
-                        cycle.endDate = targetDay - 1;
-                        if (cycle.endDate < start) {
-                            dao.deleteCycleEntry(cycle);
-                        } else {
-                            dao.updateCycleEntry(cycle);
-                        }
-                        
-                        CycleEntry secondPart = new CycleEntry(targetDay + 1, cycle.flowIntensity);
-                        secondPart.endDate = originalEnd;
-                        dao.insertCycleEntry(secondPart);
                     }
-                    break;
                 }
             }
         }

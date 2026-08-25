@@ -15,21 +15,21 @@ import java.util.Set;
  * Fully local, transparent cycle prediction engine.
  *
  * Algorithm:
- *   1. Take up to 6 most recent non-excluded completed cycles.
- *   2. Compute their lengths (start of next cycle − start of current cycle).
- *   3. Average those lengths (simple mean; could be upgraded to weighted later).
- *   4. Next period = most recent cycle start + average length.
- *   5. Ovulation = next period start − 14 days (luteal phase constant).
- *   6. Fertile window = ovulation − 5 to ovulation + 1.
+ * 1. Take up to 6 most recent non-excluded completed cycles.
+ * 2. Compute their lengths (start of next cycle − start of current cycle).
+ * 3. Average those lengths (simple mean; could be upgraded to weighted later).
+ * 4. Next period = most recent cycle start + average length.
+ * 5. Ovulation = next period start − 14 days (luteal phase constant).
+ * 6. Fertile window = ovulation − 5 to ovulation + 1.
  *
  * Gap exclusion:
- *   Cycles with `excluded = true` are filtered out before computing the average.
- *   This prevents a 2-year gap (contraception, pregnancy) from skewing the result
- *   to absurd values like 138-day cycles (real competitor complaint).
+ * Cycles with `excluded = true` are filtered out before computing the average.
+ * This prevents a 2-year gap (contraception, pregnancy) from skewing the result
+ * to absurd values like 138-day cycles (real competitor complaint).
  *
  * TrackingMode gates:
- *   - NO_PERIODS_CONTRACEPTION  → return empty fertile/ovulation fields
- *   - PERIMENOPAUSE / POSTPARTUM → set showReliabilityCaveat = true
+ * - NO_PERIODS_CONTRACEPTION → return empty fertile/ovulation fields
+ * - PERIMENOPAUSE / POSTPARTUM → set showReliabilityCaveat = true
  */
 public class PredictionEngine {
 
@@ -42,7 +42,10 @@ public class PredictionEngine {
     /** Luteal phase length (days from ovulation to next period). */
     private static final int LUTEAL_PHASE_DAYS = 14;
 
-    /** Maximum fertile window span before ovulation. Changed to 1 to limit window to 3 days total around ovulation (ov-1, ov, ov+1) */
+    /**
+     * Maximum fertile window span before ovulation. Changed to 1 to limit window to
+     * 3 days total around ovulation (ov-1, ov, ov+1)
+     */
     private static final int FERTILE_WINDOW_BEFORE = 1;
 
     /** Fertile window days after ovulation. */
@@ -82,6 +85,13 @@ public class PredictionEngine {
         // Predicted next period start
         LocalDate nextPeriodStart = mostRecentStart.plusDays(avgLength);
 
+        // If user explicitly confirmed "No" for dates on or after nextPeriodStart,
+        // shift the predicted next period to start after the denied date.
+        long deniedEpoch = settings != null ? settings.getLastPeriodDeniedEpoch() : 0L;
+        if (deniedEpoch >= mostRecentStartEpoch && nextPeriodStart.toEpochDay() <= deniedEpoch) {
+            nextPeriodStart = LocalDate.ofEpochDay(deniedEpoch).plusDays(1);
+        }
+
         // Fertile window / ovulation (suppressed for some tracking modes)
         LocalDate fertileStart = null;
         LocalDate fertileEnd = null;
@@ -105,18 +115,18 @@ public class PredictionEngine {
                 cyclesUsed,
                 lowConfidence,
                 caveat,
-                avgLength
-        );
+                avgLength);
     }
 
     /**
-     * Determines which calendar days in a given month fall into each prediction category.
+     * Determines which calendar days in a given month fall into each prediction
+     * category.
      * Useful for the CalendarFragment colour-coding.
      *
-     * @param prediction  A previously computed {@link CyclePrediction}.
-     * @param allCycles   All cycle entries (for confirmed period days).
-     * @param monthStart  First day of the month being rendered.
-     * @param monthEnd    Last day of the month being rendered.
+     * @param prediction A previously computed {@link CyclePrediction}.
+     * @param allCycles  All cycle entries (for confirmed period days).
+     * @param monthStart First day of the month being rendered.
+     * @param monthEnd   Last day of the month being rendered.
      * @return A {@link CalendarData} object with Sets of dates for each category.
      */
     public CalendarData buildCalendarData(
@@ -130,26 +140,35 @@ public class PredictionEngine {
         LocalDate gridEnd = monthEnd.plusMonths(2);
 
         int avgCycleLen = prediction.averageCycleLength;
-        if (avgCycleLen <= 0) avgCycleLen = settings.getAvgCycleLength();
-        if (avgCycleLen <= 0) avgCycleLen = 28;
+        if (avgCycleLen <= 0)
+            avgCycleLen = settings.getAvgCycleLength();
+        if (avgCycleLen <= 0)
+            avgCycleLen = 28;
         boolean showFertile = shouldShowFertile(settings.getTrackingMode());
 
         // Confirmed period days, past ovulation, and fertile windows from logged cycles
         for (CycleEntry cycle : allCycles) {
             LocalDate start = LocalDate.ofEpochDay(cycle.startDate);
             int avgPeriodLen = settings.getAvgPeriodLength();
-            if (avgPeriodLen <= 0) avgPeriodLen = 5;
+            if (avgPeriodLen <= 0)
+                avgPeriodLen = 5;
 
             long displayEndEpoch = cycle.isOngoing()
-                    ? Math.min(Math.max(LocalDate.now().toEpochDay(), cycle.startDate + avgPeriodLen - 1), cycle.startDate + 9)
+                    ? Math.min(Math.max(LocalDate.now().toEpochDay(), cycle.startDate + avgPeriodLen - 1),
+                            cycle.startDate + 9)
                     : cycle.endDate;
             LocalDate end = LocalDate.ofEpochDay(displayEndEpoch);
 
-            // 1. Confirmed period days
+            // 1. Confirmed period days (past & today) and predicted period days (future)
             LocalDate day = start;
+            LocalDate today = LocalDate.now();
             while (!day.isAfter(end)) {
                 if (!day.isBefore(gridStart) && !day.isAfter(gridEnd)) {
-                    data.periodDays.add(day);
+                    if (day.isAfter(today)) {
+                        data.predictedDays.add(day);
+                    } else {
+                        data.periodDays.add(day);
+                    }
                 }
                 day = day.plusDays(1);
             }
@@ -175,12 +194,15 @@ public class PredictionEngine {
 
         if (prediction.hasData() && prediction.nextPeriodStart != null) {
             int avgPeriodLength = settings.getAvgPeriodLength();
-            if (avgPeriodLength <= 0) avgPeriodLength = 5;
+            if (avgPeriodLength <= 0)
+                avgPeriodLength = 5;
             LocalDate curPeriodStart = prediction.nextPeriodStart;
 
-            // Project forward up to 12 cycles (approx 1 year) so users can plan dates/vacations ahead
+            // Project forward up to 12 cycles (approx 1 year) so users can plan
+            // dates/vacations ahead
             for (int cycleIdx = 0; cycleIdx < 12; cycleIdx++) {
-                if (curPeriodStart.isAfter(gridEnd)) break;
+                if (curPeriodStart.isAfter(gridEnd))
+                    break;
 
                 // Predicted period days
                 for (int i = 0; i < avgPeriodLength; i++) {
@@ -245,7 +267,8 @@ public class PredictionEngine {
      * Computes the average cycle length from completed consecutive cycle pairs.
      * Cycle length = startDate of next cycle − startDate of current cycle.
      *
-     * Falls back to the user-overridden average from settings if no completed cycles exist.
+     * Falls back to the user-overridden average from settings if no completed
+     * cycles exist.
      */
     private int computeAverageCycleLength(List<CycleEntry> eligible) {
         // We need at least 2 entries to compute 1 inter-cycle length

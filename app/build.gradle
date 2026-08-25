@@ -10,8 +10,8 @@ android {
         applicationId "com.khatibstudio.cyvia"
         minSdk 24
         targetSdk 35
-        versionCode 3
-        versionName "1.1.2"
+        versionCode 6   
+        versionName "1.1.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
@@ -30,7 +30,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [
-                admobAppId: "ca-app-pub-3807814510907688~1631749621" // Production App ID
+                admobAppId: "ca-app-pub-3940256099942544~3347511713" // AdMob Test App ID (Replace before publishing)
             ]
         }
     }
@@ -45,6 +45,13 @@ android {
     buildFeatures {
         viewBinding true
         buildConfig true
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            jvmArgs '-Dfile.encoding=UTF-8'
+        }
     }
 
     // Suppress lint errors that would block the build during development
@@ -101,7 +108,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:23.2.0'
 
     // Google Play Billing (one-time Remove Ads IAP)
-    implementation 'com.android.billingclient:billing:6.2.1'
+    implementation 'com.android.billingclient:billing:8.0.0'
 
     // MPAndroidChart (offline charting — no network required)
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
@@ -109,9 +116,26 @@ dependencies {
     // Gson (JSON serialisation for backup/restore)
     implementation 'com.google.code.gson:gson:2.10.1'
 
+    // Biometric prompt for fingerprint unlock
+    implementation 'androidx.biometric:biometric:1.1.0'
+
     // Testing
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.11.0'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     androidTestImplementation 'androidx.room:room-testing:2.6.1'
 }
+
+tasks.register('runPersonaTests', JavaExec) {
+    dependsOn 'compileDebugUnitTestJavaWithJavac', 'compileDebugJavaWithJavac'
+    mainClass = 'com.khatibstudio.cyvia.TestRunner'
+    classpath = files(
+        android.getBootClasspath(),
+        file("$buildDir/intermediates/javac/debug/compileDebugJavaWithJavac/classes"),
+        file("$buildDir/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes"),
+        configurations.debugUnitTestRuntimeClasspath
+    )
+    jvmArgs '-Dfile.encoding=UTF-8'
+}
+

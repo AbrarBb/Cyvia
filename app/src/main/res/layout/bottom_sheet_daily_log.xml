@@ -285,6 +285,8 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:hint="@string/log_notes_hint"
+                android:textColorHint="@color/cyvia_on_surface_variant"
+                app:hintTextColor="@color/cyvia_primary"
                 android:layout_marginBottom="@dimen/space_16">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -294,6 +296,7 @@
                     android:minLines="2"
                     android:maxLines="5"
                     android:inputType="textMultiLine|textCapSentences"
+                    android:textColor="@color/cyvia_on_surface"
                     android:fontFamily="@font/inter" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -313,6 +316,8 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:textColorHint="@color/cyvia_on_surface_variant"
+                    app:hintTextColor="@color/cyvia_primary"
                     android:hint="Temp (°C)">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -320,6 +325,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
+                        android:textColor="@color/cyvia_on_surface"
                         android:fontFamily="@font/inter" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -336,6 +342,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:textColorHint="@color/cyvia_on_surface_variant"
+                        app:hintTextColor="@color/cyvia_primary"
+                        app:suffixTextColor="@color/cyvia_on_surface_variant"
                         android:hint="Weight"
                         app:suffixText="kg">
 
@@ -344,6 +353,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
+                            android:textColor="@color/cyvia_on_surface"
                             android:fontFamily="@font/inter" />
                     </com.google.android.material.textfield.TextInputLayout>
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Soft Pink Background Badge -->
+    <path
+        android:fillColor="#FFF0F5"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <!-- White Kitty Head -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#FFD1DC"
+        android:strokeWidth="1"
+        android:pathData="M11,15 L14,21 C14,14 34,14 34,21 L37,15 C38,21 38,34 24,36 C10,34 10,21 11,15 Z" />
+    <!-- Ear Pinks -->
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M13,16 L15,20 L19,19 Z M35,16 L33,20 L29,19 Z" />
+    <!-- Red Bow -->
+    <path
+        android:fillColor="#FF4081"
+        android:pathData="M32,13 A3,3 0 1,1 32,19 A3,3 0 1,1 32,13 Z M38,13 A3,3 0 1,1 38,19 A3,3 0 1,1 38,13 Z M35,15 A2,2 0 1,1 35,17 A2,2 0 1,1 35,15 Z" />
+    <!-- Happy Closed Curve Eyes ^ ^ -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M16,26 Q19,22 22,26 M26,26 Q29,22 32,26" />
+    <!-- Cheeks -->
+    <path
+        android:fillColor="#FF80AB"
+        android:pathData="M13,29 A3,2 0 1,1 13,28.9 Z M35,29 A3,2 0 1,1 35,28.9 Z" />
+    <!-- Yellow Nose -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M23,28 A1.5,1 0 1,1 23,30 Z" />
+    <!-- Sparkle Stars -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M8,12 L9,10 L11,9 L9,8 L8,6 L7,8 L5,9 L7,10 Z M41,32 L42,30 L44,29 L42,28 L41,26 L40,28 L38,29 L40,30 Z" />
+</vector>

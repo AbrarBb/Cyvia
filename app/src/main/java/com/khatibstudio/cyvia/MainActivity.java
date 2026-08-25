@@ -42,10 +42,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        CyviaApplication app = CyviaApplication.from(this);
+
+        // Apply Premium Theme if selected
+        String accentColor = app.getSettingsRepository().getAccentColor();
+        if ("PINK".equals(accentColor)) {
+            setTheme(R.style.Theme_Cyvia_Pink);
+        } else if ("MINT".equals(accentColor)) {
+            setTheme(R.style.Theme_Cyvia_Mint);
+        } else if ("OCEAN".equals(accentColor)) {
+            setTheme(R.style.Theme_Cyvia_Ocean);
+        }
+
         super.onCreate(savedInstanceState);
 
         // Check if onboarding is needed (before inflating main layout)
-        CyviaApplication app = CyviaApplication.from(this);
         if (!app.getSettingsRepository().isOnboardingComplete()) {
             startActivity(new Intent(this, OnboardingActivity.class));
             finish();

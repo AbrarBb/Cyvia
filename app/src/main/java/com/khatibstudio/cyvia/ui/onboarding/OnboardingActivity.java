@@ -154,7 +154,7 @@ public class OnboardingActivity extends AppCompatActivity {
                 settings.setMinorSafeMode(true);
                 settings.setTrackIntimacyEnabled(false);
             } else if (!settings.hasTrackIntimacyPreference()) {
-                settings.setTrackIntimacyEnabled(false);
+                settings.setTrackIntimacyEnabled(true);
             }
 
             // Save preferences from the last page
@@ -165,13 +165,17 @@ public class OnboardingActivity extends AppCompatActivity {
                 settings.setTrackingMode(prefsPage.getSelectedMode());
             }
 
-            // Save last period date from page 3
             OnboardingLastPeriodFragment datePage = (OnboardingLastPeriodFragment) pages.get(2);
             if (datePage != null) {
                 LocalDate lastPeriodDate = datePage.getSelectedDate();
                 if (lastPeriodDate != null) {
+                    int pLen = settings.getAvgPeriodLength();
+                    if (pLen <= 0) pLen = 7;
+                    if (pLen > 7) pLen = 7;
+
                     CycleEntry seed = new CycleEntry(
                             lastPeriodDate.toEpochDay(), FlowIntensity.MEDIUM);
+                    seed.endDate = lastPeriodDate.toEpochDay() + pLen - 1;
                     cycleRepository.insertCycle(seed);
                 }
             }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#EDE7F6"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <!-- Sleeping / Slumped Kitty Head -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#D1C4E9"
+        android:strokeWidth="1"
+        android:pathData="M11,16 L14,22 C14,15 34,15 34,22 L37,16 C38,22 38,35 24,37 C10,35 10,22 11,16 Z" />
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M13,17 L15,21 L19,20 Z M35,17 L33,21 L29,20 Z" />
+    <!-- Bow -->
+    <path
+        android:fillColor="#9575CD"
+        android:pathData="M32,14 A3,3 0 1,1 32,20 A3,3 0 1,1 32,14 Z M38,14 A3,3 0 1,1 38,20 A3,3 0 1,1 38,14 Z M35,16 A2,2 0 1,1 35,18 A2,2 0 1,1 35,16 Z" />
+    <!-- Sleeping Closed Eyes - - -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:pathData="M16,27 L21,27 M27,27 L32,27" />
+    <!-- Yellow Nose -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M23,29 A1.5,1 0 1,1 23,31 Z" />
+    <!-- Floating Zzz -->
+    <path
+        android:strokeColor="#7E57C2"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M34,8 L38,8 L34,12 L38,12 M39,4 L42,4 L39,7 L42,7" />
+</vector>

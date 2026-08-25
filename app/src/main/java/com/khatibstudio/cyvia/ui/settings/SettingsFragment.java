@@ -176,6 +176,8 @@ public class SettingsFragment extends Fragment {
         else if (SettingsRepository.THEME_DARK.equals(theme)) binding.btnThemeDark.setChecked(true);
         else binding.btnThemeSystem.setChecked(true);
 
+
+
         // Auto Backup
         updateAutoBackupStatus();
 
@@ -259,6 +261,10 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        // Navigate to Premium Customizations
+        binding.btnPremiumCustomizations.setOnClickListener(v ->
+                androidx.navigation.Navigation.findNavController(v).navigate(R.id.nav_premium));
+
         // Export
         binding.btnExport.setOnClickListener(v -> {
             CyviaApplication.suppressLockOnce();
@@ -302,6 +308,9 @@ public class SettingsFragment extends Fragment {
         // Remove Ads
         binding.btnRemoveAds.setOnClickListener(v -> launchRemoveAdsPurchase());
     }
+
+
+
 
     private void updateAppLockUI() {
         if (binding == null) return;

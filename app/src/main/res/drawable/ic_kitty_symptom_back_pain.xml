@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#FCE4EC"
+        android:pathData="M24,2 C36.15,2 46,11.85 46,24 C46,36.15 36.15,46 24,46 C11.85,46 2,36.15 2,24 C2,11.85 11.85,2 24,2 Z" />
+    <!-- Kitty Lying Down Rest View -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#F8BBD0"
+        android:strokeWidth="1"
+        android:pathData="M8,26 C8,18 20,18 24,22 C30,22 40,24 40,32 C40,38 12,38 8,26 Z" />
+    <!-- Ears -->
+    <path
+        android:fillColor="#FFAAC1"
+        android:pathData="M11,18 L14,14 L17,19 Z" />
+    <!-- Mini Bow -->
+    <path
+        android:fillColor="#FF4081"
+        android:pathData="M15,16 A2,2 0 1,1 15,20 A2,2 0 1,1 15,16 Z" />
+    <!-- Sleepy/Resting Eye -->
+    <path
+        android:strokeColor="#2E1E40"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M13,24 Q15,26 17,24" />
+    <!-- Soothing Heart Bandage on Lower Back -->
+    <path
+        android:fillColor="#FF5252"
+        android:pathData="M31,23 C31,20 27,20 27,23 C27,26 31,29 31,29 C31,29 35,26 35,23 C35,20 31,20 31,23 Z" />
+    <path
+        android:strokeColor="#FF1744"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M27,17 L29,19 M35,17 L33,19" />
+</vector>

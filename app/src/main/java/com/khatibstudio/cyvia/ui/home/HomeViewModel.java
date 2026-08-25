@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.khatibstudio.cyvia.CyviaApplication;
@@ -39,9 +40,12 @@ public class HomeViewModel extends AndroidViewModel {
     private final LiveData<List<CycleEntry>> allCycles;
     private final LiveData<DailyLog> todayLog;
     private final LiveData<List<DailyLog>> allLogs;
-    private final androidx.lifecycle.MutableLiveData<LocalDate> currentDate = new androidx.lifecycle.MutableLiveData<>(LocalDate.now());
+    private final MutableLiveData<LocalDate> currentDate = new MutableLiveData<>(LocalDate.now());
     private final MediatorLiveData<CyclePrediction> prediction = new MediatorLiveData<>();
     private final MediatorLiveData<Integer> cycleDay = new MediatorLiveData<>();
+    /** True when the displayed cycleDay was produced by modulo-wrapping past the
+     *  end of the last logged cycle — meaning we crossed into a new predicted cycle. */
+    private boolean cycleDayIsWrapped = false;
 
     public HomeViewModel(Application application) {
         super(application);
@@ -70,28 +74,16 @@ public class HomeViewModel extends AndroidViewModel {
     private void updateCycleDayValue() {
         List<CycleEntry> cycles = allCycles.getValue();
         if (cycles == null || cycles.isEmpty()) {
+            cycleDayIsWrapped = false;
             cycleDay.setValue(null);
             return;
         }
         CycleEntry mostRecent = cycles.get(0);
         LocalDate startDate = LocalDate.ofEpochDay(mostRecent.startDate);
         int day = (int) ChronoUnit.DAYS.between(startDate, currentDate.getValue()) + 1;
-
-        // Clamp: if day exceeds the average cycle length, wrap it so the ring
-        // never gets stuck showing a stale phase after the cycle boundary.
-        int avgCycleLen = settings.getAvgCycleLength();
-        CyclePrediction pred = prediction.getValue();
-        if (pred != null && pred.averageCycleLength > 0) {
-            avgCycleLen = pred.averageCycleLength;
-        }
-        if (avgCycleLen <= 0) avgCycleLen = 28;
-
-        if (day > avgCycleLen) {
-            // Wrap using modulo so it cycles back to day 1
-            day = ((day - 1) % avgCycleLen) + 1;
-        }
         if (day < 1) day = 1;
 
+        cycleDayIsWrapped = false;
         cycleDay.setValue(day);
     }
 
@@ -127,20 +119,21 @@ public class HomeViewModel extends AndroidViewModel {
         return settings.shouldShowFertileWindow();
     }
 
-    /** Returns the current phase name based on cycle day and average cycle length. */
+    /**
+     * Returns the current phase name based on cycle day and average cycle length.
+     *
+     * Key distinction:
+     * - "MENSTRUAL" = user is within a CONFIRMED period (a CycleEntry covers today)
+     * - "PREDICTED_MENSTRUAL" = cycle math says period should be happening, but no
+     *   CycleEntry covers today — it's just a prediction
+     */
     public String getCyclePhase(int cycleDayNum, int avgCycleLength) {
-        List<CycleEntry> cycles = allCycles.getValue();
-        if (cycles != null && !cycles.isEmpty()) {
-            CycleEntry mostRecent = cycles.get(0);
-            if (!mostRecent.isOngoing()) {
-                long startEpoch = mostRecent.startDate;
-                long targetEpoch = startEpoch + cycleDayNum - 1;
-                if (targetEpoch <= mostRecent.endDate) {
-                    return "MENSTRUAL";
-                }
-            }
+        // Step 1: Check if today is within a CONFIRMED period (actual CycleEntry)
+        if (isTodayConfirmedPeriod()) {
+            return "MENSTRUAL";
         }
 
+        // Step 2: Math-based phase calculation
         int periodLen = settings.getAvgPeriodLength();
         if (periodLen <= 0 || periodLen >= avgCycleLength) periodLen = 5;
 
@@ -148,9 +141,47 @@ public class HomeViewModel extends AndroidViewModel {
         int fertileStart = Math.max(periodLen + 1, ovDay - 2);
         int fertileEnd = Math.min(avgCycleLength, ovDay + 2);
 
-        if (cycleDayNum <= periodLen) return "MENSTRUAL";
+        // If the math says we're in period days, but no CycleEntry confirms it,
+        // it's a PREDICTION (user hasn't logged "Yes, period started")
+        if (cycleDayNum <= periodLen) {
+            return "PREDICTED_MENSTRUAL";
+        }
         if (cycleDayNum < fertileStart) return "FOLLICULAR";
         if (cycleDayNum <= fertileEnd) return "OVULATORY";
         return "LUTEAL";
+    }
+
+    /**
+     * Returns true ONLY if a CycleEntry in the database actually covers
+     * today as a PERIOD day — i.e. the user has confirmed the period started
+     * AND today is within the period duration (not just the overall cycle).
+     *
+     * For ongoing cycles: period lasts at most avgPeriodLength days from start.
+     * For ended cycles: period lasts from startDate to endDate.
+     */
+    public boolean isTodayConfirmedPeriod() {
+        List<CycleEntry> cycles = allCycles.getValue();
+        if (cycles == null) return false;
+        long todayEpoch = LocalDate.now().toEpochDay();
+        int avgPeriodLen = settings.getAvgPeriodLength();
+        if (avgPeriodLen <= 0) avgPeriodLen = 5;
+
+        for (CycleEntry c : cycles) {
+            if (c.isOngoing()) {
+                // Ongoing cycle = user started period but hasn't started a new one yet.
+                // The actual PERIOD only lasts avgPeriodLen days from the start.
+                // After that, user is in follicular/ovulatory/luteal of this cycle.
+                long periodEnd = c.startDate + avgPeriodLen - 1;
+                if (todayEpoch >= c.startDate && todayEpoch <= periodEnd) {
+                    return true;
+                }
+            } else {
+                // Ended cycle: period ran from startDate to endDate
+                if (todayEpoch >= c.startDate && todayEpoch <= c.endDate) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
