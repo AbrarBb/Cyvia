@@ -1,7 +1,7 @@
 # 🌸 Cyvia – Private Period Tracker
 
 <p align="center">
-  <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" alt="Cyvia Logo" width="120" height="120" style="border-radius: 28px;" />
+  <img src="Cyvia_app_icon.png" alt="Cyvia Logo" width="120" height="120" style="border-radius: 28px;" />
 </p>
 
 <p align="center">
